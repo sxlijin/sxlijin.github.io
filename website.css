@@ -1,18 +1,11 @@
-/* basic styling */
-
-aside {
-    position: fixed;
-    top: 0;
-    text-align: center;
-}
+/* general aesthetics */
 
 body {
-    clear: both;
     margin: 0 auto;
+    padding: 1em 0;
     max-width: 60em;
     font-family: "Georgia", "Helvetica", "Arial", sans-serif;
     line-height: 1.5;
-    padding: 1em 1em;
 }
 
 a {
@@ -25,28 +18,63 @@ a:hover {
 
 /* responsive adjustment */
 
-@media (max-width: 50em) {
+body > * {
+    background-color: white;
+}
+
+header, aside {
+    position: fixed;
+    text-align: center;
+}
+
+header {
+    top: 0;
+    height: 5ex;
+    padding: 2ex 0 1ex;
+    z-index: 2;
+}
+
+aside {
+    top: 6ex;
+    padding: 0;
+    z-index: 0;
+}
+
+main {
+    position: relative;
+    padding: 0 1em;
+    z-index: 1;
+}
+
+@media (max-width: 40em) {
+    /* rules applied when less wide than 40em */
+
+    header, aside { 
+        width: 100%;
+    }
+
     main {
-        top: 15em;
+        top: 30ex;
     }
 }
 
-@media (min-width: 50em) {
-    aside {
-        width: 30%;
-        float: left;
+@media (min-width: 40em) {
+    /* rules applied when wider than 40em */
+
+    header, aside {
+        width: 15em;
     }
 
     main {
-        width: 70%;
-        float: right;
+        margin: 0 0 0 15em;
     }
 }
 
 /* resume formatting */
 
-article {
-    padding: 0 0 1em;
+h2 {
+    margin: 0;
+    padding: 0;
 }
 
 h3 {
@@ -67,6 +95,10 @@ h3::after {
     content: "";
     background-color: black;
     z-index: 0;
+}
+
+article {
+    padding: 0 0 1em;
 }
 
 .title, .date, .subtitle, .description {
