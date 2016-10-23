@@ -1,0 +1,145 @@
+/* general aesthetics */
+
+body {
+  margin: 0 auto;
+  padding: 1em 0;
+  max-width: 60em;
+  font-family: "Georgia", "Helvetica", "Arial", sans-serif;
+  line-height: 1.5;
+
+}
+
+a       { text-decoration: none; }
+a:hover { color: #e81c4f; }
+*       { 
+  background-color: white; 
+  padding: 0; 
+  margin: 0;
+          text-size-adjust: 100%; 
+      -ms-text-size-adjust: 100%; 
+     -moz-text-size-adjust: 100%; 
+  -webkit-text-size-adjust: 100%;
+}
+
+/* responsive adjustment */
+
+$collapse-width: 480px;
+
+@media only screen and (max-width: $collapse-width),
+       only screen and (max-device-width: $collapse-width) {
+  header, aside { width: 100%; }
+  header        { padding: 30px 0; }
+  aside         { margin-top: 120px; }
+  main          { top: 60ex; }
+}
+
+@media only screen and (min-width: $collapse-width)
+                   and (min-device-width: $collapse-width) {
+  $left-col-width: 200px;
+
+  header, aside {
+    width: $left-col-width; 
+    max-width: $left-col-width; 
+    margin: 0 10px;
+  }
+
+  header  { padding-top: 30px; }
+  aside   { margin-top: 90px; }
+  main    { margin: 0 0 0 $left-col-width + 2*10px; }
+}
+
+/* resume formatting: scrolling and styling */
+
+@mixin fuck-text-size-inflation {
+  /* hopefully i can take this out one day
+   * unfortunately, that day seems very far
+   * http://stackoverflow.com/questions/20924039
+   */
+  @media (max-device-width: $collapse-width) {
+    font-size: 2.25em;
+  }
+}
+
+@mixin fixed-and-centered {
+  top: 0;
+  position: fixed;
+  text-align: center;
+}
+
+header {
+  @include fixed-and-centered;
+  @include fuck-text-size-inflation;
+  z-index: 2;
+
+  font-size: 1.5em;
+  font-weight: bolder;
+}
+
+aside {
+  @include fixed-and-centered;
+  @include fuck-text-size-inflation;
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  padding: 0 1em;
+  z-index: 1;
+}
+
+section {
+  > p:nth-child(1) {
+    position: relative;
+    font-variant: small-caps;
+    font-weight: bold;
+    font-size: 1.25em;
+    overflow: hidden;
+
+    &::after {
+      position: absolute;
+      width: 100%;
+      height: 10%;
+      top: 45%;
+      margin: 0 1ex;
+      content: "";
+      background-color: black;
+    }
+  }
+
+  > article {
+    position: relative;
+    padding: 0 0 1em;
+
+    > p:nth-child(1) {
+      float: left;
+      @include fuck-text-size-inflation;
+    }
+
+    > p:nth-child(2) {
+      float: right;
+      @include fuck-text-size-inflation;
+    }
+
+    > p:nth-child(3) {
+      clear: both;
+      font-style: italic;
+    }
+
+    ul {
+        padding: 0 0 0 2em;
+    }
+
+    &::after {
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      margin: 1ex 0;
+      content: "";
+      background-color: grey;
+    }
+
+    &:last-child::after {
+      background-color: white;
+    }
+  }
+}
