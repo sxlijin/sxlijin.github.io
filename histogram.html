@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <!--
-  
+
   If you Google "histogram generator" or anything along those lines, the
   search results don't really turn up anything particularly useful. This
   is a project to rectify that.
 
-  Currently in progress.
+  Currently a work in progress.
+
+  Desired:
+    * ability to set title
+    * ability to set axes
+    * svg -> png conversion
 
   Might have to make Git track d3.v4 when I finally put this together
   properly, but in the meantime, hosting it off their website is (hopefully)
@@ -13,90 +18,150 @@
 
 -->
 <head>
-  <style>
-
-  @media screen {
-    body > * {
-      margin: 10px;
-      float: left;
-    }
-  }
-
-  #histogram rect {
-    fill: steelblue;
-  }
-
-  #histogram text {
-    fill: steelblue;
-    font: 10px sans-serif;
-    text-anchor: end;
-  }
-
-  </style>
   <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
-  <script src="https://unpkg.com/react@15/dist/react.js"></script>
-  <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
   <script>
-    // From the tutorial at https://bost.ocks.org/mike/bar/2/
+  function getHistogramData() {
+    return document.getElementById('histogram-data')
+          .value
+          .split(/\s+/)
+          .map(parseFloat)
+          .filter((elem) => !isNaN(elem));
+  }
 
-    function getHistogramData() {
-      return document.getElementById('histogram-data')
-            .value
-            .split(/\s+/)
-            .map(parseFloat)
-            .filter((elem) => !isNaN(elem));
+  function binData(data) {
+    data.sort((a, b) => a - b);
+
+    console.log(data);
+
+    if (data.length == 0) return [];
+
+    let min = data[0],
+        max = data[data.length - 1],
+        binWidth = parseFloat(document.getElementById('bin-width').value),
+        bins = new Map();
+
+    // i.e. # of bins is round( 1 + ln(data.length) )
+    if (!binWidth) binWidth = (max - min) / Math.round(1 + Math.log(data.length));
+
+    for (let i = 0, currentBin = min;
+         i < data.length;
+         currentBin += binWidth)
+    {
+      console.log('===============', currentBin);
+      bins.set(currentBin, 0);
+      while (data[i] < currentBin + binWidth) {
+        console.log(data[i], currentBin);
+        bins.set(currentBin, bins.get(currentBin) + 1);
+        i++;
+      }
     }
 
-    window.onload = () => {
-      let data = getHistogramData();
+    let binnedData = [];
 
-      let width = 500,
-        height = 500;
+    for (let [binKey, binCount] of bins) {
+      binnedData.push({bin: binKey, count: binCount});
+    }
 
-      let y = d3.scaleLinear()
-        .domain([0, d3.max(data)])
-        .range([height, 0]);
+    console.log(binnedData);
+    return binnedData;
+  }
 
-      let chart = d3.select('#histogram')
-        .attr('width', width)
-        .attr('height', height);
+  function reloadChart() {
+    let svg     = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+        data    = binData(getHistogramData()),
+        histDiv = getComputedStyle(document.getElementById('histogram'));
 
-      let barWidth = width / data.length;
+    function conv(nStr) { return parseFloat(nStr.slice(0, nStr.length - 2)); }
 
-      let bar = chart.selectAll('g')
-        .data(data)
-        .enter().append('g')
-        .attr('transform', (d, i) => `translate(${i * barWidth}, 0)`);
+    let width   = conv(histDiv.width),
+        height  = conv(histDiv.height),
+        y       = d3.scaleLinear()
+                    .domain([0, d3.max(data.map((e) => e.count))])
+                    .range([height, 50]),
+        barW    = width / data.length,
+        chart   = d3.select(svg)
+                    .attr('width', width)
+                    .attr('height', height);
 
-      bar.append('rect')
-        .attr('width', barWidth - 1)
-        .attr('y', y)
-        .attr('height', (d) => height - y(d));
+    let bar = chart.selectAll('g')
+      .data(data)
+      .enter().append('g')
+      .attr('transform', (d, i) => `translate(${i * barW}, 0)`);
 
-      bar.append('text')
-        .attr('x', barWidth / 2)
-        .attr('y', (d) => y(d) + 3)
-        .attr('dx', '2em')
-        .attr('dy', '-3em')
-        .text((d) => d);
+    bar.append('rect')
+      .attr('width', barW - 1)
+      .attr('height', (d) => height - y(d.count))
+      .attr('y', (d) => y(d.count) - 20);
 
-    };
-</script>
+    bar.append('text')
+      .classed('count-label', true)
+      .attr('x', barW / 2)
+      .attr('y', (d) => y(d.count) - 20)
+      .attr('dx', 0)
+      .attr('dy', '1.5em')
+      .text((d) => d.count.toString());
+
+    bar.append('text')
+      .classed('bin-label', true)
+      .attr('x', barW / 2)
+      .attr('y', height)
+      .attr('dx', 0)
+      .attr('dy', 0)
+      .text((d) => d.bin.toString().slice(0, 5));
+
+    let histNode = document.getElementById('histogram');
+    while (histNode.hasChildNodes()) histNode.removeChild(histNode.lastChild);
+    histNode.appendChild(svg);
+  }
+
+  function onDataChange() {
+    reloadChart();
+    localStorage.setItem('histogrammer', document.getElementById('histogram-data').value);
+  }
+
+  window.onload = () => {
+    document.getElementById('histogram-data').value = localStorage.getItem('histogrammer');
+    reloadChart();
+  }
+  </script>
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+    media="screen" />
+  <style>
+  body.container { margin-top: 5vh; margin-bottom: 5vh; height: 90vh; }
+
+  .sidebar div    { height: 5vh; clear: both; }
+  .sidebar textarea { height: 85vh; }
+  .sidebar label  { float: left; }
+  .sidebar input  { float: right; width: 35%; }
+
+  #histogram { height: 90vh; }
+
+  #histogram rect       { fill: steelblue; }
+  #histogram rect:hover { fill: indianred; }
+
+  #histogram text { font: bold 14px sans-serif; text-anchor: middle; }
+  #histogram text.bin-label   { fill: steelblue; }
+  #histogram text.count-label { fill: white; }
+  </style>
 </head>
-<body>
-  <!-- placeholder data for experimenting in textarea -->
-  <textarea
-    id="histogram-data"
-    rows="200"
-    placeholder="Your data here, one data point per line."
-    >
-0  
-foobar
-10
-6e1
-20
-30
-40
-50</textarea>
-  <svg id="histogram"></svg>
+<body class="container">
+  <div class="three columns sidebar">
+    <div>
+      <label>Bin width:</label>
+      <input id="bin-width" oninput="onDataChange()">
+    </div>
+    <textarea
+      id="histogram-data"
+      class="u-full-width"
+      placeholder="Your data here, one data point per line."
+      oninput="onDataChange()"
+      >
+    </textarea>
+  </div>
+  <div class="nine columns">
+    <div id="histogram"></div>
+  </div>
 </body>
