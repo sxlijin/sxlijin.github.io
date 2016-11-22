@@ -116,11 +116,13 @@
 
   function onDataChange() {
     reloadChart();
-    localStorage.setItem('histogrammer', document.getElementById('histogram-data').value);
+    localStorage.setItem('histogram-data', document.getElementById('histogram-data').value);
+    localStorage.setItem('bin-width', document.getElementById('bin-width').value);
   }
 
   window.onload = () => {
-    document.getElementById('histogram-data').value = localStorage.getItem('histogrammer');
+    document.getElementById('histogram-data').value = localStorage.getItem('histogram-data');
+    document.getElementById('bin-width').value = localStorage.getItem('bin-width');
     reloadChart();
   }
   </script>
