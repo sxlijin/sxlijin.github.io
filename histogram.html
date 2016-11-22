@@ -52,7 +52,8 @@
          currentBin += binWidth)
     {
       bins.set(currentBin, 0);
-      while (data[i] < currentBin + binWidth) {
+      while (data[i] < currentBin + binWidth ||
+             (data[i] <= currentBin + binWidth && currentBin + binWidth == max)) {
         bins.set(currentBin, bins.get(currentBin) + 1);
         i++;
       }
