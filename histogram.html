@@ -47,7 +47,6 @@
          i < data.length;
          currentBin += binWidth)
     {
-      console.log('===============', currentBin);
       bins.set(currentBin, 0);
       while (data[i] < currentBin + binWidth) {
         console.log(data[i], currentBin);
