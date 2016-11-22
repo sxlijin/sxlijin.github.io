@@ -33,7 +33,7 @@
     }
 
     </style>
-    <script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="//d3js.org/d3.v4.js" charset="utf-8"></script>
     <script>
         // From the tutorial at https://bost.ocks.org/mike/bar/2/
 
@@ -47,36 +47,38 @@
 
         window.onload = () => {
             let data = getHistogramData();
-            console.log(data);
 
             let width = 500,
-                barHeight = 20;
+                height = 500;
 
-            let x = d3.scaleLinear()
+            let y = d3.scaleLinear()
                 .domain([0, d3.max(data)])
-                .range([0, width]);
+                .range([height, 0]);
 
             let chart = d3.select('#histogram')
                 .attr('width', width)
-                .attr('height', barHeight * data.length);
+                .attr('height', height);
+
+            let barWidth = width / data.length;
 
             let bar = chart.selectAll('g')
                 .data(data)
               .enter().append('g')
-                .attr('transform', (d, i) => `translate(0, ${i * barHeight})`);
+                .attr('transform', (d, i) => `translate(${i * barWidth}, 0)`);
 
             bar.append('rect')
-                .attr('width', x)
-                .attr('height', barHeight - 1);
+                .attr('width', barWidth - 1)
+                .attr('y', y)
+                .attr('height', (d) => height - y(d));
 
             bar.append('text')
-                .attr('x', (d) => x(d) - 3)
-                .attr('y', barHeight / 2)
+                .attr('x', barWidth / 2)
+                .attr('y', (d) => y(d) + 3)
                 .attr('dx', '2em')
-                .attr('dy', '.35em')
+                .attr('dy', '-3em')
                 .text((d) => d);
 
-		};
+      };
 </script>
 </head>
 <body>
