@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Samuel Lijin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <!--
+      @media (min-width: 900px) { html { font-size: 34px; } }
+    -->
+    <style>
+    html {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+    }
+
+    .container {
+      display:  flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 960px;
+      min-height: 80vh;
+      margin: 0 auto;
+    }
+
+    .container > * {
+      text-align: center;
+      padding: 7px;
+    }
+
+    .big-icon > * {
+      width: 70vw;
+      max-width: 10em;
+    }
+
+    .links button {
+      display: inline-block;
+      font-size: 0.7em;
+      margin: 0 0.2em;
+      width: 8em;
+      padding: .75em 2em;
+      text-align: center;
+      background-color: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid #aaa;
+    }
+
+    button:hover, button:focus {
+      border-color: #444;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="big-icon"><img src="/images/icon.png"/></div>
+      <div class="hello"><p>hi. i'm sam.</p></div>
+      <div class="links">
+        <a href="/blog"><button>blog.</button></a>
+        <a href="/resume"><button>resume.</button></a>
+      </div>
+    </div>
+  </body>
+</html>
