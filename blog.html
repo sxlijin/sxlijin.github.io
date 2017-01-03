@@ -1,0 +1,27 @@
+---
+layout: default
+---
+
+<div>
+  <article>
+    <p>
+    {% capture my-include %}{% include profile.md %}{% endcapture %}
+    {{ my-include | markdownify }}
+    </p>
+  </article>
+</div>
+<hr/>
+<div class="posts">
+  {% for post in site.posts %}
+    <article class="post">
+
+      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+      <span>{{post.date | date: '%Y %b %d'}}</span>
+
+      <div class="entry">
+        {{ post.excerpt | truncatewords: 30 }}
+      </div>
+    </article>
+    <hr/>
+  {% endfor %}
+</div>
