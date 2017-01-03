@@ -1,0 +1,13 @@
+{
+  "name": "Samuel Lijin",
+  "short_name": "Samuel Lijin",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "The personal website of Samuel Lijin.",
+  "theme_color": "white",
+  "start_url": "./",
+  "related_applications": [{
+    "platform": "web"
+  }]
+}
