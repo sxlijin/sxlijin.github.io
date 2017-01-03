@@ -1,0 +1,62 @@
+---
+---
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/* adobe color wheel: #e81c50 #c672c8 #743ba3 #10008c #3a6ad8 */
+
+@mixin centered-column {
+  width: calc(100% - 2em);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+}
+  
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #3a6ad8;
+
+  &:visited {
+    color: #743ba3;
+  }
+
+  &:hover {
+    color: #e81c50;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
+}
+
+.site-header {
+  background-color: #eee;
+  
+  .wrapper {
+    @include centered-column;
+    display: flex;
+    justify-content: space-between;
+
+    * {
+      height: 2em;
+      line-height: 2em;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.page-content {
+  position: relative;
+  @include centered-column;
+  line-height: 1.5;
+}
