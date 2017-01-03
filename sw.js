@@ -19,6 +19,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+  event.request.url = event.request.url.replace(/^http:/, 'https:');
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
