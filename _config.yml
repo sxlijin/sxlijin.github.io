@@ -26,3 +26,5 @@ github:
 markdown: kramdown
 
 permalink: pretty
+
+exclude: [ "_dev/" ]
