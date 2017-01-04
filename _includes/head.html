@@ -17,21 +17,6 @@
   <link rel="canonical"
         href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
-  <script>
-  // from https://developers.google.com/web/fundamentals/getting-started/primers/service-workers
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('/sw.js').then(function(registration) {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }).catch(function(err) {
-        // registration failed :(
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    });
-  }
-  </script>
-
   {% if jekyll.environment == 'production' and site.google_analytics %}
     {% include google-analytics.html %}
   {% endif %}
