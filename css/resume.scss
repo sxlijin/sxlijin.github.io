@@ -3,6 +3,10 @@
 @import 'typography';
 
 /* general aesthetics */
+$base-font-size: 16px;
+html {
+  font-size: $base-font-size;
+}
 
 body {
   margin: 0 auto;
@@ -35,8 +39,11 @@ $base-font-size: 16px;
   /* hopefully i can take this *bleep* font size multiplier
    * out one day. unfortunately, that day seems very far
    * http://stackoverflow.com/questions/20924039
+   *
+   * EDIT: it seems that day is here; the next time i meddle
+   * with this, i'll come back and delete this comment block
    */
-  html          { font-size: 2.0 * $base-font-size; }
+  /* html          { font-size: 2 * $base-font-size; } */
   header, aside { width: 100%; }
   header        { padding: 30px 0; }
   aside         { margin-top: 7.5ex; }
@@ -46,7 +53,6 @@ $base-font-size: 16px;
 @media only screen and (min-width: $collapse-width)
                    and (min-device-width: $collapse-width) {
   $left-col-width: 200px;
-  html          { font-size: $base-font-size; }
 
   header, aside {
     width: $left-col-width; 
