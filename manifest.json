@@ -3,7 +3,7 @@
   "short_name": "Samuel Lijin",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "black",
   "description": "The personal website of Samuel Lijin.",
   "theme_color": "white",
   "start_url": "./",
