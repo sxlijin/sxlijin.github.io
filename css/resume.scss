@@ -10,7 +10,7 @@ html {
 
 body {
   margin: 0 auto;
-  padding: 1em 0;
+  padding: 0;
   max-width: 60em;
   font-family: "Roboto", sans-serif;
   line-height: 1.5;
@@ -34,6 +34,10 @@ a:hover { color: #e81c4f; }
 $collapse-width: 480px;
 $base-font-size: 16px;
 
+$header-height: 4rem;
+header { line-height: $header-height; }
+aside  {  margin-top: $header-height; }
+
 @media only screen and (max-width: $collapse-width),
        only screen and (max-device-width: $collapse-width) {
   /* hopefully i can take this *bleep* font size multiplier
@@ -45,24 +49,22 @@ $base-font-size: 16px;
    */
   /* html          { font-size: 2 * $base-font-size; } */
   header, aside { width: 100%; }
-  header        { padding: 30px 0; }
-  aside         { margin-top: 7.5ex; }
-  main          { top: 25ex; }
+  main          { top: 14rem; }
 }
 
 @media only screen and (min-width: $collapse-width)
                    and (min-device-width: $collapse-width) {
   $left-col-width: 200px;
+  $left-col-margin: 10px;
 
   header, aside {
     width: $left-col-width; 
     max-width: $left-col-width; 
-    margin: 0 10px;
+    margin-left: $left-col-margin;
+    margin-right: $left-col-margin;
   }
 
-  header  { padding-top: 30px; }
-  aside   { margin-top: 90px; }
-  main    { margin: 0 0 0 $left-col-width + 2*10px; }
+  main { margin: 1em 0 0 $left-col-width + 2 * $left-col-margin; }
 }
 
 /* resume formatting: scrolling and styling */
