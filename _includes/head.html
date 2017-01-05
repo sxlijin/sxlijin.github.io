@@ -13,11 +13,13 @@
   <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
 
-  {% if page.url == '/' %}
-  <link rel="stylesheet" media="all" href="{{ "/css/index.css" | relative_url }}">
-  {% else %}
-  <link rel="stylesheet" media="all" href="{{ "/css/main.css" | relative_url }}">
-  {% endif %}
+  {% comment %}
+  The CSS include can be overridden by specifying css_override in the
+  include tag, like so: {% include file css_override="/css/override.css" %}
+  {% endcomment %}
+  <link rel="stylesheet"
+        media="all"
+        href="{{ include.css_override | default: "/css/main.css" | relative_url }}">
 
   <link rel="canonical"
         href="{{ page.url | replace:'index.html','' | absolute_url }}">
