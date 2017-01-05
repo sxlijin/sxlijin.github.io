@@ -32,4 +32,14 @@
   @include centered-column;
   position: relative;
   line-height: 1.5;
+
+  hr {
+    margin: 2.5em 0 3em;
+    border: 0;
+    border-top: 1px solid #dddddd;
+
+    &:last-child {
+        border-top: 0;
+    }
+  }
 }
