@@ -21,6 +21,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 repository: sxlijin/sxlijin.github.io
 github:
   url: ""
+google_analytics: UA-89488611-1
 
 # Build settings
 markdown: kramdown
