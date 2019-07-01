@@ -2,6 +2,11 @@
 
 ## Setting Up
 
+On Debian the following is required:
+~~~
+apt install ruby-dev libz-dev
+~~~
+
 Install Ruby and RubyGems; then install `bundler` and dependencies:
 ~~~
 gem install bundler && bundle install --binstubs
