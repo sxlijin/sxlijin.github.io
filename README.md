@@ -1,6 +1,6 @@
 # Running the Website Locally
 
-## Setting Up
+## Setting Up and Updating
 
 On Debian the following is required:
 ~~~
@@ -16,6 +16,11 @@ If https is desired, a private key and cert will be necessary (note that the cer
 ~~~
 openssl genrsa -out website-DEV.key 4096
 openssl req -new -x509 -sha256 -key website-DEV.key -out website-DEV.cert -days 9999 -subj /O=website-DEV
+~~~
+
+To update all Ruby deps:
+~~~
+bundle update github-pages
 ~~~
 
 ## Development
