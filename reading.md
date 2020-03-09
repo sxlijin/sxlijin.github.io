@@ -19,3 +19,14 @@ Although there's always [research.google.com](research.google.com), some additio
 * ["Life in the Trenches of healthcare.gov" (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov) - a recanting of the travails that healthcare.gov went through, as summarized by a Xoogler SRE.
 * ["No Silver Bullet" (1986)](http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf) - a discussion of the fundamental challenges involved in creating software.
 * ["Supercomputing's Monster in the Closet" (2016)](https://spectrum.ieee.org/computing/hardware/how-to-kill-a-supercomputer-dirty-power-cosmic-rays-and-bad-solder) - "Jaguar had 360 terabytes of main memory [and] was logging ECC errors at a rate of 350 per minute." Also see [this Twitter thread](https://twitter.com/whitequark/status/980522328151834624?s=19), which is what led me to this in the first place.
+
+## Personal
+
+### 2020
+
+* Jemisin, N. K. - The Fifth Season
+* Jemisin, N. K. - The Obelisk Gate
+* Jemisin, N. K. - The Stone Sky
+* Carter, Bill - The War for Late Night
+* McClelland, Cary - Silicon City: San Francisco in the Long Shadow of the Valley
+* Pratchett, Terry and Neil Gaiman - Good Omens
