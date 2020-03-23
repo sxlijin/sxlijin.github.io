@@ -30,3 +30,8 @@ Although there's always [research.google.com](research.google.com), some additio
 * Carter, Bill - The War for Late Night
 * McClelland, Cary - Silicon City: San Francisco in the Long Shadow of the Valley
 * Pratchett, Terry and Neil Gaiman - Good Omens
+* Attempted to start reading the Discworld series; got
+  * almost halfway through *Sourcery* (started with that one because supposedly Pratchett recommended that as a starting point),
+  * halfway through *Mort* (went with it next because I was curious about Death's character), and
+  * maybe 40 pages each of *Small Gods* and *Feet of Clay* (the latter because I found a thread on /r/discworld saying that the thing that finally got some people into Discworld was the Watch series).
+  * Ultimately, I don't think Pratchett is my cup of tea. Entertaining, certainly: I definitely appreciate the absurdism and surrealism of it. But something is missing for me - maybe it's the lack of plot (which isn't necessarily true, I definitely got to the point where I saw that *Sourcery* is about the end of the world and *Mort* is about Mort's journey), lack of rules to the reality of Discworld (e.g. why is it important to talk about A'Tuin? but of course, complaining about the lack of rules is somewhat absurd given that much of Discworld is about challenging, well, the absurd) - I can't quite pin it down, but *whatever* it is, I wasn't drawn into the world so much as just tickled by it.
