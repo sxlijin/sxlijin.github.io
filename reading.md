@@ -19,6 +19,7 @@ Although there's always [research.google.com](research.google.com), some additio
 * ["Life in the Trenches of healthcare.gov" (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov) - a recanting of the travails that healthcare.gov went through, as summarized by a Xoogler SRE.
 * ["No Silver Bullet" (1986)](http://faculty.salisbury.edu/~xswang/Research/Papers/SERelated/no-silver-bullet.pdf) - a discussion of the fundamental challenges involved in creating software.
 * ["Supercomputing's Monster in the Closet" (2016)](https://spectrum.ieee.org/computing/hardware/how-to-kill-a-supercomputer-dirty-power-cosmic-rays-and-bad-solder) - "Jaguar had 360 terabytes of main memory [and] was logging ECC errors at a rate of 350 per minute." Also see [this Twitter thread](https://twitter.com/whitequark/status/980522328151834624?s=19), which is what led me to this in the first place.
+* ["The Hardest Program I've Ever Written" (2015)](http://journal.stuffwithstuff.com/2015/09/08/the-hardest-program-ive-ever-written/) - the story of `dartfmt`: "The hardest program I’ve ever written, once you strip out the whitespace, is 3,835 lines long. That handful of code took me almost a year to write. [...] I deleted 20,704 lines of code over that time."
 
 ## Personal
 
