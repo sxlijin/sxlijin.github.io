@@ -1,22 +1,20 @@
 # Sam Lijin
 
-recruiting@sxlijin.com | https://github.com/sxlijin | https://linkedin.com/in/sxlijin | he/him
+recruiting@sxlijin.com \| https://github.com/sxlijin \| https://linkedin.com/in/sxlijin \| he/him
 
 ## Experience
 
-### trunk.io | July 2021 - current
+### trunk.io \| July 2021 - current
 
-#### Check | Services TL, Mar 2023 - current
+#### Check \| Services TL, Mar 2023 - current
 
 Proposed, scoped, designed, and led a team of 3 to:
 
 * Build out Trunk Check's GitHub integrations, to scan PRs and repos for lint issues, formatting issues, and security vulnerabilities
 * Build a web-only onboarding experience (prior to this, onboarding meant either installing the CLI or our VSCode extension)
 * Build out integrations with security tools, to provide comprehensive security coverage of PRs and repos
-* Provide customer service to enterprise and community users
-* Do assorted keep-the-lights on work: release process improvements, production incident response, and so forth.
 
-#### Check | IC, July 2021 - Feb 2023
+#### Check \| IC, July 2021 - Feb 2023
 
 * Helped close our first 100+ engineer customer, by working with them to identify and close feature gaps
 * Designed and implemented system for tracking Check billing usage
@@ -26,14 +24,14 @@ Proposed, scoped, designed, and led a team of 3 to:
   * usability improvements (e.g. surfacing filename and line numbers of invalid config entries)
 * Provide customer service to enterprise and community users
 
-### Google | Sept 2017 - June 2021
+### Google \| Sept 2017 - June 2021
 
-#### User Identity SRE | IC, Mar 2021 - June 2021
+#### User Identity SRE \| IC, Mar 2021 - June 2021
 
 * Identified and severed a Gmail dependency on internal Identity storage systems, preempting the need to staff a team to do so
 * Analyzed global outage potential for three internal systems (OIDC, autoconfig, TidyDB) and designed solutions to limit the blast radius of production changes to said systems
 
-#### Cloud Firestore | EngProd TL, Aug 2019 - Feb 2021
+#### Cloud Firestore \| EngProd TL, Aug 2019 - Feb 2021
 
 * Ran OKR planning and set a vision for the EngProd team, while also transitioning through 4 managers over 6 months
 * Ramped up every new hire for the team: two new grad ICs, three senior ICs, and one managers
@@ -43,20 +41,20 @@ Proposed, scoped, designed, and led a team of 3 to:
 * Designed and implemented tooling to run a hermetic instance of Firestore
 * Proposed and implemented a standardized onboarding curriculum for new Firestore engineers ("breadth talks") 
 
-#### GAE Memcache | EngProd TL, Apr 2019 - July 2019
+#### GAE Memcache \| EngProd TL, Apr 2019 - July 2019
 
 * Proposed and kicked off a plan to close critical test coverage gaps and improve iteration speed, based on a review of high-impact outages and the feature roadmap for the next year
 * Implemented automated performance regression detection for the backend and GAE Flex serving path 
 * Consulted on how to run end-to-end tests that exercised GAE Memcache integrations with other subsystems
 
-#### Cloud Firestore | IC, Sept 2017 - July 2019
+#### Cloud Firestore \| IC, Sept 2017 - July 2019
 
 * Participated in design of the migration from an eventually consistent storage layer to strongly consistent storage layer (Megamover for Firestore)
 * Designed and implemented test infrastructure for the aforementioned migration
 * Designed and implemented invariant testing of a new metadata garbage collection system (EG cleanup)
 * Participated in incident response for high-severity outages (omg/12642, omg/12277, omg/12344)
 
-#### Miscellaneous | Sept 2017 - June 2021
+#### Miscellaneous \| Sept 2017 - June 2021
 
 * Redesigned the Noogler training curriculum on Google-internal storage/database technologies
 * Proposed and landed features in various systems owned by other teams (e.g. grimoire docs-panel, readtome.gwsq, canaries_max)
@@ -64,8 +62,9 @@ Proposed, scoped, designed, and led a team of 3 to:
 
 ## Education
 
-Vanderbilt University (Nashville, TN) | May 2017 | B.S. in Computer Science; B.A. in Mathematics and Political Science |  3.73 / 4.00
-Stuyvesant HS (New York, NY) | 2013
+Vanderbilt University (Nashville, TN) \| May 2017 \| B.S. in Computer Science; B.A. in Mathematics and Political Science \|  3.73 / 4.00
+
+Stuyvesant HS (New York, NY) \| 2013
 
 ## Skills
 
