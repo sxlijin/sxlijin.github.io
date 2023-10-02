@@ -3,7 +3,8 @@
 @import 'typography';
 
 /* general aesthetics */
-$base-font-size: 16px;
+$base-font-size: 12px;
+
 html {
   font-size: $base-font-size;
 }
@@ -13,138 +14,31 @@ body {
   padding: 0;
   max-width: 60em;
   font-family: "Roboto", sans-serif;
-  line-height: 1.5;
 
-}
-
-a       { text-decoration: none; }
-a:hover { color: #e81c4f; }
-*       { 
-  background-color: white; 
-  padding: 0; 
-  margin: 0;
-          text-size-adjust: 100%; 
-      -ms-text-size-adjust: 100%; 
-     -moz-text-size-adjust: 100%; 
-  -webkit-text-size-adjust: 100%;
-}
-
-/* responsive adjustment */
-
-$collapse-width: 480px;
-$base-font-size: 16px;
-
-$header-height: 4rem;
-header { line-height: $header-height; }
-aside  {  margin-top: $header-height; }
-
-@media only screen and (max-width: $collapse-width),
-       only screen and (max-device-width: $collapse-width) {
-  /* hopefully i can take this *bleep* font size multiplier
-   * out one day. unfortunately, that day seems very far
-   * http://stackoverflow.com/questions/20924039
-   *
-   * EDIT: it seems that day is here; the next time i meddle
-   * with this, i'll come back and delete this comment block
-   */
-  /* html          { font-size: 2 * $base-font-size; } */
-  header, aside { width: 100%; }
-  main          { top: 14rem; }
-}
-
-@media only screen and (min-width: $collapse-width)
-                   and (min-device-width: $collapse-width) {
-  $left-col-width: 200px;
-  $left-col-margin: 10px;
-
-  header, aside {
-    width: $left-col-width; 
-    max-width: $left-col-width; 
-    margin-left: $left-col-margin;
-    margin-right: $left-col-margin;
+  @media screen {
+    line-height: 1.5;
   }
-
-  main { margin: 1em 0 0 $left-col-width + 2 * $left-col-margin; }
 }
 
-/* resume formatting: scrolling and styling */
-
-
-@mixin fixed-and-centered {
-  top: 0;
-  position: fixed;
-  text-align: center;
+h1, h2, h3, h4 {
+  margin: .5rem 0;
 }
 
-header {
-  @include fixed-and-centered;
-  z-index: 2;
+h1, h2, h3 {
+  display: flex;
 
-  font-size: 1.5em;
-  font-weight: bolder;
-}
-
-aside {
-  @include fixed-and-centered;
-  z-index: 0;
-}
-
-main {
-  position: relative;
-  padding: 0 1em;
-  z-index: 1;
-}
-
-section {
-  > p:nth-child(1) {
-    position: relative;
-    font-weight: bold;
-    font-size: 1.25em;
-    overflow: hidden;
-
-    &::after {
-      position: absolute;
-      width: 100%;
-      height: 10%;
-      top: 45%;
-      margin: 0 1ex;
-      content: "";
-      background-color: black;
-    }
+  ::after {
+    flex-grow: 1;
+    content: "";
+    border-top: 1px solid grey;
+    margin: 1ex 0 1ex 1ex;
   }
+}
 
-  > article {
-    position: relative;
-    padding: 0 0 1em;
+p, ul, ol {
+  margin: .3rem 0;
 
-    > p:nth-child(1) {
-      float: left;
-    }
-
-    > p:nth-child(2) {
-      float: right;
-    }
-
-    > p:nth-child(3) {
-      clear: both;
-      font-style: italic;
-    }
-
-    ul {
-        padding: 0 0 0 2em;
-    }
-
-    &::after {
-      position: absolute;
-      width: 100%;
-      height: 1px;
-      margin: 1ex 0;
-      content: "";
-      background-color: grey;
-    }
-
-    &:last-child::after {
-      background-color: white;
-    }
+  ul, ol {
+    margin: 0;
   }
 }
