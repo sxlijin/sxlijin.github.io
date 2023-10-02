@@ -1,7 +1,7 @@
 ---
 layout: bare-bones
 ---
-{% include head.html css_override="/css/index.css" %}
+{% include head.html css_override="/css/resume.css" %}
 
 # Sam Lijin
 
