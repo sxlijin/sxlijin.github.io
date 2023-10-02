@@ -23,8 +23,10 @@ github:
   url: ""
 google_analytics: UA-89488611-1
 
-# Build settings
+# https://jekyllrb.com/docs/configuration/markdown/
 markdown: kramdown
+kramdown:
+  hard_wrap: false
 
 permalink: pretty
 

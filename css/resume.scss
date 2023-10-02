@@ -4,6 +4,7 @@
 
 /* general aesthetics */
 $base-font-size: 12px;
+$line-height: 1.5em;
 
 html {
   font-size: $base-font-size;
@@ -16,7 +17,7 @@ body {
   font-family: "Roboto", sans-serif;
 
   @media screen {
-    line-height: 1.5;
+    line-height: $line-height;
   }
 }
 
@@ -41,4 +42,8 @@ p, ul, ol {
   ul, ol {
     margin: 0;
   }
+}
+
+svg.icon {
+  height: $line-height;
 }
