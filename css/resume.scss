@@ -23,6 +23,11 @@ body {
 
 h1, h2, h3, h4 {
   margin: .5rem 0;
+
+  @media screen {
+    margin-top: 1.2rem;
+    line-height: $line-height;
+  }
 }
 
 h1, h2, h3 {

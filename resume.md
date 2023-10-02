@@ -84,6 +84,6 @@ Stuyvesant HS (New York, NY) \| 2013
 
 ## Skills
 
-* C++, Java, Typescript, Javascript, Python; light experience with Rust, Golang, Scheme
-* Bazel, gRPC, React
+* C++, Java, Typescript, Javascript, Python, Bash; light experience with Rust, Golang, Scheme
+* gRPC, Bazel, React, Linux
 * Hobbies: climbing, skiing, photography
