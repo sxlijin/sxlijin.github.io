@@ -28,7 +28,7 @@ h1, h2, h3, h4 {
 h1, h2, h3 {
   display: flex;
 
-  ::after {
+  &::after {
     flex-grow: 1;
     content: "";
     border-top: 1px solid grey;
@@ -46,4 +46,5 @@ p, ul, ol {
 
 svg.icon {
   height: $line-height;
+  vertical-align: top;
 }
