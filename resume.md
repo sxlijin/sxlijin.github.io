@@ -1,3 +1,8 @@
+---
+layout: bare-bones
+---
+{% include head.html css_override="/css/index.css" %}
+
 # Sam Lijin
 
 recruiting@sxlijin.com \| https://github.com/sxlijin \| https://linkedin.com/in/sxlijin \| he/him
