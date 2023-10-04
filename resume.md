@@ -27,18 +27,17 @@ he/him
 Proposed, scoped, designed, and led a team of 3 to:
 
 * Build out Trunk Check's GitHub integrations, to scan PRs and repos for lint issues, formatting issues, and security vulnerabilities
-* Build a web-only onboarding experience (prior to this, onboarding meant either installing the CLI or our VSCode extension)
-* Build out integrations with security tools, to provide comprehensive security coverage of PRs and repos
+* Build a web-only onboarding experience (prior to which, onboarding meant either installing the CLI or our VSCode extension)
+* Build out integrations with security tools, to provide comprehensive security coverage of PRs and repositories
 
 #### Check \| IC, July 2021 - Feb 2023
 
-* Helped close our first 100+ engineer customer, by working with them to identify and close feature gaps
-* Designed and implemented system for tracking Check billing usage
+* Helped close our first 100+ engineer customer by identifying feature gaps in Check and closing them
 * Proposed, designed, and implemented various key Check features:
-  * a plugin system, which enables users to contribute linter integrations to Check,
-  * linter integration framework features (non-file targets, output post-processing, linter integration debugging),
-  * usability improvements (e.g. surfacing filename and line numbers of invalid config entries)
-* Provide customer service to enterprise and community users
+  * a plugin system, which enables Check users to contribute linter integrations to Check,
+  * framework improvements needed to grow Check from <25 integrated tools to 90+ integrated tools (e.g. custom output parsers, more flexible linter configuration)
+  * usability improvements (e.g. stacktraces for invalid configs, user journeys for debugging linter integrations)
+* Provide customer service to community and enterprise users
 
 ### Google \| Sept 2017 - June 2021
 
