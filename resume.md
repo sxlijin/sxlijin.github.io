@@ -28,7 +28,7 @@ he/him
 #### Check \| Senior Software Engineer \| Services TL, Mar 2023 - current
 
 Proposed, scoped, designed, and led a team of 3 to:
-* Build out Trunk Check's GitHub integrations (full-stack), to scan PRs and repos for lint issues, formatting issues, and security vulnerabilities
+* Build out Trunk Check's GitHub integrations (full-stack), to scan PRs and repos for lint/formatting issues and vulnerabilities
 * Build a web-only onboarding experience (prior to which, onboarding meant either installing the CLI or our VSCode extension)
 * Build out integrations with security tools, to provide comprehensive security coverage of PRs and repositories
 
