@@ -52,8 +52,8 @@ Proposed, scoped, designed, and led a team of 3 to:
 * Ran OKR planning and set a vision for the team, while simultaneously transitioning the team through 4 managers over 6 months
 * Ramped up every new hire/transfer: two new grad ICs, three senior ICs, and three managers
 * Participated in org-level reviews of design docs and postmortems for Cloud EngProd and Databases
-* Set up automated release proctoring, allowing us to stop manually proctoring releases
-* Modernized release tooling for a legacy environment spanning 5+ teams (GAE nightly), enabling Firestore to retain multiple pre-production release environments
+* Set up automated release proctoring, allowing us to stop manually proctoring releases, by driving consensus on signal criteria
+* Modernized release tooling for a stack spanning 5+ teams (GAE nightly), enabling us to retain multiple release environments
 * Designed and implemented tooling to run a hermetic instance of Firestore (microservices spanning 5+ teams)
 * Proposed and implemented a standardized onboarding curriculum for new Firestore engineers ("breadth talks") 
 
@@ -65,7 +65,7 @@ Proposed, scoped, designed, and led a team of 3 to:
 
 #### Cloud Firestore \| Software Engineer \| IC, Sept 2017 - July 2019 \| L3 → L4 Nov 2018
 
-* Participated in design of the migration from an eventually consistent storage layer to strongly consistent storage layer (Megamover for Firestore)
+* Worked on design and implementation of the migration from eventually consistent to strongly consistent storage
 * Designed and implemented test infrastructure for the aforementioned migration
 * Designed and implemented invariant testing of a new metadata garbage collection system (EG cleanup)
 * Participated in incident response for high-severity outages (omg/12642, omg/12277, omg/12344)
@@ -73,8 +73,8 @@ Proposed, scoped, designed, and led a team of 3 to:
 #### Miscellaneous \| Sept 2017 - June 2021
 
 * Redesigned the Noogler training curriculum on Google-internal storage/database technologies
-* Proposed and landed features in various systems owned by other teams (e.g. grimoire docs-panel, readtome.gwsq, canaries_max)
-* Landed multiple large-scale changes to refactor APIs across all of google3 (e.g. adding Python RPC stub types, deleting old C++ APIs, removing SWIG dependencies)
+* Proposed and landed features in various systems owned by other teams (e.g. docs-panel, readtome.gwsq, canaries_max)
+* Landed multiple large-scale changes to refactor APIs across all of google3 (e.g. adding Python RPC stub types, SWIG to CLIF)
 
 ## Education
 
