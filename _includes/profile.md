@@ -1,9 +1,5 @@
-Hi, I'm Sam. These are my ramblings.
+Hi there! I'm Sam.
 
-I work at Google, specifically doing software things in GCP.
+I do software things: as of 2023, I've spent the last 2 years at trunk.io building developer tools, and spent the previous 3.5 years at Google working on distributed database systems.
 
-Occasionally I make things:
-
-* [a simple histogram maker](/histogram)
-
-Here's a list of [things I've read](/reading) that you might find interesting - in particular, I try to curate information about Google internals in that list (the stuff that isn't just published via research.google.com, at least).
+Check out my [bookshelf](/bookshelf) for some interesting things I've read.
