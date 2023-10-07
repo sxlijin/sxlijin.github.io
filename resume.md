@@ -22,39 +22,39 @@ he/him
 
 ### trunk.io \| July 2021 - current
 
+* Support community and enterprise users; incorporate their feedback into planning and prioritization of usability/feature work, bugfixes, and documentation improvements
+* Identify, plan, and execute infrastructure improvements (e.g. building data validation/repair jobs, establishing development and testing stories for third-party integrations, build cluster automation, release tooling speedups)
+
 #### Check \| Services TL, Mar 2023 - current
 
-* Proposed, scoped, designed, and led a team of 3 to:
-  * Build out Trunk Check's GitHub integrations (full-stack), to scan PRs and repos for lint issues, formatting issues, and security vulnerabilities
-  * Build a web-only onboarding experience (prior to which, onboarding meant either installing the CLI or our VSCode extension)
-  * Build out integrations with security tools, to provide comprehensive security coverage of PRs and repositories
-* Identify, plan, and execute various infrastructure improvements (e.g. recurring data validation repair jobs, infra improvements for dev/test and staging/prod)
-* Work with community and enterprise users to troubleshoot use cases, identify usability gaps, and prioritize bugfixes and feature work
+Proposed, scoped, designed, and led a team of 3 to:
+* Build out Trunk Check's GitHub integrations (full-stack), to scan PRs and repos for lint issues, formatting issues, and security vulnerabilities
+* Build a web-only onboarding experience (prior to which, onboarding meant either installing the CLI or our VSCode extension)
+* Build out integrations with security tools, to provide comprehensive security coverage of PRs and repositories
 
 #### Check \| IC, July 2021 - Feb 2023
 
-* Helped close our first 100+ engineer customer by identifying feature gaps in Check and closing them
+* Helped close our first 100+ engineer customer by identifying and addressing Check feature gaps
 * Proposed, designed, and implemented various key Check features:
   * a plugin system, which enables Check users to contribute linter integrations to Check,
   * framework improvements needed to grow Check from <25 integrated tools to 90+ integrated tools (e.g. custom output parsers, more flexible linter configuration)
   * usability improvements (e.g. stacktraces for invalid configs, user journeys for debugging linter integrations)
-* Work with community and enterprise users to troubleshoot use cases, identify usability gaps, and prioritize bugfixes and feature work
 
 ### Google \| Sept 2017 - June 2021
 
 #### User Identity SRE \| IC, Mar 2021 - June 2021
 
 * Identified and severed a Gmail dependency on internal Identity storage systems, preempting the need to staff a team to do so
-* Analyzed global outage potential for three internal systems (OIDC, autoconfig, TidyDB) and designed solutions to limit the blast radius of production changes to said systems
+* Analyzed global outage potential of three internal systems (OIDC, autoconfig, TidyDB) and designed solutions to limit the blast radius of production changes to said systems
 
 #### Cloud Firestore \| EngProd TL, Aug 2019 - Feb 2021
 
-* Ran OKR planning and set a vision for the EngProd team, while also transitioning through 4 managers over 6 months
-* Ramped up every new hire for the team: two new grad ICs, three senior ICs, and one managers
+* Ran OKR planning and set a vision for the team, while simultaneously transitioning the team through 4 managers over 6 months
+* Ramped up every new hire/transfer: two new grad ICs, three senior ICs, and three managers
 * Participated in org-level reviews of design docs and postmortems for Cloud EngProd and Databases
 * Set up automated release proctoring, allowing us to stop manually proctoring releases
-* Modernized release automation for GAE nightly releases, allowing Firestore to retain a production-like environment for ad-hoc testing
-* Designed and implemented tooling to run a hermetic instance of Firestore
+* Modernized release tooling for a legacy environment spanning 5+ teams (GAE nightly), enabling Firestore to retain multiple pre-production release environments
+* Designed and implemented tooling to run a hermetic instance of Firestore (microservices spanning 5+ teams)
 * Proposed and implemented a standardized onboarding curriculum for new Firestore engineers ("breadth talks") 
 
 #### GAE Memcache \| EngProd TL, Apr 2019 - July 2019
