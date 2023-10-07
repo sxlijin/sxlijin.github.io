@@ -38,6 +38,7 @@ Although there's always [research.google.com](research.google.com), some additio
 * ["Things You SHould Never Do, Part 1" (2000)](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/)
 * [Debugging an evil Go runtime bug (2017)](https://marcan.st/2017/12/debugging-an-evil-go-runtime-bug/)
 * [The Elves Leave Middle Earth - Sodas Are No Longer Free (2009)](https://steveblank.com/2009/12/21/the-elves-leave-middle-earth-%E2%80%93-soda%E2%80%99s-are-no-longer-free/)
+* [How we manage 200+ open-source repos (2023)](https://turbot.com/blog/2023/10/repo-management)
 
 ## Personal
 
