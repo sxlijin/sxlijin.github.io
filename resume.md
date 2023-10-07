@@ -25,14 +25,14 @@ he/him
 * Support community and enterprise users; incorporate their feedback into planning and prioritization of usability/feature work, bugfixes, and documentation improvements
 * Identify, plan, and execute infrastructure improvements (e.g. building data validation/repair jobs, establishing development and testing stories for third-party integrations, build cluster automation, release tooling speedups)
 
-#### Check \| Services TL, Mar 2023 - current
+#### Check \| Senior Software Engineer \| Services TL, Mar 2023 - current
 
 Proposed, scoped, designed, and led a team of 3 to:
 * Build out Trunk Check's GitHub integrations (full-stack), to scan PRs and repos for lint issues, formatting issues, and security vulnerabilities
 * Build a web-only onboarding experience (prior to which, onboarding meant either installing the CLI or our VSCode extension)
 * Build out integrations with security tools, to provide comprehensive security coverage of PRs and repositories
 
-#### Check \| IC, July 2021 - Feb 2023
+#### Check \| Senior Software Engineer \| IC, July 2021 - Feb 2023
 
 * Helped close our first 100+ engineer customer by identifying and addressing Check feature gaps
 * Proposed, designed, and implemented various key Check features:
@@ -42,12 +42,12 @@ Proposed, scoped, designed, and led a team of 3 to:
 
 ### Google \| Sept 2017 - June 2021
 
-#### User Identity SRE \| IC, Mar 2021 - June 2021
+#### User Identity SRE \| Senior Software Engineer \| IC, Mar 2021 - June 2021
 
 * Identified and severed a Gmail dependency on internal Identity storage systems, preempting the need to staff a team to do so
 * Analyzed global outage potential of three internal systems (OIDC, autoconfig, TidyDB) and designed solutions to limit the blast radius of production changes to said systems
 
-#### Cloud Firestore \| EngProd TL, Aug 2019 - Feb 2021
+#### Cloud Firestore \| Senior Software Engineer \| EngProd TL, Aug 2019 - Feb 2021 \| L4 → L5 Nov 2020
 
 * Ran OKR planning and set a vision for the team, while simultaneously transitioning the team through 4 managers over 6 months
 * Ramped up every new hire/transfer: two new grad ICs, three senior ICs, and three managers
@@ -57,13 +57,13 @@ Proposed, scoped, designed, and led a team of 3 to:
 * Designed and implemented tooling to run a hermetic instance of Firestore (microservices spanning 5+ teams)
 * Proposed and implemented a standardized onboarding curriculum for new Firestore engineers ("breadth talks") 
 
-#### GAE Memcache \| EngProd TL, Apr 2019 - July 2019
+#### GAE Memcache \| Software Engineer \| EngProd TL, Apr 2019 - July 2019
 
 * Proposed and kicked off a plan to close critical test coverage gaps and improve iteration speed, based on a review of high-impact outages and the feature roadmap for the next year
 * Implemented automated performance regression detection for the backend and GAE Flex serving path 
 * Consulted on how to run end-to-end tests that exercised GAE Memcache integrations with other subsystems
 
-#### Cloud Firestore \| IC, Sept 2017 - July 2019
+#### Cloud Firestore \| Software Engineer \| IC, Sept 2017 - July 2019 \| L3 → L4 Nov 2018
 
 * Participated in design of the migration from an eventually consistent storage layer to strongly consistent storage layer (Megamover for Firestore)
 * Designed and implemented test infrastructure for the aforementioned migration
