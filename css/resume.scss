@@ -5,6 +5,7 @@
 /* general aesthetics */
 $base-font-size: 12px;
 $line-height: 1.5em;
+$space-width: 0.25em;
 
 html {
   font-size: $base-font-size;
@@ -33,11 +34,17 @@ h1, h2, h3, h4 {
 h1, h2, h3 {
   display: flex;
 
+  // `display: flex` causes leading and trailing whitespace of elements to get
+  // trimmed, which in the case of `<a>text with link</a> description` gets
+  // rendered as "text with linkdescription", which is undesirable. 0.25em is
+  // the common width of " ", which fixes this (" " has font-dependent width)
+  gap: $space-width;
+
   &::after {
     flex-grow: 1;
     content: "";
     border-top: 1px solid grey;
-    margin: 1ex 0 1ex 1ex;
+    margin: 1.3ex 0 0 calc(1ex - $space-width);
   }
 }
 

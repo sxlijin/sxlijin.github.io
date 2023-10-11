@@ -47,13 +47,13 @@ Proposed, scoped, designed, and led a team of 3 to:
 * Identified and severed a Gmail dependency on internal Identity storage systems, preempting the need to staff a team to do so
 * Analyzed global outage potential of three internal systems (e.g. OpenIDConnect signing key rotation, autoconfig) and designed solutions to limit the blast radius of production changes to said systems
 
-#### Cloud Firestore \| Senior Software Engineer \| Engineering Productivity TL, Aug 2019 - Feb 2021
+#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Senior Software Engineer \| Engineering Productivity TL, Aug 2019 - Feb 2021
 
 * Ran OKR planning and set a vision for the team, while simultaneously transitioning the team through 4 managers over 6 months
 * Ramped up every new hire/transfer: two new grad ICs, three senior ICs, and three managers
 * Participated in org-level reviews of design docs and postmortems for Cloud Engineering Productivity and Databases
 * Set up automated release proctoring, allowing us to stop manually proctoring releases, by driving consensus on signal criteria
-* Modernized release tooling for a stack spanning 5+ teams (Google App Engine), enabling us to retain multiple release environments
+* Modernized release tooling for a stack spanning 5+ teams (Google App Engine's nightly environment), enabling Firestore to retain its nightly release environment
 * Designed and implemented tooling to run a hermetic instance of Firestore (microservices spanning 5+ teams)
 * Proposed and implemented a standardized onboarding curriculum for new Firestore engineers ("breadth talks") 
 
@@ -63,7 +63,7 @@ Proposed, scoped, designed, and led a team of 3 to:
 * Implemented automated performance regression detection for the backend and Google App Engine Flex serving path 
 * Consulted on how to run end-to-end tests that exercised Google App Engine Memcache integrations with other subsystems
 
-#### Cloud Firestore \| Software Engineer \| IC, Sept 2017 - July 2019
+#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Software Engineer \| IC, Sept 2017 - July 2019
 
 * Worked on design and implementation of the migration from eventually consistent to strongly consistent storage
 * Designed and implemented test infrastructure for the aforementioned migration
