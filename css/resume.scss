@@ -44,7 +44,7 @@ h1, h2, h3 {
     flex-grow: 1;
     content: "";
     border-top: 1px solid grey;
-    margin: 1.3ex 0 0 calc(1ex - #{$space-width});
+    margin: 1.3ex 0 0 calc(0.7ex - #{$space-width});
   }
 }
 
