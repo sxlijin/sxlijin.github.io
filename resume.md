@@ -41,7 +41,7 @@ he/him
   * Designed and implemented a logging system with novel observability and privacy requirements
   * Designed and implemented Jepsen-style testing to validate correctness guarantees
 
-* [Migration from Datastore to Firestore](https://cloud.google.com/datastore/docs/upgrade-to-firestore): 0 downtime, xM RPS, and xxPB of data across 30+ datacenters
+* [Migration from Datastore to Firestore](https://cloud.google.com/datastore/docs/upgrade-to-firestore): zero downtime, xM RPS, and xxPB of data across 30+ datacenters
   * Designed composite index migration, queue processing migration, progressive rollout, fast rollback, and disk stockout mitigations; implemented transaction log replay and state transitions
   * Designed and implemented end-to-end correctness and performance testing
 
@@ -60,7 +60,6 @@ he/him
 
 * Incident response for API proxy rollback which affected every Google Cloud service
 * Redesigned the Noogler training on Google-internal storage technologies & ran sessions for 2500 Nooglers
-* Proposed and landed features in various systems owned by other teams (e.g. readtome automation improvements which rejected 800+ PRs of 4000 PRs in a 2-month window)
 * Landed multiple google3-wide refactorings, each spanning xxK files (e.g. SWIG to CLIF)
 
 ## Education
