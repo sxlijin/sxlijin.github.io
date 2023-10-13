@@ -20,65 +20,58 @@ he/him
 
 ## Experience
 
-### [trunk.io](https://trunk.io) \| July 2021 - current
+### [Trunk](https://trunk.io) \| July 2021 - current
 
-* Support community and enterprise users; incorporate their feedback into planning and prioritization of usability/feature work, bugfixes, and documentation improvements
-* Identify, plan, and execute infrastructure improvements (e.g. building data validation/repair jobs, establishing development and testing stories for third-party integrations, build cluster automation, release tooling speedups)
+#### [Check](https://trunk.io/products/check) \| Senior Software Engineer \|  IC, July 2021 - Feb 2023 \| Services TL, Mar 2023 - current
 
-#### [Check](https://trunk.io/products/check) \| Senior Software Engineer \| Services TL, Mar 2023 - current
-
-Proposed, scoped, designed, and led a team of 3 to:
-* Build out Trunk Check's GitHub integrations (full-stack), to scan PRs and repos for lint/formatting issues and vulnerabilities
-* Build a web-only onboarding experience (prior to which, onboarding meant either installing the CLI or our VSCode extension)
-* Build out integrations with security tools, to provide comprehensive security coverage of PRs and repositories
-
-#### [Check](https://trunk.io/products/check) \| Senior Software Engineer \| IC, July 2021 - Feb 2023
-
-* Helped close our first 100+ engineer customer by identifying and addressing Check feature gaps
-* Proposed, designed, and implemented various key Check features:
-  * a plugin system, which enables Check users to contribute linter integrations to Check,
-  * framework improvements needed to grow Check from <25 integrated tools to 90+ integrated tools (e.g. custom output parsers, more flexible linter configuration)
-  * usability improvements (e.g. stacktraces for invalid configs, user journeys for debugging linter integrations)
+* Proposed, designed, and led a team of 3 to build a [web-only experience for Check](https://docs.trunk.io/check/get-started): both an onboarding flow and SaaS offerings (previously, Check had only been available as a CLI or VSCode extension)
+* Proposed and built vulnerability scanning into Check, enabling it to compete with Snyk, Jit, GitHub Advanced Security, Sonar, and others
+* Helped grow Check from <1K users to 80K+ users by focusing on product-led growth (e.g. frictionless CLI/VSCode onboarding, going from 25 to 90 tool integrations)
 
 ### Google \| Sept 2017 - June 2021
 
 #### User Identity SRE \| Senior Software Engineer \| IC, Mar 2021 - June 2021
 
-* Identified and severed a Gmail dependency on internal Identity storage systems, preempting the need to staff a team to do so
-* Analyzed global outage potential of three internal systems (e.g. OpenIDConnect signing key rotation, autoconfig) and designed solutions to limit the blast radius of production changes to said systems
+* Designed an incremental key rotation system to limit the global outage risk to Google SSO
+* Discovered and severed an undocumented Gmail serving dependency on Identity-internal systems
 
-#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Senior Software Engineer \| Engineering Productivity TL, Aug 2019 - Feb 2021
+#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Senior Software Engineer \| IC, Sept 2017 - July 2019 \| EngProd TL, Aug 2019 - Feb 2021
 
-* Ran OKR planning and set a vision for the team, while simultaneously transitioning the team through 4 managers over 6 months
-* Ramped up every new hire/transfer: two new grad ICs, three senior ICs, and three managers
-* Participated in org-level reviews of design docs and postmortems for Cloud Engineering Productivity and Databases
-* Set up automated release proctoring, allowing us to stop manually proctoring releases, by driving consensus on signal criteria
-* Modernized release tooling for a stack spanning 5+ teams (Google App Engine's nightly environment), enabling Firestore to retain its nightly release environment
-* Designed and implemented tooling to run a hermetic instance of Firestore (microservices spanning 5+ teams)
-* Proposed and implemented a standardized onboarding curriculum for new Firestore engineers ("breadth talks") 
+* Metadata TTL system
+  * Requirements: backlog of XX trillion records, sustained 1M ops/sec, peaking at 3M ops/sec
+  * Designed and implemented a logging system with novel observability and privacy requirements
+  * Designed and implemented Jepsen-style testing to validate correctness guarantees
 
-#### Google App Engine Memcache \| Software Engineer \| Engineering Productivity TL, Apr 2019 - July 2019
+* Migration from Cloud Datastore to Cloud Firestore
+  * Requirements: live migration of xM RPS and xxPB of data across 30+ datacenters
+  * Designed migration of composite indices, queue processing, rollback mechanisms, progressive rollout tooling; implemented transaction log replay and state transition management
+  * Designed rollout strategy to mitigate the risk of running out of datacenter storage capacity
+  * Designed and implemented end-to-end correctness and performance testing
 
-* Proposed and kicked off a plan to close critical test coverage gaps and improve iteration speed, based on a review of high-impact outages and the feature roadmap for the next year
-* Implemented automated performance regression detection for the backend and Google App Engine Flex serving path 
-* Consulted on how to run end-to-end tests that exercised Google App Engine Memcache integrations with other subsystems
+* Velocity improvements for 60-eng org
+  * Scoped, designed, and implemented automated rollbacks, which allowed us to exit a 3-month release freeze and prevented 5 outages over the next 6 months
+  * Identified the need for and built a nightly release environment for Firestore, which required deploying 20+ microservices owned by 10 teams into a new environment
+  * Designed and implemented tooling to spin up a production-like Firestore stack (10+ microservices), which reduced iteration cycles from days to minutes
 
-#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Software Engineer \| IC, Sept 2017 - July 2019
+#### Google App Engine Memcache \| Software Engineer \| EngProd TL, Apr 2019 - July 2019
 
-* Worked on design and implementation of the migration from eventually consistent to strongly consistent storage
-* Designed and implemented test infrastructure for the aforementioned migration
-* Designed and implemented invariant testing of a new metadata garbage collection system
-* Participated in incident response for high-severity outages (us-central2 network partition, GCP-wide API proxy rollback)
+* Scoped, designed, and led execution of test coverage improvement plan
+  * Requirements: strongly consistent distributed cache serving xxM QPS and a newly implemented control plane comprising 8 microservices with no e2e nor pre-prod test coverage
+  * Improved rollout cadence and reduce rollback frequency
+* Designed and implemented automated performance regression testing for two critical serving paths
+  * Used to validate Google-wide rollout of AMD CPUs, by proving a 50p latency delta of <10us
+  * Implemented on shared Borg (i.e. vulnerable to noisy neighbors) with <12% variance
 
 #### Miscellaneous \| Sept 2017 - June 2021
 
-* Redesigned the Noogler training curriculum on Google-internal storage/database technologies
-* Proposed and landed features in various systems owned by other teams (e.g. docs-panel, readtome.gwsq, canaries_max)
-* Landed multiple large-scale changes to refactor APIs across all of google3 (e.g. adding Python RPC stub types, SWIG to CLIF)
+* Incident response for API proxy rollback which affected every Google Cloud service
+* Redesigned the Noogler training on Google-internal storage technologies & ran sessions for 2500 Nooglers
+* Proposed and landed features in various systems owned by other teams (e.g. readtome automation improvements which rejected 800+ PRs of 4000 PRs in a 2-month window)
+* Landed multiple google3-wide refactorings, each spanning xxK files (e.g. SWIG to CLIF)
 
 ## Education
 
-Vanderbilt University (Nashville, TN) \| May 2017 \| B.S. in Computer Science; B.A. in Mathematics and Political Science \|  3.73 / 4.00
+Vanderbilt University (Nashville, TN) \| May 2017 \| B.S. in Computer Science, Mathematics, and Political Science
 
 Stuyvesant HS (New York, NY) \| 2013
 
