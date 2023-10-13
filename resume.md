@@ -24,9 +24,9 @@ he/him
 
 #### [Check](https://trunk.io/products/check) \| Senior Software Engineer \|  IC, July 2021 - Feb 2023 \| Services TL, Mar 2023 - current
 
-* Proposed, designed, and led a team of 3 to build a [web-only experience for Check](https://docs.trunk.io/check/get-started): both an onboarding flow and SaaS offerings (previously, Check had only been available as a CLI or VSCode extension)
-* Proposed and built vulnerability scanning into Check, enabling it to compete with Snyk, Jit, GitHub Advanced Security, Sonar, and others
-* Helped grow Check from <1K users to 80K+ users by focusing on product-led growth (e.g. frictionless CLI/VSCode onboarding, going from 25 to 90 tool integrations)
+* Proposed, designed, and led a team of 3 to build a [web-only experience for Check](https://docs.trunk.io/check/get-started) (both an onboarding flow and SaaS offerings)
+* Proposed and built vulnerability scanning into Check, enabling it to compete with security products such as Snyk
+* Helped grow Check from <1K users to 80K+ users by focusing on product-led growth
 
 ### Google \| Sept 2017 - June 2021
 
@@ -37,27 +37,21 @@ he/him
 
 #### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Senior Software Engineer \| IC, Sept 2017 - July 2019 \| EngProd TL, Aug 2019 - Feb 2021
 
-* Metadata TTL system
-  * Requirements: backlog of XX trillion records, sustained 1M ops/sec, peaking at 3M ops/sec
+* Metadata TTL system: backlog of XX trillion records, sustained 1M ops/sec, peaking at 3M ops/sec
   * Designed and implemented a logging system with novel observability and privacy requirements
   * Designed and implemented Jepsen-style testing to validate correctness guarantees
 
-* Migration from Cloud Datastore to Cloud Firestore
-  * Requirements: live migration of xM RPS and xxPB of data across 30+ datacenters
-  * Designed migration of composite indices, queue processing, rollback mechanisms, progressive rollout tooling; implemented transaction log replay and state transition management
-  * Designed rollout strategy to mitigate the risk of running out of datacenter storage capacity
+* [Migration from Datastore to Firestore](https://cloud.google.com/datastore/docs/upgrade-to-firestore): 0 downtime, xM RPS, and xxPB of data across 30+ datacenters
+  * Designed composite index migration, queue processing migration, progressive rollout, fast rollback, and disk stockout mitigations; implemented transaction log replay and state transitions
   * Designed and implemented end-to-end correctness and performance testing
 
 * Velocity improvements for 60-eng org
-  * Scoped, designed, and implemented automated rollbacks, which allowed us to exit a 3-month release freeze and prevented 5 outages over the next 6 months
-  * Identified the need for and built a nightly release environment for Firestore, which required deploying 20+ microservices owned by 10 teams into a new environment
-  * Designed and implemented tooling to spin up a production-like Firestore stack (10+ microservices), which reduced iteration cycles from days to minutes
+  * Proposed and implemented automated rollbacks: got us out of a 3-month release freeze and prevented 5 outages over the next 6 months
+  * Proposed, designed, and built new development and pre-production environments spanning 30+ microservices
 
 #### Google App Engine Memcache \| Software Engineer \| EngProd TL, Apr 2019 - July 2019
 
-* Scoped, designed, and led execution of test coverage improvement plan
-  * Requirements: strongly consistent distributed cache serving xxM QPS and a newly implemented control plane comprising 8 microservices with no e2e nor pre-prod test coverage
-  * Improved rollout cadence and reduce rollback frequency
+* Proposed and led execution of test coverage improvement strategy for a new control plane: reduced rollbacks and ensured strong consistency of a distributed cache serving xxM QPS
 * Designed and implemented automated performance regression testing for two critical serving paths
   * Used to validate Google-wide rollout of AMD CPUs, by proving a 50p latency delta of <10us
   * Implemented on shared Borg (i.e. vulnerable to noisy neighbors) with <12% variance

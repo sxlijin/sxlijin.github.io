@@ -3,7 +3,7 @@
 @import 'typography';
 
 /* general aesthetics */
-$base-font-size: 12px;
+$base-font-size: 14px;
 $line-height: 1.5em;
 $space-width: 0.25em;
 
@@ -14,7 +14,7 @@ html {
 body {
   margin: 0 auto;
   padding: 0;
-  max-width: 60em;
+  max-width: 55em;
   font-family: "Roboto", sans-serif;
 
   @media screen {
