@@ -2,7 +2,9 @@
 
 An incomplete list of things I've read. Most are formative, some are included for completeness, and occasionally there's something I haven't yet read.
 
-## Blogs
+## Technical
+
+### Blogs
 
 * Julia Evans / b0rk - https://jvns.ca/
 * Dan Luu / danluu - https://danluu.com/
@@ -16,7 +18,7 @@ An incomplete list of things I've read. Most are formative, some are included fo
   * [Systems design explains the world (2020)](https://apenwarr.ca/log/20201227) and [Systems design 2: what we hope we know (2023)](https://apenwarr.ca/log/20230415)
 * Bartosz Ciechanowski - https://ciechanow.ski/ - a master class in interactive graphics
 
-## Articles
+### Articles
 
 * [A Few Billion Lines of Code Later (2010)](https://web.stanford.edu/~engler/BLOC-coverity.pdf)
 
@@ -54,8 +56,7 @@ An incomplete list of things I've read. Most are formative, some are included fo
 
 * [How we manage 200+ open-source repos (2023)](https://turbot.com/blog/2023/10/repo-management)
 
-
-## Google
+### Google
 
 I originally put this together back when I was at Google, trying to collate the publicly available resources I knew about so that I had something to point to when people asked me about life at Google. I don't update this much anymore.
 
@@ -68,9 +69,20 @@ I originally put this together back when I was at Google, trying to collate the 
 
 ## Personal
 
+### Fiction
+
 * Jemisin, N. K. - The Fifth Season
 * Jemisin, N. K. - The Obelisk Gate
 * Jemisin, N. K. - The Stone Sky
 * Carter, Bill - The War for Late Night
 * McClelland, Cary - Silicon City: San Francisco in the Long Shadow of the Valley
 * Pratchett, Terry and Neil Gaiman - Good Omens
+
+### Niches
+
+* [The Center Column](https://thecentercolumn.com/) - tripod gear reviews
+* [VDiff Climbing](https://www.vdiffclimbing.com/) - assorted intros to different climbing disciplines
+* Outdoor gear: REI, Moosejaw, Backcountry, Expertvoice
+* Hardware: McMaster-Carr, Grainger, OnlineMetals
+* Electronics: Digikey, Mouser
+* Stationery: JetPens, MUJI, others that I haven't used
