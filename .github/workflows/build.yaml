@@ -1,5 +1,7 @@
+name: build and deploy sxlijin.github.io
 on:
-  push: [main]
+  push:
+    branches: [main]
 
 jobs:
   deploy:
