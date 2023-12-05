@@ -6,9 +6,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    # id-token: write is needed by actions/deploy-pages
     permissions:
       contents: read
       pages: write
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
