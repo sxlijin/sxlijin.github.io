@@ -1,3 +1,7 @@
+---
+title: bookshelf
+...
+
 # Bookshelf
 
 An incomplete list of things I've read. Most are formative, some are included for completeness, and occasionally there's something I haven't yet read.

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="black">
+  <link rel="manifest" href="/manifest.json">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+  <title>$title$</title>
+  <link rel="stylesheet" media="all" href="$css$">
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-89488611-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+<body>
+  $if(header)$
+  $header$
+  $else$
+  <header class="site-header" role="banner">
+    <div class="wrapper">
+      <div>
+        <a class="site-title" href="/"><img src="/assets/icon.svg"/></a>
+      </div>
+      <div>
+        <p>hi, i'm sam!</p>
+      </div>
+      <div>
+        <a href="/blog">blog.</a>
+      </div>
+    </div>
+  </header>
+  $endif$
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+      $body$
+    </div>
+  </main>
+</body>
+</html>

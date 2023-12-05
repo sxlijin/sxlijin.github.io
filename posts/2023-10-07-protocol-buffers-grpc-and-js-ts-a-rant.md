@@ -1,7 +1,8 @@
 ---
-layout: post
 title: Protocol Buffers, gRPC, and JS/TS - a Rant
----
+...
+
+# Protocol Buffers, gRPC, and JS/TS - a Rant
 
 Protocol Buffers and gRPC are amazing. But also, fuck them.
 

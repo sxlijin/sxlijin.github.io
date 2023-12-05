@@ -1,7 +1,8 @@
 ---
-layout: bare-bones
----
-{% include head.html css_override="/css/resume.css" %}
+title: resume
+header: <header></header>
+css: /css/resume.css
+...
 
 # Sam Lijin
 
