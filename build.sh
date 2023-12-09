@@ -29,8 +29,8 @@ pandoc index.md >$OUTPUT_DIR/index.html
 pandoc resume.md >$OUTPUT_DIR/resume.html
 pandoc bookshelf.md >$OUTPUT_DIR/bookshelf.html
 
-cat lib/blog.md <(ls -r posts | sed -E 's|(.*).md|\n  * [\1](/\1.html)|') | \
-  pandoc >$OUTPUT_DIR/blog.html
+#cat lib/blog.md <(ls -r posts | sed -E 's|(.*).md|\n  * [\1](/\1.html)|') | \
+#  pandoc >$OUTPUT_DIR/blog.html
 
 pandoc posts/2017-06-01-was-my-degree-worth-it.md >$OUTPUT_DIR/2017-06-01-was-my-degree-worth-it.html
 pandoc posts/2023-10-07-protocol-buffers-grpc-and-js-ts-a-rant.md >$OUTPUT_DIR/2023-10-07-protocol-buffers-grpc-and-js-ts-a-rant.html
