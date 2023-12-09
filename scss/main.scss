@@ -2,7 +2,7 @@
 
 @mixin centered-column {
   width: calc(100% - 2em);
-  max-width: 960px;
+  max-width: 35em;
   margin: 0 auto;
   padding: 1em;
 }
