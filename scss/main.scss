@@ -1,13 +1,8 @@
 @import 'base';
 
-@mixin centered-column {
-  // todo - subtract 1em for mobile
-  width: calc(100vw);
-  padding: 0 0 0 calc(100vw - 100%);
-}
+// todo - subtract 1em for mobile
 
-.page-content {
-  @include centered-column;
+main {
   position: relative;
   line-height: 1.5;
   max-width: 35em;
