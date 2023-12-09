@@ -26,6 +26,7 @@ function pandoc {
 pandoc index.md >$OUTPUT_DIR/index.html
 pandoc resume.md >$OUTPUT_DIR/resume.html
 pandoc bookshelf.md >$OUTPUT_DIR/bookshelf.html
+pandoc test.md >$OUTPUT_DIR/test.html
 
 cat lib/blog.md <(ls -r posts | sed -E 's|(.*).md|\n  * [\1](/\1.html)|') | \
   pandoc >$OUTPUT_DIR/blog.html
