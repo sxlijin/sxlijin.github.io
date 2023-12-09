@@ -6,11 +6,13 @@ export PANDOC_CLI
 export SASS_CLI
 export OUTPUT_DIR=_site
 
-rm -rf ${OUTPUT_DIR}
+# Avoid removing the output directory itself: this screws with hot reload.
+rm -rf ${OUTPUT_DIR}/*
 mkdir -p ${OUTPUT_DIR}
 
-# Everything in root assets used to be at the root of the repo. Keeping it that way for backwards
-# compatibility, just in case there's a reason I wanted them there that I forgot about.
+# Everything in root assets used to be at the root of the repo. Keeping it that
+# way for backwards compatibility, just in case there's a reason I wanted them
+# there that I forgot about.
 cp root-assets/* $OUTPUT_DIR/
 
 # Create an assets/ dir in the outputs.
@@ -26,7 +28,6 @@ function pandoc {
 pandoc index.md >$OUTPUT_DIR/index.html
 pandoc resume.md >$OUTPUT_DIR/resume.html
 pandoc bookshelf.md >$OUTPUT_DIR/bookshelf.html
-pandoc test.md >$OUTPUT_DIR/test.html
 
 cat lib/blog.md <(ls -r posts | sed -E 's|(.*).md|\n  * [\1](/\1.html)|') | \
   pandoc >$OUTPUT_DIR/blog.html

@@ -13,7 +13,7 @@ npx nodemon -e md,sh,scss --exec ./build.sh
 to run hot reload:
 
 ```bash
-npx live-server _site --port=3000 --no-browser --middleware=$(pwd)/html-fallback.js
+npx browser-sync start --server _site --files _site --extensions html
 ```
 
 ## TODOs
