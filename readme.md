@@ -2,6 +2,20 @@
 
 notes on how my personal website is implemented.
 
+## dev process
+
+to run incremental builds:
+
+```bash
+npx nodemon -e md,sh,scss --exec ./build.sh
+```
+
+to run hot reload:
+
+```bash
+npx live-server _site --port=3000 --no-browser --middleware=$(pwd)/html-fallback.js
+```
+
 ## TODOs
 
 * Improve blog.md auto-generation (use post titles)
