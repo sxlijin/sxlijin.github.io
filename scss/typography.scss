@@ -4,8 +4,14 @@
 
 html {
   font-family: "Roboto", sans-serif;
+
+  // Browser stylesheets usually set explicit font families for these elements,
+  // so we have to tell the browser to inherit them from <html> styles.
+  input, textarea, button {
+    font-family: inherit;
+  }
 }
-  
+
 body {
   margin: 0;
 }
