@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/* adobe color wheel: #e81c50 #c672c8 #743ba3 #10008c #3a6ad8 */
+
+@mixin typography {
+  html {
+    font-family: "Roboto", sans-serif;
+
+    // Browser stylesheets usually set explicit font families for these elements,
+    // so we have to tell the browser to inherit them from <html> styles.
+    input, textarea, button { font-family: inherit; }
+  }
+
+  body { margin: 0; }
+
+  a {
+    text-decoration: none;
+    color: #3a6ad8;
+
+    &:visited { color: #743ba3; }
+    &:hover   { color: #e81c50; }
+    &:active  { opacity: 0.5; }
+  }
+
+  pre { overflow: auto; }
+}
+
+@mixin header-layout {
+  header {
+    background-color: #eee;
+
+    display: flex;
+    justify-content: space-between;
+    padding: .75em;
+
+    font-size: 14px;
+
+    * {
+      height: 1.5em;
+      line-height: 1.5em;
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+}
+
+@include typography;
+@include header-layout;

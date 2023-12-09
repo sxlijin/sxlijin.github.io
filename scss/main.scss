@@ -1,35 +1,17 @@
-@import 'typography';
+@import 'base';
 
 @mixin centered-column {
-  width: calc(100% - 2em);
-  max-width: 35em;
-  margin: 0 auto;
-  padding: 1em;
-}
-
-.site-header {
-  background-color: #eee;
-  
-  .wrapper {
-    @include centered-column;
-    display: flex;
-    justify-content: space-between;
-
-    * {
-      height: 2em;
-      line-height: 2em;
-    }
-
-    p {
-      margin: 0;
-    }
-  }
+  // todo - subtract 1em for mobile
+  width: calc(100vw);
+  padding: 0 0 0 calc(100vw - 100%);
 }
 
 .page-content {
   @include centered-column;
   position: relative;
   line-height: 1.5;
+  max-width: 35em;
+  margin: 0 auto;
 
   hr {
     margin: 2.5em 0 3em;
