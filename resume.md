@@ -1,6 +1,5 @@
 ---
 title: resume
-header: <header></header>
 css: /css/resume.css
 ...
 
