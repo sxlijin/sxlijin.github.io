@@ -15,7 +15,7 @@ databases serving millions of requests per second.
 
 ## stuff
 
-* [bookshelf](/bookshelf)
+* [library](/library)
 * [resume](/resume)
 
 ## blog

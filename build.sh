@@ -25,9 +25,17 @@ function pandoc {
     --template lib/template.html --metadata-file lib/metadata.yaml $@
 }
 
-pandoc --lua-filter index.lua index.md >$OUTPUT_DIR/index.html
-pandoc resume.md >$OUTPUT_DIR/resume.html
-pandoc bookshelf.md >$OUTPUT_DIR/bookshelf.html
+pandoc --lua-filter index.lua pages/index.md >$OUTPUT_DIR/index.html
 
-pandoc posts/2017-06-01-was-my-degree-worth-it.md >$OUTPUT_DIR/2017-06-01-was-my-degree-worth-it.html
-pandoc posts/2023-10-07-protocol-buffers-grpc-and-js-ts-a-rant.md >$OUTPUT_DIR/2023-10-07-protocol-buffers-grpc-and-js-ts-a-rant.html
+ls pages/ | sed "s/.md//" | grep -v index | \
+while read path
+do
+  pandoc "pages/${path}.md" >"${OUTPUT_DIR}/${path}.html"
+done
+
+ls posts/ | sed "s/.md//" | \
+while read path 
+do
+  pandoc --metadata="basepath:${path}" --lua-filter post.lua \
+    "posts/${path}.md" >"${OUTPUT_DIR}/${path}.html"
+done

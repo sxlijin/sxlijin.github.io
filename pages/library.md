@@ -1,10 +1,10 @@
 ---
-title: bookshelf
+title: library
 ...
 
-# Bookshelf
+# Library
 
-An incomplete list of things I've read. Most are formative, some are included for completeness, and occasionally there's something I haven't yet read.
+An incomplete list of media I've consumed. Most are formative, some are included for completeness, and occasionally there's something that's still on my todo list.
 
 ## Technical
 
@@ -60,6 +60,10 @@ An incomplete list of things I've read. Most are formative, some are included fo
 
 * [How we manage 200+ open-source repos (2023)](https://turbot.com/blog/2023/10/repo-management)
 
+### Books
+
+* Tanya Reilly - The Staff Engineer's Path
+
 ### Google
 
 I originally put this together back when I was at Google, trying to collate the publicly available resources I knew about so that I had something to point to when people asked me about life at Google. I don't update this much anymore.
@@ -75,12 +79,8 @@ I originally put this together back when I was at Google, trying to collate the 
 
 ### Fiction
 
-* Jemisin, N. K. - The Fifth Season
-* Jemisin, N. K. - The Obelisk Gate
-* Jemisin, N. K. - The Stone Sky
-* Carter, Bill - The War for Late Night
-* McClelland, Cary - Silicon City: San Francisco in the Long Shadow of the Valley
-* Pratchett, Terry and Neil Gaiman - Good Omens
+* N. K. Jemisin's "The Broken Earth" trilogy
+* pirateaba's [The Wandering Inn](https://wanderinginn.com/)
 
 ### Niches
 
