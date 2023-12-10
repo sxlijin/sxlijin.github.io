@@ -23,6 +23,14 @@
   }
 
   pre { overflow: auto; }
+
+  blockquote {
+    // #666 felt a smidge too dark, #777 felt a smidge too light
+    color: #6a6a6a;
+    margin: 0 0 0 1em;
+    border-left: 2px solid #aaa;
+    padding-left: 1em;
+  }
 }
 
 @mixin header-layout {
