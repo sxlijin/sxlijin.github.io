@@ -52,7 +52,7 @@ cp -R assets/ $OUTPUT_DIR/
 $SASS_CLI scss/:$OUTPUT_DIR/css/
 
 function pandoc {
-  $PANDOC_CLI --verbose --standalone --from gfm --to html \
+  $PANDOC_CLI --verbose --standalone --from gfm --to html --mathjax \
     --template lib/template.html --metadata-file lib/metadata.yaml $@
 }
 
