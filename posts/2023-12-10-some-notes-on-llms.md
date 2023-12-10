@@ -6,10 +6,10 @@ mathjax: yes
 # Some Notes on LLMs
 
 I had a conversation with a friend a few months ago talking about whether or
-not either of us were going to use LLMs, and my answer at the time was that I
-didn't think I was going to do much with it, since everything I was seeing at
-the time suggested it wasn't sufficiently contextually aware to be able to help
-in my everyday work.
+not either of us were going to use LLMs on a regular basis, and my answer at the
+time was that I didn't think I was going to do much with it, since everything I
+was seeing at the time suggested it wasn't sufficiently contextually aware to be
+able to help in my everyday work.
 
 In the months since, that answer has changed a fair bit: I reach for ChatGPT
 every few days now. Sometimes it's every other day, sometimes it's just once a
