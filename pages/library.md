@@ -84,9 +84,14 @@ I originally put this together back when I was at Google, trying to collate the 
 
 ### Niches
 
-* [The Center Column](https://thecentercolumn.com/) - tripod gear reviews
-* [VDiff Climbing](https://www.vdiffclimbing.com/) - assorted intros to different climbing disciplines
 * Outdoor gear: REI, Moosejaw, Backcountry, Expertvoice
+* Outdoor navigation: Gaia, CalTopo, OnX, Fatmap
 * Hardware: McMaster-Carr, Grainger, OnlineMetals
 * Electronics: Digikey, Mouser
 * Stationery: JetPens, MUJI, others that I haven't used
+* [The Center Column](https://thecentercolumn.com/) - tripod gear reviews
+* [VDiff Climbing](https://www.vdiffclimbing.com/) - assorted intros to different climbing disciplines
+* https://ncatlab.org
+* https://semiengineering.com/
+* https://www.eetimes.com/
+* https://semiengineering.com/
