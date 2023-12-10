@@ -25,7 +25,7 @@ function pandoc {
     --template lib/template.html --metadata-file lib/metadata.yaml $@
 }
 
-pandoc --lua-filter index.lua pages/index.md >$OUTPUT_DIR/index.html
+pandoc --lua-filter lib/index.lua pages/index.md >$OUTPUT_DIR/index.html
 
 ls pages/ | sed "s/.md//" | grep -v index | \
 while read path
@@ -36,6 +36,6 @@ done
 ls posts/ | sed "s/.md//" | \
 while read path 
 do
-  pandoc --metadata="basepath:${path}" --lua-filter post.lua \
+  pandoc --metadata="basepath:${path}" --lua-filter lib/post.lua \
     "posts/${path}.md" >"${OUTPUT_DIR}/${path}.html"
 done

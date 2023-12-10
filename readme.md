@@ -16,6 +16,14 @@ to run hot reload:
 npx browser-sync start --server _site --files _site --extensions html
 ```
 
+to iterate on Lua filters:
+
+```bash
+pandoc FILE -t json
+pandoc FILE -t lib/writer.lua
+npx nodemon -e lua --exec pandoc FILE -t lib/writer.lua
+```
+
 ## TODOs
 
 * Improve blog.md auto-generation (use post titles)
