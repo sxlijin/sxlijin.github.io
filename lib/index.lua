@@ -1,25 +1,33 @@
 function Pandoc(doc)
-  local posts_md = {}
+  local entries = {}
 
-  for _, postPath in ipairs(pandoc.system.list_directory("posts")) do
-    local year, month, day = postPath:match("(%d+)-(%d+)-(%d+)-.*.md")
+  -- NB: it looks like list_directory may return entries in an undefined order
+  for _, path in ipairs(pandoc.system.list_directory("posts")) do
+    local year, month, day = path:match("(%d+)-(%d+)-(%d+)-.*.md")
     local timestamp = os.time({year = year, month = month, day = day})
     local formattedDate = os.date("%b %Y", timestamp)
 
     local postPandoc =
-      pandoc.read(io.open("posts/" .. postPath):read("*all"), "gfm")
+      pandoc.read(io.open("posts/" .. path):read("*all"), "gfm")
 
     table.insert(
-        posts_md,
-        1,
-        string.format("  * <div class=\"post-date\">%s</div> [%s](%s)",
+        entries,
+        { timestamp = timestamp,
+          md = string.format("  * <div class=\"post-date\">%s</div> [%s](%s)",
                       formattedDate,
                       pandoc.utils.stringify(postPandoc.meta["title"]),
-                      postPath:match("(.*).md")))
+                      path:match("(.*).md"))})
+  end
+
+  table.sort(entries, function (a, b) return a["timestamp"] > b["timestamp"] end)
+
+  md_list = {}
+  for _, entry in ipairs(entries) do
+    table.insert(md_list, entry["md"])
   end
 
   local blocks = pandoc.read(
-    "<div class=\"post-list\">" .. table.concat(posts_md, "\n") .. "</div>",
+    "<div class=\"post-list\">" .. table.concat(md_list, "\n") .. "</div>",
     "markdown")
 
   for _, block in ipairs(blocks.blocks) do
