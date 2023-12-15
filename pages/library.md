@@ -58,9 +58,7 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [The Elves Leave Middle Earth - Sodas Are No Longer Free (2009)](https://steveblank.com/2009/12/21/the-elves-leave-middle-earth-%E2%80%93-soda%E2%80%99s-are-no-longer-free/)
 
-* [How we manage 200+ open-source repos (2023)](https://turbot.com/blog/2023/10/repo-management)
-
-* [An Oral History of Bank Python (2021)](https://calpeterson.com/bank-python.html)
+* [An Oral History of Bank Python (2021)](https://calpaterson.com/bank-python.html)
 
 ### Books
 
