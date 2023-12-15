@@ -60,6 +60,8 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [How we manage 200+ open-source repos (2023)](https://turbot.com/blog/2023/10/repo-management)
 
+* [An Oral History of Bank Python (2021)](https://calpeterson.com/bank-python.html)
+
 ### Books
 
 * Tanya Reilly - The Staff Engineer's Path
