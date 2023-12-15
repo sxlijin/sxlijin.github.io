@@ -28,7 +28,6 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
   > Parsing is considered a solved problem. Unfortunately, this view is naïve, rooted in the widely believed myth that programming languages exist.
 
-* [Life in the Trenches of healthcare.gov (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov)
 
 * [No Silver Bullet (1986)](http://worrydream.com/refs/Brooks-NoSilverBullet.pdf) - a discussion of the fundamental challenges involved in creating software.
 
@@ -59,6 +58,12 @@ An incomplete list of media I've consumed. Most are formative, some are included
 * [The Elves Leave Middle Earth - Sodas Are No Longer Free (2009)](https://steveblank.com/2009/12/21/the-elves-leave-middle-earth-%E2%80%93-soda%E2%80%99s-are-no-longer-free/)
 
 * [An Oral History of Bank Python (2021)](https://calpaterson.com/bank-python.html)
+
+### Talks
+
+* [Life in the Trenches of healthcare.gov (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov)
+
+* [Fuck You, Pay Me (2012)](https://youtu.be/jVkLVRt6c1U)
 
 ### Books
 
