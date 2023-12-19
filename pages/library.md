@@ -59,6 +59,8 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [An Oral History of Bank Python (2021)](https://calpaterson.com/bank-python.html)
 
+* [Better Context Menus with Safe Triangles (2023)](https://www.smashingmagazine.com/2023/08/better-context-menus-safe-triangles/), found via [this Tweet](https://twitter.com/claviska/status/1710098277767729479?t=9M1Mv15eiCqWxx7q8ghztg)
+
 ### Talks
 
 * [Life in the Trenches of healthcare.gov (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov)
