@@ -33,7 +33,7 @@ sxlijin
 
 ### [Trunk](https://trunk.io) \| July 2021 - current
 
-#### [Check](https://trunk.io/products/check) \| Senior Software Engineer \|  IC, July 2021 - Feb 2023 \| Services TL, Mar 2023 - current
+#### [Trunk Check](https://trunk.io/products/check) \| Senior Software Engineer \| Services TL, Mar 2023 - current \|  IC, July 2021 - Feb 2023
 
 * Proposed, designed, and led a team of 3 to build a [web experience for Check](https://docs.trunk.io/check/get-started) (both a web-only onboarding flow and SaaS offerings)
 * Proposed and built vulnerability scanning into Check, enabling it to compete with security products such as Snyk
@@ -46,7 +46,7 @@ sxlijin
 * Designed an incremental key rotation system to limit the global outage risk to Google SSO
 * Discovered and severed an undocumented Gmail serving dependency on Identity-internal systems
 
-#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Senior Software Engineer \| IC, Sept 2017 - July 2019 \| EngProd TL, Aug 2019 - Feb 2021
+#### [Cloud Firestore](https://firebase.google.com/docs/firestore) \| Senior Software Engineer \| EngProd TL, Aug 2019 - Feb 2021 \| IC, Sept 2017 - July 2019
 
 * Metadata TTL system: backlog of XX trillion records, sustained 1M ops/sec, peaking at 3M ops/sec
   * Designed and implemented a logging system with novel observability and privacy requirements
