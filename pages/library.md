@@ -10,19 +10,23 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Blogs
 
+* Avery Penwarr / apenwarr - https://apenwarr.ca/log/
+  * go/vfa and [What do executives do, anyways? (2019)](https://apenwarr.ca/log/20190926)
+  * [Systems design explains the world (2020)](https://apenwarr.ca/log/20201227) and [Systems design 2: what we hope we know (2023)](https://apenwarr.ca/log/20230415)
+* Patrick McKenzie / patio11 - https://www.kalzumeus.com/ and https://www.bitsaboutmoney.com/
+  * [Falsehoods Programmers Believe About Names (2010)](https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
+  * [Salary Negotiation (2012)](https://www.kalzumeus.com/2012/01/23/salary-negotiation/)
 * Julia Evans / b0rk - https://jvns.ca/
 * Dan Luu / danluu - https://danluu.com/
 * rachelbythebay - https://rachelbythebay.com/
 * Amos Wenger / fasterthanlime - https://fasterthanli.me/
-* Patrick McKenzie / patio11 - https://www.kalzumeus.com/ and https://www.bitsaboutmoney.com/
-  * [Falsehoods Programmers Believe About Names (2010)](https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)
-  * [Salary Negotiation (2012)](https://www.kalzumeus.com/2012/01/23/salary-negotiation/)
-* Avery Penwarr / apenwarr - https://apenwarr.ca/log/
-  * go/vfa and [What do executives do, anyways? (2019)](https://apenwarr.ca/log/20190926)
-  * [Systems design explains the world (2020)](https://apenwarr.ca/log/20201227) and [Systems design 2: what we hope we know (2023)](https://apenwarr.ca/log/20230415)
 * Bartosz Ciechanowski - https://ciechanow.ski/ - a master class in interactive graphics
 
 ### Articles
+
+* Alvaro and Kingsbury - [MySQL 8.0.34 (2023)](https://jepsen.io/analyses/mysql-8.0.34.pdf)
+
+* [PostgreSQL's fsync() surprise (2018)](https://lwn.net/Articles/752063/)
 
 * [A Few Billion Lines of Code Later (2010)](https://web.stanford.edu/~engler/BLOC-coverity.pdf)
 
