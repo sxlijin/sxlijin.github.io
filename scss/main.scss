@@ -1,12 +1,12 @@
 @import 'base';
 
-// todo - subtract 1em for mobile
-
 main {
   position: relative;
   line-height: 1.5;
-  max-width: 35em;
+  max-width: min(35em, 90vw);
   margin: 0 auto;
+
+  // Keep page contents centered when scrollbar is shown
   padding-left: calc(100vw - 100%);
 
   hr {

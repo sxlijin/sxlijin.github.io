@@ -9,7 +9,7 @@ main {
   font-size: $base-font-size;
   margin: 0 auto;
   padding: 0;
-  max-width: 55em;
+  max-width: min(55em, 90vw);
   font-family: "Roboto", sans-serif;
   line-height: $line-height;
 
