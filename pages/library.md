@@ -26,6 +26,8 @@ An incomplete list of media I've consumed. Most are formative, some are included
 * Google / Testing on the Toilet - https://testing.googleblog.com/
 * High Scalability - https://highscalability.com/
 * Will Larson / lethain - https://lethain.com/ and https://staffeng.com/
+* Murat Buffalo - https://muratbuffalo.blogspot.com/
+* Cindy Sridharan - https://copyconstruct.medium.com/
 
 ### Articles
 
@@ -161,3 +163,8 @@ Other
 ### Assorted
 
 * [Veritasium - Why Machines That Bend Are Better (2019)](https://youtu.be/97t7Xj_iBv0)
+* [Paul Campos - How I Won My Lawsuit Against the University of Colorado (2024)][campos-pt-1], [pt. 2][campos-pt-2], and [pt. 3][campos-pt-3]
+
+[campos-pt-1]: https://www.lawyersgunsmoneyblog.com/2024/02/how-i-won-my-lawsuit-against-the-university-of-colorado
+[campos-pt-2]: https://www.lawyersgunsmoneyblog.com/2024/02/how-i-won-my-lawsuit-against-the-university-of-colorado-part-ii
+[campos-pt-3]: https://www.lawyersgunsmoneyblog.com/2024/02/how-i-won-my-lawsuit-against-the-university-of-colorado-part-iii
