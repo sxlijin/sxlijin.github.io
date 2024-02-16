@@ -28,8 +28,11 @@ An incomplete list of media I've consumed. Most are formative, some are included
 * Will Larson / lethain - https://lethain.com/ and https://staffeng.com/
 * Murat Buffalo - https://muratbuffalo.blogspot.com/
 * Cindy Sridharan - https://copyconstruct.medium.com/
+* Memos, collected by Sriram Krishnan - https://sriramk.com/memos/
 
 ### Articles
+
+* [ABP Privacy Infra, Long Range Investments (Facebook internal, 2021)](https://www.documentcloud.org/documents/21716382-facebook-data-lineage-internal-document)
 
 * [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
 
