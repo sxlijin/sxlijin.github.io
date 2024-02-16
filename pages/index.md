@@ -16,6 +16,7 @@ databases serving millions of requests per second.
 ## stuff
 
 * [library](/library)
+* [interview questions](/interview-questions)
 * [resume](/resume)
 
 ## blog
