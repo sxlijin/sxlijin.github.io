@@ -21,39 +21,78 @@ An incomplete list of media I've consumed. Most are formative, some are included
 * rachelbythebay - https://rachelbythebay.com/
 * Amos Wenger / fasterthanlime - https://fasterthanli.me/
 * Bartosz Ciechanowski - https://ciechanow.ski/ - a master class in interactive graphics
+* Hillel Wayne - https://www.hillelwayne.com/
+* Google / C++ Tip of the Week - https://abseil.io/tips/
+* Google / Testing on the Toilet - https://testing.googleblog.com/
+* High Scalability - https://highscalability.com/
+* Will Larson / lethain - https://lethain.com/ and https://staffeng.com/
 
 ### Articles
 
-* Alvaro and Kingsbury - [MySQL 8.0.34 (2023)](https://jepsen.io/analyses/mysql-8.0.34.pdf)
+* [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
+
+  AFAIK this originates from [a talk that Jeff Dean gave in
+  2010][latency-numbers-jeff-dean]; the numbers have changed slightly in the
+  decade+ since, but it largely still holds. You can also find it on [High
+  Scalability][latency-numbers-high-scalability] and
+  [sre.google][latency-numbers-sre-google].
+
+[latency-numbers-jeff-dean]: https://youtu.be/modXC5IWTJI?t=3554
+[latency-numbers-high-scalability]: http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelope-calculations-to-choo.html
+[latency-numbers-sre-google]: https://static.googleusercontent.com/media/sre.google/en//static/pdf/rule-of-thumb-latency-numbers-letter.pdf
+
+* [No Vehicles in the Park](https://novehiclesinthepark.com/)
+
+  > some people think that there could be simple rules for Internet content that are easy to apply
+
+* [StackOverflow Update: 560M Pageviews A Month, 25 Servers, And It's All About Performance (2014)](http://highscalability.com/blog/2014/7/21/stackoverflow-update-560m-pageviews-a-month-25-servers-and-i.html)
+
+* [How we migrated our PostgreSQL database with 11 seconds downtime (2024)](https://gds.blog.gov.uk/2024/01/17/how-we-migrated-our-postgresql-database-with-11-seconds-downtime/) - Gov.UK's story of migrating from one RDS Postgres DB to another.
+
+* [MySQL 8.0.34 (2023)](https://jepsen.io/analyses/mysql-8.0.34.pdf)
+
+  > The core problem is that MySQL claims to implement Repeatable Read but
+  > actually provides something much weaker.
 
 * [PostgreSQL's fsync() surprise (2018)](https://lwn.net/Articles/752063/)
 
+  > If that happens to a PostgreSQL server, the result can be silent corruption
+  > of the database
+
 * [A Few Billion Lines of Code Later (2010)](https://web.stanford.edu/~engler/BLOC-coverity.pdf)
 
-  > Parsing is considered a solved problem. Unfortunately, this view is naïve, rooted in the widely believed myth that programming languages exist.
+  > Parsing is considered a solved problem. Unfortunately, this view is naïve,
+  > rooted in the widely believed myth that programming languages exist.
 
 
 * [No Silver Bullet (1986)](http://worrydream.com/refs/Brooks-NoSilverBullet.pdf) - a discussion of the fundamental challenges involved in creating software.
 
 * [Supercomputing's Monster in the Closet (2016)](https://spectrum.ieee.org/computing/hardware/how-to-kill-a-supercomputer-dirty-power-cosmic-rays-and-bad-solder) - found via [this Twitter thread](https://twitter.com/whitequark/status/980522328151834624?s=19)
 
-  > Jaguar had 360 terabytes of main memory [and] was logging ECC errors at a rate of 350 per minute.
+  > Jaguar had 360 terabytes of main memory [and] was logging ECC errors at a
+  > rate of 350 per minute.
 
 * [The Hardest Program I've Ever Written (2015)](http://journal.stuffwithstuff.com/2015/09/08/the-hardest-program-ive-ever-written/) - the story of `dartfmt`
 
-  > The hardest program I’ve ever written, once you strip out the whitespace, is 3,835 lines long. That handful of code took me almost a year to write. [...] I deleted 20,704 lines of code over that time.
+  > The hardest program I’ve ever written, once you strip out the whitespace,
+  > is 3,835 lines long. That handful of code took me almost a year to write.
+  > [...] I deleted 20,704 lines of code over that time.
 
 * [We can't send mail more than 500 miles](https://web.mit.edu/jemorris/humor/500-miles)
 
 * [Caches, Modes, and Unstable Systems (2021)](https://brooker.co.za/blog/2021/08/27/caches.html)
 
-  > So our system has two stable loops. One's a happy loop where the cache is full [...] The other is a sad loop, where the cache is empty, and stays empty
+  > So our system has two stable loops. One's a happy loop where the cache is
+  > full [...] The other is a sad loop, where the cache is empty, and stays
+  > empty
 
-* [We Have No Moat, and Neither Does OpenAI (2023)](https://www.semianalysis.com/p/google-we-have-no-moat-and-neither)
+* [We Have No Moat, and Neither Does OpenAI (Google, 2023)](https://www.semianalysis.com/p/google-we-have-no-moat-and-neither)
 
 * [The Tyranny of Structurelessness (1972)](https://www.jofreeman.com/joreen/tyranny.htm)
 
-  > As long as the structure of the group is informal, the rules of how decisions are made are known only to a few and awareness of power is limited to those who know the rules.
+  > As long as the structure of the group is informal, the rules of how
+  > decisions are made are known only to a few and awareness of power is
+  > limited to those who know the rules.
 
 * [Things You Should Never Do, Part 1 (2000)](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/) - Joel Spolsky talking about the Netscape rewrite
 
@@ -67,13 +106,16 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Talks
 
-* [Life in the Trenches of healthcare.gov (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov)
+* [Jeff Dean - Building Software Systems at Google and Lessons Learned (2010)](https://youtu.be/modXC5IWTJI)
 
-* [Fuck You, Pay Me (2012)](https://youtu.be/jVkLVRt6c1U)
+* [Robert Kennedy - Life in the Trenches of healthcare.gov (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov)
+
+* [Mike Monteiro - Fuck You, Pay Me (2012)](https://youtu.be/jVkLVRt6c1U)
 
 ### Books
 
 * Tanya Reilly - The Staff Engineer's Path
+* Martin Kleppman - Designing Data-Intensive Applications
 
 ### Google
 
@@ -95,14 +137,27 @@ I originally put this together back when I was at Google, trying to collate the 
 
 ### Niches
 
-* Outdoor gear: REI, Moosejaw, Backcountry, Expertvoice
-* Outdoor navigation: Gaia, CalTopo, OnX, Fatmap
+Industries (non-software)
+
+* https://abovethelaw.com/
+* https://semiengineering.com/
+* https://www.eetimes.com/
+* https://ncatlab.org
+
+Outdoors
+
+* gear: REI, Moosejaw, Backcountry, Expertvoice
+* navigation: Gaia, CalTopo, OnX, Fatmap
+* https://www.vdiffclimbing.com/
+* https://www.redbull.com/int-en/shows/reel-rock-1
+
+Other
+
 * Hardware: McMaster-Carr, Grainger, OnlineMetals
 * Electronics: Digikey, Mouser
 * Stationery: JetPens, MUJI, others that I haven't used
-* [The Center Column](https://thecentercolumn.com/) - tripod gear reviews
-* [VDiff Climbing](https://www.vdiffclimbing.com/) - assorted intros to different climbing disciplines
-* https://ncatlab.org
-* https://semiengineering.com/
-* https://www.eetimes.com/
-* https://semiengineering.com/
+* https://thecentercolumn.com/
+
+### Assorted
+
+* [Veritasium - Why Machines That Bend Are Better (2019)](https://youtu.be/97t7Xj_iBv0)
