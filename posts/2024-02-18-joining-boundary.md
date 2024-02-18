@@ -80,7 +80,7 @@ With Boundary, it's a very different career opportunity:
     technical instincts to product thinking to leadership skills.
 
   * It's _not_ going to have household-level brand recognition - plus, there's
-    a very real chance that we son't make it.
+    a very real chance that we won't make it.
 
 which leads me to:
 
