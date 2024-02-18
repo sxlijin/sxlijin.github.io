@@ -32,6 +32,9 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [Every infrastructure decision I endorse or regret
+    (2024)](https://cep.dev/posts/every-infrastructure-decision-i-endorse-or-regret-after-4-years-running-infrastructure-at-a-startup/)
+
 * [ABP Privacy Infra, Long Range Investments (Facebook internal, 2021)](https://www.documentcloud.org/documents/21716382-facebook-data-lineage-internal-document)
 
 * [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
