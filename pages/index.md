@@ -7,11 +7,13 @@ css: /css/index.css
 
 I do software things.
 
-I've been at [trunk.io] since 2021, building developer tools and working on
-product strategy. Previously, I spent 3 years at Google building petabyte-scale
-databases serving millions of requests per second.
+I'm currently at [Boundary], where I'm creating a new ML developer experience.
 
-[trunk.io]: https://trunk.io
+Previously, I spent 2 years at [Trunk] building devtools and 4 years at
+Google building petabyte-scale databases serving millions of requests per second.
+
+[Boundary]: https://www.boundaryml.com/
+[Trunk]: https://trunk.io/
 
 ## stuff
 
