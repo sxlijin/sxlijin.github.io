@@ -9,47 +9,79 @@ and the past 2 at [Trunk], a series-A DevEx startup that I joined pre-A.
 
 [Trunk]: https://trunk.io/
 
-I realized a few months ago that I wasn't excited in my role anymore, and and
+I realized a few months ago that I wasn't excited in my role anymore, and
 asked myself what I wanted to do. After a bit of looking around, I found that
 the answer was that I wanted to transition to AI/ML[^why-ai-ml] - so that's
 where I started.
 
-[^why-ai-ml]: Specifically, that we've reached a point where this technology is
-    accessible for the average developer, and that we're seeing steady progress
-    (sometimes in huge leaps) with LLMs and particularly because we've somehow
+[^why-ai-ml]: I know, I know, it is such a cliche for people to want to get into AI/ML. I actually stayed away from it for years because it felt like such a cliche.
+
+    But specifically with the advent of LLMs,, it feels like we've reached a turning point where this technology is now actually
+    accessible to the average developer, and that we're seeing steady progress
+    (sometimes in huge leaps) particularly because we've somehow
     gotten to a point where, between the transformer architecture and Moore's
     law, we can just throw obscene amounts of compute at problems to solve them.
 
-I ended up with two offers: one from [Boundary] and one from OpenAI.
+I ended up with two offers:
+
+  * one from [Boundary], a no-name seed-stage AI/ML startup with 2 co-founders
+    and 0 employees, and
+  * one from OpenAI.
 
 I chose to join [Boundary].
 
 [Boundary]: https://www.boundaryml.com/.
 
-## Why?
+## Why? - the short version
 
-The short answer: I was more excited about joining Boundary. I believe in
-Vaibhav and Aaron, and I think we have a real chance to do something big.
+I was **excited** about Boundary, in a way that I wasn't about OpenAI.
 
-The long answer: it took weeks to make this decision. Joining OpenAI is, as
-Vaibhav put it, the objectively sane decision to make in this situation.
+I actually originally decided that I was going to join OpenAI and turn down
+Boundary - or as Vaibhav, one of Boundary's co-founders, put it, "make the
+objectively sane decision".
 
-Here's the list of criteria I went through, in roughly the order in which I
-thought about them[^criteria-order]:
+But the first time I told a friend I was going to join OpenAI, I couldn't help
+but feel like I was turning down a chance to do something big. That feeling
+stuck with me when I told a second friend, and was still there when I told a
+third friend.
 
+So when Vaibhav called me to pitch me one last time, I realized that right now,
+the decision that makes me happy - the decision that makes me _excited_ - is
+joining Boundary.
+
+
+## Why? - the long version
+
+This was the first time I've ever had the luxury of being able to choose between
+two amazing, two very different opportunities. It took me a long time - three,
+maybe four weeks - to actually come to a decision.
+
+I realized, at some point, that the question I needed to ask myself was "what do
+I want to do in life?", and for me, the answer is that I want to do something
+that matters, and ideally, I'd like to build it from the ground up.
+
+There's absolutely an appeal to building resilient training infrastructure,
+to building a scalable system from zero, to taking a system from 99% available
+to 99.99% available (or even 99.999%). But it would be even cooler to be able to
+do all that for something that I've built from scratch - and that was what
+pushed me towards Boundary.
+
+It took me a long time to get to this realization though. I went through all the
+criteria[^criteria-order] that I could think of, and then some:
+
+  * money
   * career opportunity
   * product opportunity (both absolute and relative[^absolute-and-relative])
   * timing (both product-in-industry timing and personal timing)
   * culture (people and values)
   * learning opportunity[^learning-opportunity]
-  * money
   * location
   * doing something else
 
-[^criteria-order]: When I say the "order in which I thought about them", I do
-    mean that - this is not necessarily the order of importance for me. It's
-    close to the order of importance, certainly, but I doubt I could actually
-    stack rank these criteria against each other.
+[^criteria-order]: I've ordered these criteria in roughly the order in which
+    they came to mind, which is similar to but not equal to an order by
+    importance. I don't think I could actually stack rank these criteria,
+    because the ordering would change from situation to situation.
 [^absolute-and-relative]: The way I always describe the $bigco vs. $startup
     decision is that at $bigco, you'll have the opportunity to have huge
     absolute impact, but small relative impact (e.g. the Windows Task Manager is
@@ -59,10 +91,41 @@ thought about them[^criteria-order]:
 [^learning-opportunity]: No, I don't like putting the third "opportunity"
     further down the list. But this is a more true order for this list.
 
+
+## Money
+
+OpenAI compensation is impressive:
+
+<figure>
+  <img src="/assets/openai-levels-fyi.png" />
+  <figcaption>
+    levels.fyi OpenAI compensation data
+    (<a href="https://www.levels.fyi/companies/openai/salaries/software-engineer/levels/l5">source</a>)
+  </figcaption>
+</figure>
+
+But money, past a certain point, has diminishing value. I'm not trying to retire
+early. I'm not looking to go heli-skiing once a month. I'm not even planning on
+buying a house anytime soon.
+
+I'm fortunate enough to earn enough that I do not, and will never have to worry
+about making rent. I don't have to buy groceries based on what's on sale. I can
+comfortable fund all my hobbies (climbing, skiing, and photography) (climbing,
+skiing, and photography). And I'm confident in the stability of my earning
+potential.
+
+That's enough for me.
+
+I know too many people who've optimized for money at the expense of their time,
+energy, and youth, and I don't want to be one of them.
+
 ## Career Opportunity
 
-With Google, my resume's pretty solid. With OpenAI[^openai-role], it would be
-bulletproof - especially for future AI/ML opportunities.
+Or, phrased alternatively, the ability to do anything I want to do.
+
+With Google, my [resume](/resume) is pretty darn solid. With
+OpenAI[^openai-role], it would've been bulletproof - especially for future AI/ML
+opportunities.
 
 [^openai-role]: I would've joined a new team being spun up to build new training
     infrastructure. In other words: as close to the AI/ML research as I can get
@@ -76,17 +139,42 @@ With Boundary, it's a very different career opportunity:
   * It's going to mean tackling a lot of Hard Problems™, from building a compiler
     to defining our infrastructure patterns to building our brand identity.
 
-  * I know that I can learn a lot from Vaibhav and Aaron, in everything from
-    technical instincts to product thinking to leadership skills.
+  * I know that I can learn a lot from Vaibhav and Aaron - the Boundary
+    co-founders - in everything from technical instincts to product thinking
+    to leadership skills.
 
   * It's _not_ going to have household-level brand recognition - plus, there's
     a very real chance that we won't make it.
 
-which leads me to:
+Most importantly: it's the opportunity to build something big, and to build it
+from scratch. OpenAI is doing amazing things - just look at [what they're doing
+with video!][openai-sora] - but I wouldn't be starting from zero.
+
+And if the goal of career experience is to get to a point you can do anything
+you want to do, and I've got a reasonably future-proofed resume already, well -
+if one of my options is to do what I want to do, why not take that one?
+
+[openai-sora]: https://openai.com/sora
 
 ## Product Opportunity
 
-Boundary's vision is to be **the** ML development experience that people want:
+One friend suggested that I can look at OpenAI in one of two ways: either it's
+Yahoo - it's already made it, and it's only downhill from here - or it's Google
+in the mid 2000s, and who wouldn't want to join that?
+
+But again, regardless of which of the two it is, when I compare that to the
+opportunity to do something big, something that's actually interesting to me,
+and to build it from zero, it's hard for that to compare.
+
+Most startups, at least to me, are not interesting. They might be academically
+interesting to me - e.g. I can see why this is a hard problem, and yes, it's
+absurd that no one's solved this yet - but they're not working on problems that
+interest me.
+
+Boundary, by contrast, is aiming to create a new, high-quality, open-source ML
+development experience. That, to me at least, means a lot of hard, interesting
+problems, and if Boundary's vision was anything less than that, I would've
+joined OpenAI.
 
   * We want to give people the right abstractions to **build** on top of their
     ML models: everything from inline comments that get stripped from your LLM
@@ -153,12 +241,6 @@ fundamental execution risk around the [innovator's dilemma].)
 
 [innovator's dilemma]: https://en.wikipedia.org/wiki/The_Innovator%27s_Dilemma
 
-### Aside: on other product opportunities
-
-Most other startups are just blatantly uninteresting to me - or if they are
-interesting, they're interesting in the academic sense of it, i.e. "yeah, I can
-see how this is a cool thing to do".
-
 ## Timing
 
 I'm very confident that the products, companies, organizations, and technologies
@@ -205,28 +287,46 @@ for something like this at that point.
 
 ## Culture: people and values
 
-Vaibhav and Aaron are incredibly smart people - I've known them for years now,
-and if anyone can pull it off, it's them. I don't say that lightly: I've worked
-with a lot of really smart people, and throughout my (still short!) life and
-career, I've prioritized surrounding myself with friends and colleagues that
-make me a better person, a more capable person, a more thoughtful person.
+Vaibhav and Aaron are incredibly smart, capable, and thoughtful people - I've
+known them for years now, and if there's anyone I know that can pull it off,
+it's them. I don't say that lightly: I've had the privilege to work with a lot
+of really amazing people.
+
+They've got the technical credentials: Vaibhav's worked on everything from
+bringing Face Unlock to the Google Pixel to building custom Python runtimes;
+Aaron rewrote AWS EC2's internal telemetry system to get rid of its scaling
+bottlenecks.
+
+The ways we worked through all the disagreements[^disagreements] we had (and we
+had a lot of them!) during my week-long work trial convinced me that they're
+thoughtful, respectful people who I can not only be honest with, but also learn
+from even when we disagree.
+
+[^disagreements]: a.k.a. arguments
+
+(Yes, a week-long work trial is pretty ridiculous - I certainly took a lot of
+convincing to do it - but ultimately I'm glad I did it. It ended up being just
+as much them interviewing me, as it was me interviewing them. Not only did we
+work through a lot of diagreements, but we also talked a lot about all our
+communication styles, and our own strengths and weaknesses.)
 
 Regardless of whether or not we succeed, I'll be excited to spend the next
-few years working alongside them, learning from them, and trying to change the
-world.
+few years working alongside them, learning from them, trying to do something big.
 
 We're all clear that this journey is only worth it if we have fun along the way,
 if we build an environment where we enjoy each others' company, that we
 consider that vital to our success, and that this will require very conscious
 and deliberate effort as we grow.
 
-OpenAI is now big enough that they're concerned about leaks.
+OpenAI, by contrast, is now big enough that they're concerned about leaks.
 
 ## Learning Opportunity
 
 One of my favorite things about Google was the sheer amount of learning
-opportunities I was surrounded by. I spent time in the guts of Bigtable,
-Megastore, Spanner, MapReduce, Flume, Borg, Chubby, GFEs, and more; I loved
+opportunities I was surrounded by. I was able to not only get my hands dirty
+deep in the guts of Bigtable, Spanner, MapReduce, Borg, and Chubby, but I was
+also able to go and learn about how web search and indexing worked, how YouTube
+video uploads worked, how Google did load balancing, so on and so forth. I loved
 being able to go "I wonder how this thing works" and then actually _reading the
 design documents that people wrote as they were building the thing_.
 
@@ -240,50 +340,35 @@ problems, about how search was unified across multiple Google products.
 I have no doubt I would get this at OpenAI, where I'd be able to avail myself of
 world-class experts and being on the inside of impressive technologies at scale.
 
-But at Boundary, I expect my learning to come from, well, shipping. I do have
-specific goals for how I want to focus that learning, and if our execution path
-ends up at odds with that learning, well, we'll cross that bridge when we get to
-it.
-
-## Money
-
-I'm fortunate to do something professionally where I will never have to worry
-about making rent, keeping the lights and heat on, or buying groceries. I have
-earned more than the median _household_ income in the US since I finished my
-education.
-
-Yes, there are luxuries that I could afford and financial security that I'd have
-if I took [OpenAI][openai-levels-fyi], but I have plenty enough of it right now
-that I'm willing to forego the ludicrous levels of compensation I'd be able to
-obtain elsewhere. I know enough people who've optimized for money at the expense
-of their time, energy, and youth, that I don't care to follow in their
-footsteps.
-
-[openai-levels-fyi]: https://www.levels.fyi/?compare=OpenAI&track=Software%20Engineer
+But at Boundary, I expect my learning to come from, well, building. I do have
+specific goals for how I want to focus my learning, and if our execution path
+ends up at odds with that (I certainly don't intend to spend any time doing
+resume-driven development), well, we'll cross that bridge when we get to it.
 
 ## Location
 
-I'm also super excited to live in Seattle - everyone I know considers it to be
-an amazing balance between work and play, where you can surround yourself with
-people who care about their careers, but the Cascades are just an hour away, and
-Squamish at four hours is close enough for a weekend trip.
+I'll be moving to Seattle for Boundary[^in-person]; if I'd joined OpenAI, I
+would've had to move back to San Francisco.
 
-Picking up outdoor sports and activities during the pandemic saved my life, and
-I deeply value mountain proximity now.
+[^in-person]: Vaibhav and Aaron both live in Seattle, and all three of us
+    strongly believe that being in an office, together, will make it much easier
+    for us to communicate effectively and spontaneously than if I was remote.
 
-I literally took a detour to San Francisco, when I was driving back to Boulder
-from Seattle, as I was deciding between Boundary and OpenAI, to see if I could
-find it in me to be excited about being back there - and I couldn't.
+Both are amazing cities: there are plenty of smart, interesting people in both,
+and they both have great access to climbing and skiing (the two sports that I
+fell in love with during the pandemic).
 
-This isn't to say San Francisco is a bad place to live - it's a great city, and
-I'm sure I could be happy if I moved back there. But I don't know if it'll be a
-forever place for me.
+But, when it comes to San Francisco, I just couldn't bring myself to be excited
+about moving back there. I actually literally spent 12 hours driving to San
+Francisco, while I was deciding between Boundary and OpenAI, in part to meet the
+OpenAI team, but really because I wanted to see if I could find it in me to be
+excited about moving back there. And I couldn't.
 
-(Fortunately, this decision wasn't too hard - Seattle and San Francisco are both
-great options. And admittedly, I also asked myself whether OpenAI allowing
-remote would change my decision, and it didn't, but for a different pair of
-locations and opportunities, the decision calculus probably would've been very
-different.)
+(Admittedly, I did also ask myself whether OpenAI allowing remote would change
+my decision - not that this was on the table; I just wanted to ask myself the
+hypothetical to figure out if it would make a difference - and it wouldn't have
+made a difference. For a different pair of locations and opportunities, though?
+That decision calculus could definitely have made the difference.)
 
 ## Why not be a founder myself?
 
@@ -295,7 +380,7 @@ a balance of priorities that I'm willing to accept for myself at this stage of
 my life. Possibly ever.
 
 (There's also a little bit of an activation energy / escape velocity / critical
-mass problem, where I'd need an idea that I'm passionate about, a cofounder who
+mass problem, where I'd need an idea that I'm passionate about, a co-founder who
 I'm willing to spend years working alongside, and stability in the other
 aspects of my life - and I think you only get there if you just dive in
 head-first, sink-or-swim style.)
@@ -311,19 +396,21 @@ any of those as getting back on the wagon again.
 
 ## Making the decision
 
-It took me weeks to make this decision (and Vaibhav, Aaron, I really appreciate
-how long you gave me to make it). I talked to almost everyone I know about it,
-tried the trick of "flip a coin and see if you're happy or not".
+It took me so, _so_ long to make this decision (and Vaibhav, Aaron, I really
+appreciate how long you gave me to make it). I talked to almost everyone I know
+about it, tried the trick of "flip a coin and see if you're happy or not", and
+spent weeks paralyzed by indecision.
 
-Ultimately, the thing that finally ended up convincing me was just
-semi-committing to one option, and telling friends that I had decided to join
-OpenAI. And I just couldn't help but feel like I was going to miss out on
-something amazing.
+Semi-committing to an option, and telling friends that I had decided to join
+OpenAI, and telling friends that I had decided to join Boundary - that was the
+litmus test I needed.
 
-Once I started telling people that I was going to join Boundary - I felt a lot
-better about that decision. And if Boundary fails, and we don't make it - as all
-the startup statistics suggest - well, at least I'll have tried to do something
-big.
+I'm happy with the decision I made, and confident that in 5 years, that in 10
+years, I'll be able to look back on this decision and be convinced I made the
+right call, regardless of whether or not Boundary succeeds.
+
+Because even if we fail - and all the startup numbers say we will - at least
+I'll have tried to do something big, and I know we'll have fun along the way.
 
 ## Aside: self-reflection
 

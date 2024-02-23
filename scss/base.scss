@@ -32,6 +32,12 @@
     border-left: 2px solid #aaa;
     padding-left: 1em;
   }
+
+  figcaption {
+    text-align: center;
+    font-size: 80%;
+    color: #555;
+  }
 }
 
 @mixin header-layout {
