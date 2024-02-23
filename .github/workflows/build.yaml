@@ -19,6 +19,8 @@ jobs:
         with:
           lfs: true
 
+      - run: git lfs checkout
+
       - name: Build the site
         run: ./build.sh
 
