@@ -29,6 +29,7 @@ An incomplete list of media I've consumed. Most are formative, some are included
 * Murat Buffalo - https://muratbuffalo.blogspot.com/
 * Cindy Sridharan - https://copyconstruct.medium.com/
 * Memos, collected by Sriram Krishnan - https://sriramk.com/memos/
+* Daniel Lemire - https://lemire.me/blog/
 
 ### Articles
 
