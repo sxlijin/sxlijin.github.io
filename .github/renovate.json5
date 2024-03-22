@@ -5,6 +5,5 @@
     "group:all",
     "schedule:monthly",
   ],
-  updateNotScheduled: false,
   prConcurrentLimit: 3,
 }
