@@ -110,8 +110,7 @@ buying a house anytime soon.
 
 I'm fortunate enough to earn enough that I do not, and will never have to worry
 about making rent. I don't have to buy groceries based on what's on sale. I can
-comfortable fund all my hobbies (climbing, skiing, and photography) (climbing,
-skiing, and photography). And I'm confident in the stability of my earning
+comfortable fund all my hobbies (climbing, skiing, and photography). And I'm confident in the stability of my earning
 potential.
 
 That's enough for me.
