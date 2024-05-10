@@ -33,6 +33,10 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [How Figma’s databases team lived to tell the scale (2024)](https://www.figma.com/blog/how-figmas-databases-team-lived-to-tell-the-scale/) and [The growing pains of database architecture (2023)](https://www.figma.com/blog/how-figma-scaled-to-multiple-databases/)
+
+  > Limit potential availability impact to <1 minute
+
 * [Every infrastructure decision I endorse or regret
     (2024)](https://cep.dev/posts/every-infrastructure-decision-i-endorse-or-regret-after-4-years-running-infrastructure-at-a-startup/)
 
