@@ -17,21 +17,58 @@ mkdir -p ${OUTPUT_DIR}
 #                                                                            #
 ##############################################################################
 
-if [ ! -e "${BIN_DIR}/pandoc.tar.gz" ]
-then
-  curl \
-    -L https://github.com/jgm/pandoc/releases/download/3.1.9/pandoc-3.1.9-linux-amd64.tar.gz \
-    -o "${BIN_DIR}/pandoc.tar.gz"
-  tar xf "${BIN_DIR}/pandoc.tar.gz" -C "${BIN_DIR}"
-fi
-export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-3.1.9/bin/pandoc"
+case "$(uname -sm)" in
+  "Darwin arm64")
+    PANDOC_OS_ARCH_PKG="arm64-macos.zip"
+    SASS_OS_ARCH="macos-arm64"
+    ;;
+  "Linux x86_64")
+    PANDOC_OS_ARCH_PKG="linux-amd64.tar.gz"
+    SASS_OS_ARCH="linux-x64"
+    ;;
+  *)
+    echo "Unrecognized platform"
+    exit 2
+    ;;
+esac
 
-if [ ! -e "${BIN_DIR}/dart-sass.tar.gz" ]
+if [ ! -e "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" ]
 then
   curl \
-    -L https://github.com/sass/dart-sass/releases/download/1.69.5/dart-sass-1.69.5-linux-x64.tar.gz \
-    -o "${BIN_DIR}/dart-sass.tar.gz"
-  tar xf "${BIN_DIR}/dart-sass.tar.gz" -C "${BIN_DIR}"
+    -L https://github.com/jgm/pandoc/releases/download/3.1.9/pandoc-3.1.9-${PANDOC_OS_ARCH_PKG} \
+    -o "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}"
+  case "${PANDOC_OS_ARCH_PKG}" in
+    *.tar.gz)
+      tar xf "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" -C "${BIN_DIR}"
+      ;;
+    *.zip)
+      unzip "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" -d "${BIN_DIR}"
+      ;;
+    *)
+      echo "Failed to unpack pandoc"
+      exit 2
+      ;;
+    esac
+fi
+case "${PANDOC_OS_ARCH_PKG}" in
+  *.tar.gz)
+    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-3.1.9/bin/pandoc"
+    ;;
+  *.zip)
+    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-3.1.9-arm64/bin/pandoc"
+    ;;
+  *)
+    echo "Failed to resolve pandoc"
+    exit 2
+    ;;
+esac
+
+if [ ! -e "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz" ]
+then
+  curl \
+    -L https://github.com/sass/dart-sass/releases/download/1.69.5/dart-sass-1.69.5-${SASS_OS_ARCH}.tar.gz \
+    -o "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz"
+  tar xf "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz" -C "${BIN_DIR}"
 fi
 export SASS_CLI="$(pwd)/${BIN_DIR}/dart-sass/sass"
 
@@ -61,12 +98,21 @@ pandoc --lua-filter lib/index.lua pages/index.md >$OUTPUT_DIR/index.html
 ls pages/ | sed "s/.md//" | grep -v index | \
 while read path
 do
-  pandoc "pages/${path}.md" >"${OUTPUT_DIR}/${path}.html"
+  mkdir -p "${OUTPUT_DIR}/${path}"
+  pandoc "pages/${path}.md" | tee \
+    "${OUTPUT_DIR}/${path}.html" \
+    "${OUTPUT_DIR}/${path}/index.html" \
+    >/dev/null
+
 done
 
 ls posts/ | sed "s/.md//" | \
 while read path 
 do
+  mkdir -p "${OUTPUT_DIR}/${path}"
   pandoc --metadata="basepath:${path}" --lua-filter lib/post.lua \
-    "posts/${path}.md" >"${OUTPUT_DIR}/${path}.html"
+    "posts/${path}.md" | tee \
+    "${OUTPUT_DIR}/${path}.html" \
+    "${OUTPUT_DIR}/${path}/index.html" \
+    >/dev/null
 done
