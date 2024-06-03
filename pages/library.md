@@ -30,8 +30,13 @@ An incomplete list of media I've consumed. Most are formative, some are included
 * Cindy Sridharan - https://copyconstruct.medium.com/
 * Memos, collected by Sriram Krishnan - https://sriramk.com/memos/
 * Daniel Lemire - https://lemire.me/blog/
+* Raymond Chen - https://devblogs.microsoft.com/oldnewthing/
 
 ### Articles
+
+* [People lie on surveys and focus groups, often unwittingly (2004)](https://devblogs.microsoft.com/oldnewthing/20041012-00/?p=37593)
+
+  > The majority of consumers who buy computers claim that personal finance management is one of the top three reasons they are purchasing a PC. They’ve been claiming this for more than a decade. But only somewhere around 2% of consumers end up using a personal finance manager.
 
 * [How Figma’s databases team lived to tell the scale (2024)](https://www.figma.com/blog/how-figmas-databases-team-lived-to-tell-the-scale/) and [The growing pains of database architecture (2023)](https://www.figma.com/blog/how-figma-scaled-to-multiple-databases/)
 
