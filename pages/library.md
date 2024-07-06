@@ -34,6 +34,12 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [What Color is Your Function? (2015)](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/)
+
+* [Async Rust Is A Bad Language (2023)](https://bitbashing.io/async-rust.html)
+  
+  > Used pervasively, Arc gives you the world’s worst garbage collector.
+
 * [People lie on surveys and focus groups, often unwittingly (2004)](https://devblogs.microsoft.com/oldnewthing/20041012-00/?p=37593)
 
   > The majority of consumers who buy computers claim that personal finance management is one of the top three reasons they are purchasing a PC. They’ve been claiming this for more than a decade. But only somewhere around 2% of consumers end up using a personal finance manager.
