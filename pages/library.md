@@ -34,6 +34,10 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [What Every Systems Programmer Should Know About Concurrency (2020)](https://assets.bitbashing.io/papers/concurrency-primer.pdf)
+
+* [When a Microsecond is an Eternity (2017)](https://github.com/CppCon/CppCon2017/blob/master/Presentations/When%20a%20Microsecond%20Is%20an%20Eternity/When%20a%20Microsecond%20Is%20an%20Eternity%20-%20Carl%20Cook%20-%20CppCon%202017.pdf)
+
 * [What Color is Your Function? (2015)](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/)
 
 * [Async Rust Is A Bad Language (2023)](https://bitbashing.io/async-rust.html)
@@ -151,6 +155,7 @@ I originally put this together back when I was at Google, trying to collate the 
 * [Modern Code Review: A Case Study at Google (2018)](https://sback.it/publications/icse2018seip.pdf) - qualitative analysis of code review practices at Google (there's also [CodeFlow: Improving the Code Review Process at Microsoft (2018)](https://queue.acm.org/detail.cfm?id=3292420), which is another mostly qualitative discussion, although they do have some very interesting stats).
 * [The Datacenter as a Computer (2018)](https://www.morganclaypool.com/doi/pdf/10.2200/S00874ED3V01Y201809CAC046) - I'm not sure if I got anything *specifically* useful from this, but in general I found it to be a nice overview of the challenges involved in operating a modern datacenter.
 * [Software Engineering at Google (2020)](https://abseil.io/resources/swe-book) - still haven't read this
+* [25 Years of Warehouse-Scale Computing (2024)](https://www.computer.org/csdl/magazine/mi/5555/01/10551740/1XyKBf0Y6uA)
 
 ## Personal
 
