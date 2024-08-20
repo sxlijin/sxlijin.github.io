@@ -156,6 +156,7 @@ I originally put this together back when I was at Google, trying to collate the 
 * [The Datacenter as a Computer (2018)](https://www.morganclaypool.com/doi/pdf/10.2200/S00874ED3V01Y201809CAC046) - I'm not sure if I got anything *specifically* useful from this, but in general I found it to be a nice overview of the challenges involved in operating a modern datacenter.
 * [Software Engineering at Google (2020)](https://abseil.io/resources/swe-book) - still haven't read this
 * [25 Years of Warehouse-Scale Computing (2024)](https://www.computer.org/csdl/magazine/mi/5555/01/10551740/1XyKBf0Y6uA)
+* Code Search, but for OSS: https://cs.opensource.google/
 
 ## Personal
 
