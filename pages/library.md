@@ -34,6 +34,10 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [Why you need a "WTF Notebook" (2021)](https://www.simplermachines.com/why-you-need-a-wtf-notebook/)
+
+  > There's a very specific reputation I want to have on a team: "Nat helps me solve my problems. Nat get things I care about done."
+
 * [What Every Systems Programmer Should Know About Concurrency (2020)](https://assets.bitbashing.io/papers/concurrency-primer.pdf)
 
 * [When a Microsecond is an Eternity (2017)](https://github.com/CppCon/CppCon2017/blob/master/Presentations/When%20a%20Microsecond%20Is%20an%20Eternity/When%20a%20Microsecond%20Is%20an%20Eternity%20-%20Carl%20Cook%20-%20CppCon%202017.pdf)
