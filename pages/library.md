@@ -191,6 +191,7 @@ Other
 * Electronics: Digikey, Mouser
 * Stationery: JetPens, MUJI, others that I haven't used
 * https://thecentercolumn.com/
+* WiFi: https://www.wiisfi.com/
 
 ### Assorted
 
