@@ -34,6 +34,8 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [Parse, Don't Validate (2019)](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+
 * [Why you need a "WTF Notebook" (2021)](https://www.simplermachines.com/why-you-need-a-wtf-notebook/)
 
   > There's a very specific reputation I want to have on a team: "Nat helps me solve my problems. Nat get things I care about done."
