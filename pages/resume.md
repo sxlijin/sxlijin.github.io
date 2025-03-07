@@ -31,7 +31,11 @@ sxlijin
 
 ## Experience
 
-### [Trunk](https://trunk.io) \| July 2021 - current
+### [BoundaryML](https://boundaryml.com) \| Founding Engineer \| Feb 2024 - current
+
+* everything
+
+### [Trunk](https://trunk.io) \| July 2021 - Jan 2024
 
 #### [Trunk Check](https://trunk.io/products/check) \| Senior Software Engineer \| Services TL, Mar 2023 - current \|  IC, July 2021 - Feb 2023
 
@@ -52,7 +56,7 @@ sxlijin
   * Designed and implemented a logging system with novel observability and privacy requirements
   * Designed and implemented Jepsen-style testing to validate correctness guarantees
 
-* [Datastore Migration](https://cloud.google.com/datastore/docs/upgrade-to-firestore): zero downtime, xM RPS and xxPB of data over xM customers and 36 datacenters
+* [Datastore Migration](https://vldb.org/pvldb/vol17/p3960-davisson.pdf): zero downtime, xM RPS and xxPB of data over xM customers and 36 datacenters
   * Designed composite index migration, queue processing migration, progressive rollout, fast rollback, and disk stockout mitigations; implemented transaction log replay, state transitions, and dark launch process
   * Designed and implemented end-to-end correctness and performance testing
 
