@@ -34,6 +34,10 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [The Hunt For The Missing Data Type (2024)](https://www.hillelwayne.com/post/graph-types/)
+
+  > There is almost no graph support in any mainstream language. None have it as a built-in type, very few have them in the standard library, and many don’t have a robust third-party library in the ecosystem. [...] Where are all the graph types?
+
 * [Parse, Don't Validate (2019)](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
 
 * [Why you need a "WTF Notebook" (2021)](https://www.simplermachines.com/why-you-need-a-wtf-notebook/)
@@ -140,9 +144,9 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Talks
 
-* [Jeff Dean - Building Software Systems at Google and Lessons Learned (2010)](https://youtu.be/modXC5IWTJI)
+* [Jeff Dean - Building Software Systems at Google and Lessons Learned (2010)](https://www.youtube.com/watch?v=modXC5IWTJI)
 
-* [Robert Kennedy - Life in the Trenches of healthcare.gov (2014)](https://www.dotconferences.com/2014/05/robert-kennedy-life-in-the-trenches-of-healthcare-gov)
+* [Robert Kennedy - Life in the Trenches of healthcare.gov (2014)](https://www.youtube.com/watch?v=GLQyj-kBRdo
 
 * [Mike Monteiro - Fuck You, Pay Me (2012)](https://youtu.be/jVkLVRt6c1U)
 
