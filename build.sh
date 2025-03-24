@@ -17,8 +17,8 @@ mkdir -p ${OUTPUT_DIR}
 #                                                                            #
 ##############################################################################
 
-export PANDOC_VERSION=3.1.9
-export SASS_VERSION=1.69.5
+export PANDOC_VERSION=3.6.4
+export SASS_VERSION=1.86.0
 
 case "$(uname -sm)" in
   "Darwin arm64")
@@ -35,17 +35,20 @@ case "$(uname -sm)" in
     ;;
 esac
 
-if [ ! -e "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" ]
+export PANDOC_ARCHIVE_NAME=pandoc-${PANDOC_VERSION}-${PANDOC_OS_ARCH_PKG}
+export PANDOC_BIN_DIR="${BIN_DIR}/pandoc-${PANDOC_VERSION}"
+if [ ! -e "${BIN_DIR}/${PANDOC_ARCHIVE_NAME}" ]
 then
   curl \
     -L https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-${PANDOC_OS_ARCH_PKG} \
-    -o "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}"
+    -o "${BIN_DIR}/${PANDOC_ARCHIVE_NAME}"
+  mkdir -p "${PANDOC_BIN_DIR}"
   case "${PANDOC_OS_ARCH_PKG}" in
     *.tar.gz)
-      tar xf "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" -C "${BIN_DIR}"
+      tar xf "${BIN_DIR}/${PANDOC_ARCHIVE_NAME}" -C "${PANDOC_BIN_DIR}"
       ;;
     *.zip)
-      unzip "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" -d "${BIN_DIR}"
+      unzip "${BIN_DIR}/${PANDOC_ARCHIVE_NAME}" -d "${PANDOC_BIN_DIR}"
       ;;
     *)
       echo "Failed to unpack pandoc"
@@ -55,25 +58,35 @@ then
 fi
 case "${PANDOC_OS_ARCH_PKG}" in
   *.tar.gz)
-    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-${PANDOC_VERSION}/bin/pandoc"
+    export PANDOC_CLI="$(pwd)/${PANDOC_BIN_DIR}/pandoc-${PANDOC_VERSION}/bin/pandoc"
     ;;
   *.zip)
-    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-${PANDOC_VERSION}-arm64/bin/pandoc"
+    export PANDOC_CLI="$(pwd)/${PANDOC_BIN_DIR}/pandoc-${PANDOC_VERSION}-arm64/bin/pandoc"
     ;;
   *)
     echo "Failed to resolve pandoc"
     exit 2
     ;;
 esac
+function pandoc {
+  $PANDOC_CLI --verbose --standalone --from gfm --to html --mathjax \
+    --template lib/template.html --metadata-file lib/metadata.yaml $@
+}
 
-if [ ! -e "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz" ]
+export SASS_ARCHIVE_NAME=dart-sass-${SASS_VERSION}-${SASS_OS_ARCH}.tar.gz
+export SASS_BIN_DIR="${BIN_DIR}/dart-sass-${SASS_VERSION}"
+if [ ! -e "${BIN_DIR}/${SASS_ARCHIVE_NAME}" ]
 then
   curl \
-    -L https://github.com/sass/dart-sass/releases/download/${SASS_VERSION}/dart-sass-${SASS_VERSION}-${SASS_OS_ARCH}.tar.gz \
-    -o "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz"
-  tar xf "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz" -C "${BIN_DIR}"
+    -L https://github.com/sass/dart-sass/releases/download/${SASS_VERSION}/${SASS_ARCHIVE_NAME} \
+    -o "${BIN_DIR}/${SASS_ARCHIVE_NAME}"
+  mkdir -p "${SASS_BIN_DIR}"
+  tar xf "${BIN_DIR}/${SASS_ARCHIVE_NAME}" -C "${SASS_BIN_DIR}"
 fi
-export SASS_CLI="$(pwd)/${BIN_DIR}/dart-sass/sass"
+export SASS_CLI="$(pwd)/${SASS_BIN_DIR}/dart-sass/sass"
+function sass {
+  $SASS_CLI $@
+}
 
 ##############################################################################
 #                                                                            #
@@ -90,12 +103,7 @@ cp root-assets/* $OUTPUT_DIR/
 # cp -R assets/ $OUTPUT_DIR/
 ln -s "../assets" "${OUTPUT_DIR}"
 
-$SASS_CLI scss/:$OUTPUT_DIR/css/
-
-function pandoc {
-  $PANDOC_CLI --verbose --standalone --from gfm --to html --mathjax \
-    --template lib/template.html --metadata-file lib/metadata.yaml $@
-}
+sass scss/:$OUTPUT_DIR/css/
 
 pandoc --lua-filter lib/index.lua pages/index.md >$OUTPUT_DIR/index.html
 
@@ -107,7 +115,6 @@ do
     "${OUTPUT_DIR}/${path}.html" \
     "${OUTPUT_DIR}/${path}/index.html" \
     >/dev/null
-
 done
 
 ls posts/ | sed "s/.md//" | \
