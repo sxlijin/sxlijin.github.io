@@ -1,7 +1,3 @@
----
-title: Was My CS Degree Worth It?
-...
-
 # Was My CS Degree Worth It?
 
 I don't know. My financial aid made it more than worth it for me, because I

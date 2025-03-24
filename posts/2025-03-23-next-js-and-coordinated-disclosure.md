@@ -1,7 +1,3 @@
----
-title: Next.js and Coordinated Disclosure
-...
-
 # Next.js and Coordinated Disclosure
 
 Everything old is new again.

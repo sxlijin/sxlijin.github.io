@@ -1,8 +1,3 @@
----
-title: Some Notes on LLMs
-mathjax: yes
-...
-
 # Some Notes on LLMs
 
 I had a conversation with a friend a few months ago talking about whether or

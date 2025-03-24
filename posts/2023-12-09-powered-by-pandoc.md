@@ -1,7 +1,3 @@
----
-title: Personal Pages, Powered by Pandoc
-...
-
 # Personal Pages, Powered by Pandoc
 
 I just finished reimplementing this website using pandoc, and am feeling

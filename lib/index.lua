@@ -1,3 +1,13 @@
+function getFirstH1(doc)
+    for _, block in ipairs(doc.blocks) do
+        if block.t == "Header" and block.level == 1 then
+            return pandoc.utils.stringify(block.content)
+        end
+    end
+    -- fallback to the filename if no h1 is found
+    return pandoc.utils.stringify(doc.meta["basepath"])
+end
+
 function Pandoc(doc)
   local entries = {}
 
@@ -10,12 +20,14 @@ function Pandoc(doc)
     local postPandoc =
       pandoc.read(io.open("posts/" .. path):read("*all"), "gfm")
 
+    local title = getFirstH1(postPandoc)
+
     table.insert(
         entries,
         { timestamp = timestamp,
           md = string.format("  * <div class=\"post-date\">%s</div> [%s](%s)",
                       formattedDate,
-                      pandoc.utils.stringify(postPandoc.meta["title"]),
+                      title,
                       path:match("(.*).md"))})
   end
 

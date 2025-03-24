@@ -1,7 +1,3 @@
----
-title: Joining Boundary
-...
-
 # Joining Boundary
 
 I've been in the industry for about 6 years now: the first 4 at Google

@@ -1,8 +1,4 @@
----
-title: Node.js, stdout, and disappearing bytes
-...
-
-# Node.js, pipes, and disappearing bytes
+# Node.js, stdout, and disappearing bytes
 
 Someone in one of my online communities recently asked about why their Node
 command was dropping output when piped to another command:
