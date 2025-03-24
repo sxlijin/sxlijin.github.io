@@ -84,7 +84,8 @@ export SASS_CLI="$(pwd)/${BIN_DIR}/dart-sass/sass"
 cp root-assets/* $OUTPUT_DIR/
 
 # Create an assets/ dir in the outputs.
-cp -R assets/ $OUTPUT_DIR/
+# cp -R assets/ $OUTPUT_DIR/
+ln -s "../assets" "${OUTPUT_DIR}"
 
 $SASS_CLI scss/:$OUTPUT_DIR/css/
 
