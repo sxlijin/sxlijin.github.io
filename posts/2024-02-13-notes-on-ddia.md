@@ -1,7 +1,3 @@
----
-title: Notes on Designing Data-Intensive Applications
-...
-
 # Notes on Designing Data-Intensive Applications
 
 I just finished reading Kleppman's Designing Data-Intensive Applications, which

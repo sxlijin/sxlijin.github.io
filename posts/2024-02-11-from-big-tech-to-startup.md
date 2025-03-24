@@ -1,7 +1,3 @@
----
-title: "Lessons Learned: From Big Tech to Startup"
-...
-
 # Lessons Learned: From Big Tech to Startup
 
 I started my career with a 4-year stint at Google, regularly dealing with orgs
