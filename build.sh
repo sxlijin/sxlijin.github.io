@@ -17,6 +17,9 @@ mkdir -p ${OUTPUT_DIR}
 #                                                                            #
 ##############################################################################
 
+export PANDOC_VERSION=3.1.9
+export SASS_VERSION=1.69.5
+
 case "$(uname -sm)" in
   "Darwin arm64")
     PANDOC_OS_ARCH_PKG="arm64-macos.zip"
@@ -35,7 +38,7 @@ esac
 if [ ! -e "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}" ]
 then
   curl \
-    -L https://github.com/jgm/pandoc/releases/download/3.1.9/pandoc-3.1.9-${PANDOC_OS_ARCH_PKG} \
+    -L https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-${PANDOC_OS_ARCH_PKG} \
     -o "${BIN_DIR}/pandoc-${PANDOC_OS_ARCH_PKG}"
   case "${PANDOC_OS_ARCH_PKG}" in
     *.tar.gz)
@@ -52,10 +55,10 @@ then
 fi
 case "${PANDOC_OS_ARCH_PKG}" in
   *.tar.gz)
-    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-3.1.9/bin/pandoc"
+    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-${PANDOC_VERSION}/bin/pandoc"
     ;;
   *.zip)
-    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-3.1.9-arm64/bin/pandoc"
+    export PANDOC_CLI="$(pwd)/${BIN_DIR}/pandoc-${PANDOC_VERSION}-arm64/bin/pandoc"
     ;;
   *)
     echo "Failed to resolve pandoc"
@@ -66,7 +69,7 @@ esac
 if [ ! -e "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz" ]
 then
   curl \
-    -L https://github.com/sass/dart-sass/releases/download/1.69.5/dart-sass-1.69.5-${SASS_OS_ARCH}.tar.gz \
+    -L https://github.com/sass/dart-sass/releases/download/${SASS_VERSION}/dart-sass-${SASS_VERSION}-${SASS_OS_ARCH}.tar.gz \
     -o "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz"
   tar xf "${BIN_DIR}/dart-sass-${SASS_OS_ARCH}.tar.gz" -C "${BIN_DIR}"
 fi
