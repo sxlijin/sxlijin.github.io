@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 /* adobe color wheel: #e81c50 #c672c8 #743ba3 #10008c #3a6ad8 */
 
 @mixin typography {
   html {
-    font-family: "Roboto", sans-serif;
+    font-family: "Helvetica", "Arial", "Roboto", sans-serif;
 
     // Browser stylesheets usually set explicit font families for these elements,
     // so we have to tell the browser to inherit them from <html> styles.
