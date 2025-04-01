@@ -1,0 +1,10 @@
+{% extends "_layouts/Base.njk" %}
+
+{% block content %}
+<article class="post">
+  <div class="post-content">
+    <p>{{ x_formatted_date }}</p>
+    {{ content | safe }}
+  </div>
+</article>
+{% endblock %} 
