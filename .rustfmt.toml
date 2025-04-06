@@ -1,0 +1,13 @@
+# Rustfmt configuration file
+# See https://rust-lang.github.io/rustfmt/ for more options
+
+# Sort imports
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+reorder_imports = true
+
+# Other common settings
+edition = "2021"
+line_length = 100
+format_strings = true
+merge_imports = true 
