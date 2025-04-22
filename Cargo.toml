@@ -14,7 +14,7 @@ unused_variables = "deny"
 anyhow = { version = "1.0.97", features = ["backtrace"] }
 askama = "0.13.0"
 async-stream = "0.3"
-axum = { version = "0.8.3" }
+axum = { version = "0.8.3", features = ["ws"] }
 comrak = "0.38.0"
 grass = "0.13.4"
 hyper = { version = "0.14", features = ["full"] }
@@ -25,6 +25,7 @@ serde_json = "1.0.140"
 serde_yaml = "0.9.34"
 tokio = { version = "1.44.2", features = ["full"] }
 tokio-stream = { version = "0.1", features = ["full"] }
+tokio-tungstenite = "0.26"
 tower = { version = "0.5.2", features = ["util"] }
 tower-http = { version = "0.5.2", features = ["fs", "trace"] }
 tracing = "0.1.41"

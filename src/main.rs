@@ -172,7 +172,10 @@ pub fn build_pages() -> Result<()> {
             );
 
             // Read the markdown file
-            let markdown = fs::read_to_string(path)?;
+            let mut markdown = fs::read_to_string(path)?;
+            if path == Path::new("pages/index.md") {
+                markdown = format!("{}\nappended blog content", markdown);
+            }
 
             // Convert markdown to HTML using comrak
             let options = comrak::Options {

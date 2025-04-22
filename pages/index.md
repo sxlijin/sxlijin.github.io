@@ -6,7 +6,7 @@ layout: Base.njk
 
 # hi, i'm sam!
 
-I do software things for work
+I do software things.
 
 I'm currently at [Boundary], where I'm creating a new ML developer experience.
 

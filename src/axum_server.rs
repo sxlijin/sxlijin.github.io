@@ -1,5 +1,10 @@
 use anyhow::{Context, Result};
-use axum::{extract::State, response::IntoResponse, routing::get, Router};
+use axum::{
+    extract::{ws::WebSocket, State, WebSocketUpgrade},
+    response::IntoResponse,
+    routing::get,
+    Router,
+};
 use serde::Serialize;
 use std::{net::SocketAddr, path::PathBuf};
 use tokio::{net::TcpListener, sync::broadcast};
@@ -48,6 +53,31 @@ async fn sse_handler(State(state): State<AppState>) -> impl IntoResponse {
             .interval(std::time::Duration::from_secs(15))
             .text("keep-alive-text"),
     )
+}
+
+async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl IntoResponse {
+    ws.on_upgrade(|ws| async move { ws_handler_impl(state, ws).await })
+}
+
+// Handler for the WebSocket endpoint
+async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
+    if state.rx.is_closed() {
+        tracing::error!("SSE channel is closed");
+    }
+
+    while let Ok(msg) = state.rx.recv().await {
+        if let Err(e) = ws
+            .send(axum::extract::ws::Message::Text(
+                serde_json::to_string(&msg)
+                    .expect("Failed to serialize message")
+                    .into(),
+            ))
+            .await
+        {
+            tracing::error!("Failed to send WebSocket message: {}", e);
+            break;
+        }
+    }
 }
 
 // Setup tracing for the application
@@ -105,20 +135,20 @@ fn setup_file_watcher() -> Result<(FsEventWatcher, broadcast::Receiver<FileChang
     Ok((watcher, rx))
 }
 
-// pub async fn watch_site() -> Result<FsEventWatcher> {
-//     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
-//         if let Ok(event) = res {
-//             tracing::info!("File changed: {:?}", event.paths);
-//         }
-//     })
-//     .context("Failed to create watcher")?;
+pub fn setup_hot_rebuild() -> Result<FsEventWatcher> {
+    let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
+        if let Ok(event) = res {
+            tracing::info!("File changed: {:?}", event.paths);
+        }
+    })
+    .context("Failed to create watcher")?;
 
-//     watcher
-//         .watch(&PathBuf::from("scss"), RecursiveMode::Recursive)
-//         .context("Failed to watch scss directory")?;
+    watcher
+        .watch(&PathBuf::from("pages"), RecursiveMode::Recursive)
+        .context("Failed to watch pages directory")?;
 
-//     Ok(watcher)
-// }
+    Ok(watcher)
+}
 
 // Start the server
 pub async fn start_server(port: u16) -> Result<()> {
@@ -128,10 +158,12 @@ pub async fn start_server(port: u16) -> Result<()> {
     // Setup file watcher and get the receiver
     let (_watcher, rx) = setup_file_watcher()?;
     let state = AppState { rx };
+    let _rebuild_watcher = setup_hot_rebuild()?;
 
     // Build the router
     let app = Router::new()
         .route("/_debug/reload", get(sse_handler))
+        .route("/_debug/reload2", get(ws_handler))
         // .layer(TraceLayer::new_for_http())
         .fallback_service(ServeDir::new("_site"))
         .with_state(state);
