@@ -1,4 +1,4 @@
-use anyhow::Context;
+use anyhow::{Context, Result};
 use axum::{extract::State, response::IntoResponse, routing::get, Router};
 use serde::Serialize;
 use std::{net::SocketAddr, path::PathBuf};
@@ -33,14 +33,21 @@ async fn sse_handler(State(state): State<AppState>) -> impl IntoResponse {
 
     let stream =
         tokio_stream::wrappers::BroadcastStream::new(state.rx).map(|result| match result {
-            Ok(msg) => axum::response::sse::Event::default().json_data(msg),
+            Ok(msg) => {
+                tracing::info!("SSE event: {:?}", msg);
+                axum::response::sse::Event::default().json_data(msg)
+            }
             Err(e) => {
                 tracing::error!("Error in SSE stream: {}", e);
                 Err(axum::Error::new(e))
             }
         });
 
-    axum::response::sse::Sse::new(stream)
+    axum::response::sse::Sse::new(stream).keep_alive(
+        axum::response::sse::KeepAlive::new()
+            .interval(std::time::Duration::from_secs(15))
+            .text("keep-alive-text"),
+    )
 }
 
 // Setup tracing for the application
@@ -54,22 +61,36 @@ fn setup_tracing() {
 }
 
 // Setup file watcher and return the broadcast receiver
-fn setup_file_watcher() -> Result<
-    (FsEventWatcher, broadcast::Receiver<FileChangeEvent>),
-    Box<dyn std::error::Error + Send + Sync>,
-> {
+fn setup_file_watcher() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
     // Create a broadcast channel for SSE
     let (tx, rx) = broadcast::channel(100);
 
     // Create a file watcher
     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
+            match event.kind {
+                EventKind::Create(_) => {
+                    println!("Create: {:?}", event.paths);
+                }
+                EventKind::Modify(_) => {
+                    println!("Modify: {:?}", event.paths);
+                }
+                _ => {}
+            }
             if let EventKind::Modify(_) = event.kind {
                 let paths: Vec<PathBuf> = event.paths;
                 if !paths.is_empty() {
                     let message = FileChangeEvent { paths };
                     // If there are no receivers, the message is dropped: that's fine.
-                    let _ = tx.send(message);
+                    let tx_result = tx.send(message);
+                    match tx_result {
+                        Ok(_) => {
+                            tracing::info!("Sent message to SSE channel");
+                        }
+                        Err(e) => {
+                            tracing::error!("Failed to send message to SSE channel: {}", e);
+                        }
+                    }
                 }
             }
         }
@@ -84,17 +105,23 @@ fn setup_file_watcher() -> Result<
     Ok((watcher, rx))
 }
 
-// Create the router with all routes
-fn create_router(state: AppState) -> Router {
-    Router::new()
-        .route("/_debug/reload", get(sse_handler))
-        // .layer(TraceLayer::new_for_http())
-        .fallback_service(ServeDir::new("_site"))
-        .with_state(state)
-}
+// pub async fn watch_site() -> Result<FsEventWatcher> {
+//     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
+//         if let Ok(event) = res {
+//             tracing::info!("File changed: {:?}", event.paths);
+//         }
+//     })
+//     .context("Failed to create watcher")?;
+
+//     watcher
+//         .watch(&PathBuf::from("scss"), RecursiveMode::Recursive)
+//         .context("Failed to watch scss directory")?;
+
+//     Ok(watcher)
+// }
 
 // Start the server
-pub async fn start_server(port: u16) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+pub async fn start_server(port: u16) -> Result<()> {
     // Initialize tracing
     setup_tracing();
 
@@ -103,19 +130,26 @@ pub async fn start_server(port: u16) -> Result<(), Box<dyn std::error::Error + S
     let state = AppState { rx };
 
     // Build the router
-    let app = create_router(state);
+    let app = Router::new()
+        .route("/_debug/reload", get(sse_handler))
+        // .layer(TraceLayer::new_for_http())
+        .fallback_service(ServeDir::new("_site"))
+        .with_state(state);
 
     // Start the server
     let addr = SocketAddr::from(([127, 0, 0, 1], port));
     tracing::info!("Starting Axum server on {}", addr);
 
     axum::serve(TcpListener::bind(addr).await?, app.into_make_service()).await?;
+    //  for entry in app.foo
+    let _w = _watcher;
 
     Ok(())
 }
 
 // Main function to run the server
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    start_server(3000).await
+async fn main() -> Result<()> {
+    start_server(3000).await?;
+    Ok(())
 }

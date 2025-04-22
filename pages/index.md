@@ -1,11 +1,12 @@
 ---
 title: hi, i'm sam!
 css: /css/index.css
-...
+layout: Base.njk
+---
 
 # hi, i'm sam!
 
-I do software things.
+I do software things for work
 
 I'm currently at [Boundary], where I'm creating a new ML developer experience.
 

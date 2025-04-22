@@ -1,6 +1,5 @@
 ---
-title: interview questions
-...
+---
 
 # Interview Questions
 
