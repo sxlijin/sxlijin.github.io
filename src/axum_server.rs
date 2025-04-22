@@ -10,7 +10,7 @@ use std::{net::SocketAddr, path::PathBuf};
 use tokio::{net::TcpListener, sync::broadcast};
 use tokio_stream::StreamExt;
 // use tower_http::trace::TraceLayer;
-use notify::{Event, EventKind, FsEventWatcher, RecursiveMode, Watcher};
+use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
 use tower_http::services::ServeDir;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -91,35 +91,24 @@ fn setup_tracing() {
 }
 
 // Setup file watcher and return the broadcast receiver
-fn setup_file_watcher() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
+fn setup_hot_refresh() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
     // Create a broadcast channel for SSE
     let (tx, rx) = broadcast::channel(100);
 
     // Create a file watcher
     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
-            match event.kind {
-                EventKind::Create(_) => {
-                    println!("Create: {:?}", event.paths);
-                }
-                EventKind::Modify(_) => {
-                    println!("Modify: {:?}", event.paths);
-                }
-                _ => {}
-            }
-            if let EventKind::Modify(_) = event.kind {
-                let paths: Vec<PathBuf> = event.paths;
-                if !paths.is_empty() {
-                    let message = FileChangeEvent { paths };
-                    // If there are no receivers, the message is dropped: that's fine.
-                    let tx_result = tx.send(message);
-                    match tx_result {
-                        Ok(_) => {
-                            tracing::info!("Sent message to SSE channel");
-                        }
-                        Err(e) => {
-                            tracing::error!("Failed to send message to SSE channel: {}", e);
-                        }
+            let paths: Vec<PathBuf> = event.paths;
+            if !paths.is_empty() {
+                let message = FileChangeEvent { paths };
+                // If there are no receivers, the message is dropped: that's fine.
+                let tx_result = tx.send(message);
+                match tx_result {
+                    Ok(_) => {
+                        tracing::debug!("Sent message to SSE channel");
+                    }
+                    Err(e) => {
+                        tracing::error!("Failed to send message to SSE channel: {}", e);
                     }
                 }
             }
@@ -135,10 +124,24 @@ fn setup_file_watcher() -> Result<(FsEventWatcher, broadcast::Receiver<FileChang
     Ok((watcher, rx))
 }
 
-pub fn setup_hot_rebuild() -> Result<FsEventWatcher> {
+pub fn setup_hot_rebuild() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
+    let (tx, rx) = broadcast::channel(100);
     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
-            tracing::info!("File changed: {:?}", event.paths);
+            let paths: Vec<PathBuf> = event.paths;
+            if !paths.is_empty() {
+                let message = FileChangeEvent { paths };
+                // If there are no receivers, the message is dropped: that's fine.
+                let tx_result = tx.send(message);
+                match tx_result {
+                    Ok(_) => {
+                        tracing::debug!("Sent message to SSE channel");
+                    }
+                    Err(e) => {
+                        tracing::error!("Failed to send message to SSE channel: {}", e);
+                    }
+                }
+            }
         }
     })
     .context("Failed to create watcher")?;
@@ -147,7 +150,7 @@ pub fn setup_hot_rebuild() -> Result<FsEventWatcher> {
         .watch(&PathBuf::from("pages"), RecursiveMode::Recursive)
         .context("Failed to watch pages directory")?;
 
-    Ok(watcher)
+    Ok((watcher, rx))
 }
 
 // Start the server
@@ -156,9 +159,22 @@ pub async fn start_server(port: u16) -> Result<()> {
     setup_tracing();
 
     // Setup file watcher and get the receiver
-    let (_watcher, rx) = setup_file_watcher()?;
+    let (_watcher, rx) = setup_hot_refresh()?;
     let state = AppState { rx };
-    let _rebuild_watcher = setup_hot_rebuild()?;
+    let (_rebuild_watcher, mut rx2) = setup_hot_rebuild()?;
+
+    tokio::spawn(async move {
+        while let Ok(_msg) = rx2.recv().await {
+            match sam_website::build_content::build_all() {
+                Ok(_) => {
+                    tracing::info!("Rebuild successful");
+                }
+                Err(e) => {
+                    tracing::error!("Rebuild failed: {}", e);
+                }
+            }
+        }
+    });
 
     // Build the router
     let app = Router::new()
