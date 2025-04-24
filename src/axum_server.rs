@@ -65,6 +65,14 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
         tracing::error!("SSE channel is closed");
     }
 
+    // let _ = ws.send(axum::extract::ws::Message::Text(
+    //     serde_json::to_string(&FileChangeEvent {
+    //         paths: vec![PathBuf::from("initial-event")],
+    //     })
+    //     .expect("Failed to serialize message")
+    //     .into(),
+    // ));
+
     while let Ok(msg) = state.rx.recv().await {
         if let Err(e) = ws
             .send(axum::extract::ws::Message::Text(
@@ -91,10 +99,14 @@ fn setup_tracing() {
 }
 
 // Setup file watcher and return the broadcast receiver
-fn setup_hot_refresh() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
+fn setup_hot_refresh() -> Result<(
+    FsEventWatcher,
+    broadcast::Sender<FileChangeEvent>,
+    broadcast::Receiver<FileChangeEvent>,
+)> {
     // Create a broadcast channel for SSE
     let (tx, rx) = broadcast::channel(100);
-
+    let tx2 = tx.clone();
     // Create a file watcher
     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
@@ -121,11 +133,16 @@ fn setup_hot_refresh() -> Result<(FsEventWatcher, broadcast::Receiver<FileChange
         .watch(&PathBuf::from("_site"), RecursiveMode::Recursive)
         .context("Failed to watch _site directory")?;
 
-    Ok((watcher, rx))
+    Ok((watcher, tx2, rx))
 }
 
-pub fn setup_hot_rebuild() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
+pub fn setup_hot_rebuild() -> Result<(
+    FsEventWatcher,
+    broadcast::Sender<FileChangeEvent>,
+    broadcast::Receiver<FileChangeEvent>,
+)> {
     let (tx, rx) = broadcast::channel(100);
+    let tx2 = tx.clone();
     let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
             let paths: Vec<PathBuf> = event.paths;
@@ -150,7 +167,7 @@ pub fn setup_hot_rebuild() -> Result<(FsEventWatcher, broadcast::Receiver<FileCh
         .watch(&PathBuf::from("pages"), RecursiveMode::Recursive)
         .context("Failed to watch pages directory")?;
 
-    Ok((watcher, rx))
+    Ok((watcher, tx2, rx))
 }
 
 // Start the server
@@ -159,9 +176,12 @@ pub async fn start_server(port: u16) -> Result<()> {
     setup_tracing();
 
     // Setup file watcher and get the receiver
-    let (_watcher, rx) = setup_hot_refresh()?;
+    let (_watcher, _tx, rx) = setup_hot_refresh()?;
     let state = AppState { rx };
-    let (_rebuild_watcher, mut rx2) = setup_hot_rebuild()?;
+    let (_rebuild_watcher, tx2, mut rx2) = setup_hot_rebuild()?;
+    let _ = tx2.send(FileChangeEvent {
+        paths: vec![PathBuf::from("pages")],
+    });
 
     tokio::spawn(async move {
         while let Ok(_msg) = rx2.recv().await {
@@ -170,7 +190,7 @@ pub async fn start_server(port: u16) -> Result<()> {
                     tracing::info!("Rebuild successful");
                 }
                 Err(e) => {
-                    tracing::error!("Rebuild failed: {}", e);
+                    tracing::error!("Rebuild failed: {:?}", e);
                 }
             }
         }
