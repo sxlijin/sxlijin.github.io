@@ -218,6 +218,7 @@ pub async fn start_server(port: u16) -> Result<()> {
 // Main function to run the server
 #[tokio::main]
 async fn main() -> Result<()> {
+    std::fs::create_dir_all("_site")?;
     start_server(3000).await?;
     Ok(())
 }

@@ -1,6 +1,6 @@
 ---
 title: resume
-css: /scss/resume.css
+css: /css/resume.css
 ---
 
 # Sam Lijin

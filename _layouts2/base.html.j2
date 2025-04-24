@@ -14,8 +14,9 @@
 
   <title>{{ title }}</title>
   <link href="https://cdn.jsdelivr.net/npm/prismjs@v1/themes/prism.css" rel="stylesheet" />
-  <link rel="stylesheet" media="all" href="/scss/main.css">
-  {% if css != "" %}
+  {% if css == "" %}
+  <link rel="stylesheet" media="all" href="/css/main.css">
+  {% else %}
   <link rel="stylesheet" media="all" href="{{ css }}">
   {% endif %}
 
