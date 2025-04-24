@@ -5,13 +5,11 @@ use axum::{
     routing::get,
     Router,
 };
+use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
 use serde::Serialize;
 use std::{net::SocketAddr, path::PathBuf};
 use tokio::{net::TcpListener, sync::broadcast};
-use tokio_stream::StreamExt;
-// use tower_http::trace::TraceLayer;
-use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
-use tower_http::services::ServeDir;
+use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Debug, Clone, Serialize)]
@@ -30,49 +28,12 @@ impl Clone for AppState {
     }
 }
 
-// Handler for the SSE endpoint
-async fn sse_handler(State(state): State<AppState>) -> impl IntoResponse {
-    if state.rx.is_closed() {
-        tracing::error!("SSE channel is closed");
-    }
-
-    let stream =
-        tokio_stream::wrappers::BroadcastStream::new(state.rx).map(|result| match result {
-            Ok(msg) => {
-                tracing::info!("SSE event: {:?}", msg);
-                axum::response::sse::Event::default().json_data(msg)
-            }
-            Err(e) => {
-                tracing::error!("Error in SSE stream: {}", e);
-                Err(axum::Error::new(e))
-            }
-        });
-
-    axum::response::sse::Sse::new(stream).keep_alive(
-        axum::response::sse::KeepAlive::new()
-            .interval(std::time::Duration::from_secs(15))
-            .text("keep-alive-text"),
-    )
-}
-
 async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl IntoResponse {
     ws.on_upgrade(|ws| async move { ws_handler_impl(state, ws).await })
 }
 
 // Handler for the WebSocket endpoint
 async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
-    if state.rx.is_closed() {
-        tracing::error!("SSE channel is closed");
-    }
-
-    // let _ = ws.send(axum::extract::ws::Message::Text(
-    //     serde_json::to_string(&FileChangeEvent {
-    //         paths: vec![PathBuf::from("initial-event")],
-    //     })
-    //     .expect("Failed to serialize message")
-    //     .into(),
-    // ));
-
     while let Ok(msg) = state.rx.recv().await {
         if let Err(e) = ws
             .send(axum::extract::ws::Message::Text(
@@ -86,6 +47,7 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
             break;
         }
     }
+    tracing::error!("File change event channel is closed");
 }
 
 // Setup tracing for the application
@@ -136,7 +98,7 @@ fn setup_hot_refresh() -> Result<(
     Ok((watcher, tx2, rx))
 }
 
-pub fn setup_hot_rebuild() -> Result<(
+fn setup_hot_rebuild() -> Result<(
     FsEventWatcher,
     broadcast::Sender<FileChangeEvent>,
     broadcast::Receiver<FileChangeEvent>,
@@ -171,7 +133,7 @@ pub fn setup_hot_rebuild() -> Result<(
 }
 
 // Start the server
-pub async fn start_server(port: u16) -> Result<()> {
+async fn start_server(port: u16) -> Result<()> {
     // Initialize tracing
     setup_tracing();
 
@@ -198,9 +160,8 @@ pub async fn start_server(port: u16) -> Result<()> {
 
     // Build the router
     let app = Router::new()
-        .route("/_debug/reload", get(sse_handler))
-        .route("/_debug/reload2", get(ws_handler))
-        // .layer(TraceLayer::new_for_http())
+        .route("/_debug/reload", get(ws_handler))
+        .layer(TraceLayer::new_for_http())
         .fallback_service(ServeDir::new("_site"))
         .with_state(state);
 
