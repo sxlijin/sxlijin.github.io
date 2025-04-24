@@ -1,5 +1,5 @@
 [general]
 # Directories to search for templates, relative to the crate root.
-dirs = ["_layouts2"]
+dirs = ["_layouts"]
 # Unless you add a `-` in a block, whitespace characters won't be trimmed.
 whitespace = "preserve"

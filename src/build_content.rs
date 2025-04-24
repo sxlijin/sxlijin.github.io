@@ -335,14 +335,14 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
         for entry in WalkDir::new(pages_dir)
             .into_iter()
             .filter_map(|e| e.ok())
-            .filter(|e| e.file_type().is_file() && e.path() != Path::new("pages/index.md"))
+            .filter(|e| {
+                e.file_type().is_file()
+                    && e.path().extension() == Some(OsStr::new("md"))
+                    && e.path() != Path::new("pages/index.md")
+            })
         {
             let path = entry.path();
 
-            // Only process .md files
-            if path.extension() != Some(OsStr::new("md")) {
-                continue;
-            }
             // Get the relative path from the posts directory
             let relative_path = path.strip_prefix(pages_dir)?;
             let output_path = output_dir.join(relative_path.with_extension("html"));

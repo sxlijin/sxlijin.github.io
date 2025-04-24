@@ -36,24 +36,6 @@
     ga('send', 'pageview');
   </script>
 
-</head>
-<body>
-  {# {% if header %}
-    {{ header | safe }}
-  {% else %} #}
-    <header role="banner">
-      <div>
-        <a href="/"><img src="/assets/icon.svg"/></a>
-      </div>
-      <div>
-        <a href="/">home</a> | <a href="/library">library</a> | <a href="/resume">resume</a>
-      </div>
-    </header>
-  {# {% endif %} #}
-  <main class="page-content" aria-label="Content">
-    {{ content | safe }}
-  </main>
-
   <script>
     // WebSocket-based reload
     function setupWebSocket() {
@@ -92,5 +74,19 @@
     // Start WebSocket connection
     setupWebSocket();
   </script>
+</head>
+<body>
+  <header role="banner">
+    <div>
+      <a href="/"><img src="/assets/icon.svg"/></a>
+    </div>
+    <div>
+      <a href="/">home</a> | <a href="/library">library</a> | <a href="/resume">resume</a>
+    </div>
+  </header>
+  <main class="page-content" aria-label="Content">
+    {{ content | safe }}
+  </main>
+
 </body>
 </html> 
