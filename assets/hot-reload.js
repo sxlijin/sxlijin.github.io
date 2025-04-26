@@ -1,6 +1,21 @@
 const DEFAULT_RECONNECT_ATTEMPTS = 3;
 const DEFAULT_RECONNECT_INTERVAL_MS = 1000;
 
+const maybeReloadWebsocket = (reconnectAttempts) => {
+	if (reconnectAttempts < DEFAULT_RECONNECT_ATTEMPTS) {
+		console.log(
+			`WebSocket error occurred, attempting to reconnect (attempt ${reconnectAttempts + 1}/${DEFAULT_RECONNECT_ATTEMPTS})...`,
+		);
+		setTimeout(() => {
+			setupWebSocket(reconnectAttempts + 1);
+		}, DEFAULT_RECONNECT_INTERVAL_MS);
+	} else {
+		console.log(
+			"Failed to set up hot refresh: reached max reconnects for websocket",
+		);
+	}
+};
+
 const setupWebSocket = (reconnectAttempts) => {
 	console.log("Setting up WebSocket connection");
 
@@ -21,38 +36,27 @@ const setupWebSocket = (reconnectAttempts) => {
 		const buildTimestamp = document.querySelector(
 			'meta[name="build-timestamp"]',
 		).content;
-		console.log("Build timestamp:", buildTimestamp);
-
-		console.log("WebSocket connection opened");
 		ws.send(
 			JSON.stringify({
-				hello: "world",
+				request: "get_build_staleness",
+				buildTimestamp: buildTimestamp,
 			}),
 		);
 	};
 
 	ws.onmessage = (event) => {
-		console.log("WebSocket message received, reloading page");
+		console.log("WebSocket message received, reloading page", event);
 		// window.location.reload();
 	};
 
-	// ws.onclose = () => { };
+	ws.onclose = () => {
+		console.log("Websocket was closed");
+		maybeReloadWebsocket(reconnectAttempts);
+	};
 
 	ws.onerror = (err) => {
 		console.error("WebSocket error:", err);
-		if (reconnectAttempts < DEFAULT_RECONNECT_ATTEMPTS) {
-			console.log(
-				`WebSocket error occurred, attempting to reconnect (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})...`,
-			);
-			setTimeout(() => {
-				setupWebSocket(reconnectAttempts + 1);
-			}, DEFAULT_RECONNECT_INTERVAL_MS);
-		} else {
-			console.log(
-				"Failed to set up hot reload: reached max reconnects for websocket",
-			);
-		}
-		ws.close();
+		maybeReloadWebsocket(reconnectAttempts);
 	};
 };
 

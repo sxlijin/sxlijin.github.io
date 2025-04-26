@@ -2,15 +2,16 @@ use anyhow::{Context, Result};
 use askama::Template;
 use chrono::NaiveDate;
 use serde::de::DeserializeOwned;
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer, Serializer};
 use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
+use std::str::FromStr;
 use std::time::{SystemTime, UNIX_EPOCH};
 use walkdir::WalkDir;
 
 #[derive(Debug)]
-struct BuildTimestamp(SystemTime);
+pub struct BuildTimestamp(SystemTime);
 
 impl std::fmt::Display for BuildTimestamp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -22,6 +23,30 @@ impl std::fmt::Display for BuildTimestamp {
                 .expect("SystemTime instances should always > UNIX_EPOCH")
                 .as_secs()
         )
+    }
+}
+
+impl serde::Serialize for BuildTimestamp {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for BuildTimestamp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let formatted: String = serde::Deserialize::deserialize(deserializer)?;
+        Ok(BuildTimestamp(
+            UNIX_EPOCH
+                + std::time::Duration::from_secs(
+                    u64::from_str(&formatted).map_err(serde::de::Error::custom)?,
+                ),
+        ))
     }
 }
 

@@ -6,7 +6,8 @@ use axum::{
     Router,
 };
 use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
-use serde::Serialize;
+use sam_website::build_content;
+use serde::{Deserialize, Serialize};
 use std::{
     net::SocketAddr,
     ops::DerefMut,
@@ -49,19 +50,21 @@ async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl
     ws.on_upgrade(|ws| async move { ws_handler_impl(state, ws).await })
 }
 
-// Handler for the WebSocket endpoint
+#[derive(Debug, Deserialize)]
+#[allow(unused)]
+enum WebsocketRequest {
+    GetBuildStaleness {
+        build_timestamp: build_content::BuildTimestamp,
+    },
+}
+
 async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
     tracing::info!("WebSocket connection established");
-    let _ = ws
-        .send(axum::extract::ws::Message::Text(
-            serde_json::to_string("Hello, world!")
-                .expect("Failed to serialize message")
-                .into(),
-        ))
-        .await;
+
     loop {
         select! {
-            Some(Ok(axum::extract::ws::Message::Text(_))) = ws.recv() => {
+            Some(Ok(axum::extract::ws::Message::Text(ws_req))) = ws.recv() => {
+                tracing::info!("Received websocket request: {}", ws_req);
                 if let Err(e) = ws
                     .send(axum::extract::ws::Message::Text(
                         serde_json::to_string(&RebuildEvent { build_timestamp: state.latest_build_timestamp.lock().await.build_timestamp })
