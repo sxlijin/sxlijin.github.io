@@ -7,7 +7,7 @@ use axum::{
 };
 use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
 use serde::Serialize;
-use std::{net::SocketAddr, path::PathBuf};
+use std::{net::SocketAddr, path::PathBuf, time::SystemTime};
 use tokio::{net::TcpListener, sync::broadcast};
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -28,12 +28,29 @@ impl Clone for AppState {
     }
 }
 
+#[derive(Debug, Serialize)]
+#[serde(tag = "event")]
+pub enum WebsocketMessage {
+    #[serde(rename = "build_timestamp")]
+    BuildTimestamp(SystemTime),
+    #[serde(rename = "file_change")]
+    FileChange(FileChangeEvent),
+}
+
 async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl IntoResponse {
     ws.on_upgrade(|ws| async move { ws_handler_impl(state, ws).await })
 }
 
 // Handler for the WebSocket endpoint
 async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
+    tracing::info!("WebSocket connection established");
+    let _ = ws
+        .send(axum::extract::ws::Message::Text(
+            serde_json::to_string("Hello, world!")
+                .expect("Failed to serialize message")
+                .into(),
+        ))
+        .await;
     while let Ok(msg) = state.rx.recv().await {
         if let Err(e) = ws
             .send(axum::extract::ws::Message::Text(

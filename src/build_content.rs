@@ -6,7 +6,24 @@ use serde::Deserialize;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::Path;
+use std::time::{SystemTime, UNIX_EPOCH};
 use walkdir::WalkDir;
+
+#[derive(Debug)]
+struct BuildTimestamp(SystemTime);
+
+impl std::fmt::Display for BuildTimestamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            self.0
+                .duration_since(UNIX_EPOCH)
+                .expect("SystemTime instances should always > UNIX_EPOCH")
+                .as_secs()
+        )
+    }
+}
 
 fn build_assets() -> Result<()> {
     let output_dir = Path::new("_site");
@@ -101,6 +118,7 @@ pub fn build_scss() -> Result<()> {
 struct MarkdownRenderEngine<'a, 'b> {
     options: comrak::Options<'b>,
     arena: comrak::Arena<comrak::nodes::AstNode<'a>>,
+    build_timestamp: SystemTime,
 }
 
 struct ParsedMarkdown<'md, TFrontmatter: Default + DeserializeOwned> {
@@ -116,11 +134,13 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                 extension: comrak::ExtensionOptions::builder()
                     .front_matter_delimiter("---".into())
                     .autolink(true)
+                    .footnotes(true)
                     .build(),
                 parse: comrak::ParseOptions::default(),
                 render: comrak::RenderOptions::builder().unsafe_(true).build(),
             },
             arena: comrak::Arena::new(),
+            build_timestamp: SystemTime::now(),
         }
     }
 
@@ -234,6 +254,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                     title: posts.last().unwrap().title.clone(),
                     css: "".to_string(),
                     content: html.join("\n"),
+                    build_timestamp: BuildTimestamp(self.build_timestamp),
                 }
                 .render()
                 .context("Failed to render template")?;
@@ -307,6 +328,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             title: result.frontmatter.title.unwrap_or(result.title),
             css: result.frontmatter.css.unwrap_or("".to_string()),
             content: html,
+            build_timestamp: BuildTimestamp(self.build_timestamp),
         }
         .render()
         .context("Failed to render template")?;
@@ -377,6 +399,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                 title: parsed.frontmatter.title.unwrap_or(parsed.title),
                 css: parsed.frontmatter.css.unwrap_or("".to_string()),
                 content: html,
+                build_timestamp: BuildTimestamp(self.build_timestamp),
             }
             .render()
             .context("Failed to render template")?;
@@ -402,6 +425,7 @@ struct Page {
     title: String,
     css: String,
     content: String,
+    build_timestamp: BuildTimestamp,
 }
 
 #[derive(Debug, Deserialize, Default)]
@@ -412,12 +436,13 @@ struct PageFrontmatter {
     layout: Option<String>,
 }
 
-pub fn build_all() -> Result<()> {
+pub fn build_all() -> Result<SystemTime> {
     build_assets()?;
     build_scss()?;
     let engine = MarkdownRenderEngine::new();
     let posts = engine.build_posts()?;
     engine.build_index_html(posts)?;
     engine.build_pages()?;
-    Ok(())
+
+    Ok(engine.build_timestamp)
 }

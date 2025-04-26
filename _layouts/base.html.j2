@@ -20,7 +20,6 @@
   <link rel="stylesheet" media="all" href="{{ css }}">
   {% endif %}
 
-
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -36,44 +35,8 @@
     ga('send', 'pageview');
   </script>
 
-  <script>
-    // WebSocket-based reload
-    function setupWebSocket() {
-      const ws = new WebSocket(`ws://${window.location.host}/_debug/reload2`);
-      let reconnectAttempts = 0;
-      const maxReconnectAttempts = 3;
-      
-      ws.onmessage = function(event) {
-        console.log("WebSocket message received, reloading page");
-        window.location.reload();
-      };
-
-      ws.onclose = function() {
-        if (reconnectAttempts < maxReconnectAttempts) {
-          console.log(`WebSocket connection closed, attempting to reconnect (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})...`);
-          reconnectAttempts++;
-          setTimeout(setupWebSocket, 1000);
-        } else {
-          console.log("Max reconnection attempts reached, stopping WebSocket connection");
-        }
-      };
-
-      ws.onerror = function(err) {
-        console.error("WebSocket error:", err);
-        if (reconnectAttempts < maxReconnectAttempts) {
-          console.log(`WebSocket error occurred, attempting to reconnect (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})...`);
-          reconnectAttempts++;
-          setTimeout(setupWebSocket, 1000);
-        } else {
-          console.log("Max reconnection attempts reached, stopping WebSocket connection");
-        }
-        ws.close();
-      };
-    }
-
-    // Start WebSocket connection
-    setupWebSocket();
-  </script>
+  <script src="/assets/hot-reload.js"></script>
+  <meta name="build-timestamp" content="{{ build_timestamp }}">
 </head>
 <body>
   <header role="banner">
