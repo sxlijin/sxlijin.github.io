@@ -9,6 +9,7 @@ use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
 use serde::Serialize;
 use std::{
     net::SocketAddr,
+    ops::DerefMut,
     path::PathBuf,
     sync::Arc,
     time::{SystemTime, UNIX_EPOCH},
@@ -27,7 +28,6 @@ struct FileChangeEvent {
 }
 struct AppState {
     rx: broadcast::Receiver<FileChangeEvent>,
-    rx2: broadcast::Receiver<RebuildEvent>,
     latest_build_timestamp: Arc<Mutex<RebuildEvent>>,
 }
 
@@ -35,7 +35,6 @@ impl Clone for AppState {
     fn clone(&self) -> Self {
         AppState {
             rx: self.rx.resubscribe(),
-            rx2: self.rx2.resubscribe(),
             latest_build_timestamp: self.latest_build_timestamp.clone(),
         }
     }
@@ -66,20 +65,6 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
                 if let Err(e) = ws
                     .send(axum::extract::ws::Message::Text(
                         serde_json::to_string(&RebuildEvent { build_timestamp: state.latest_build_timestamp.lock().await.build_timestamp })
-                            .expect("Failed to serialize message")
-                            .into(),
-                    ))
-                    .await
-                {
-                    tracing::error!("Failed to send WebSocket message: {}", e);
-                    break;
-                }
-            }
-            Ok(rebuild_event) = state.rx2.recv() => {
-                tracing::info!("Rebuild finished, sending websocket message");
-                if let Err(e) = ws
-                    .send(axum::extract::ws::Message::Text(
-                        serde_json::to_string(&rebuild_event)
                             .expect("Failed to serialize message")
                             .into(),
                     ))
@@ -198,10 +183,8 @@ async fn start_server(port: u16) -> Result<()> {
     // Setup file watcher and get the receiver
     let (_watcher, _tx, rx) = setup_hot_refresh()?;
     let (_rebuild_watcher, tx2, mut rx2) = setup_hot_rebuild()?;
-    let (post_rebuild_tx, post_rebuild_rx) = broadcast::channel(1);
     let state = AppState {
         rx,
-        rx2: post_rebuild_rx,
         latest_build_timestamp: Arc::new(Mutex::new(RebuildEvent {
             build_timestamp: UNIX_EPOCH,
         })),
@@ -210,11 +193,16 @@ async fn start_server(port: u16) -> Result<()> {
         paths: vec![PathBuf::from("pages")],
     });
 
+    let latest_build_timestamp = state.latest_build_timestamp.clone();
     tokio::spawn(async move {
         while let Ok(_msg) = rx2.recv().await {
             match sam_website::build_content::build_all() {
                 Ok(build_timestamp) => {
-                    let _ = post_rebuild_tx.send(RebuildEvent { build_timestamp });
+                    let mut latest_build_timestamp = latest_build_timestamp.lock().await;
+                    std::mem::swap(
+                        latest_build_timestamp.deref_mut(),
+                        &mut RebuildEvent { build_timestamp },
+                    );
                     tracing::info!("Rebuild successful");
                 }
                 Err(e) => {
