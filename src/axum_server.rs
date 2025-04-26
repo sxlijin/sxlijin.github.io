@@ -7,8 +7,17 @@ use axum::{
 };
 use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
 use serde::Serialize;
-use std::{net::SocketAddr, path::PathBuf, time::SystemTime};
-use tokio::{net::TcpListener, sync::broadcast};
+use std::{
+    net::SocketAddr,
+    path::PathBuf,
+    sync::Arc,
+    time::{SystemTime, UNIX_EPOCH},
+};
+use tokio::{
+    net::TcpListener,
+    select,
+    sync::{broadcast, Mutex},
+};
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -18,23 +27,23 @@ struct FileChangeEvent {
 }
 struct AppState {
     rx: broadcast::Receiver<FileChangeEvent>,
+    rx2: broadcast::Receiver<RebuildEvent>,
+    latest_build_timestamp: Arc<Mutex<RebuildEvent>>,
 }
 
 impl Clone for AppState {
     fn clone(&self) -> Self {
         AppState {
             rx: self.rx.resubscribe(),
+            rx2: self.rx2.resubscribe(),
+            latest_build_timestamp: self.latest_build_timestamp.clone(),
         }
     }
 }
 
-#[derive(Debug, Serialize)]
-#[serde(tag = "event")]
-pub enum WebsocketMessage {
-    #[serde(rename = "build_timestamp")]
-    BuildTimestamp(SystemTime),
-    #[serde(rename = "file_change")]
-    FileChange(FileChangeEvent),
+#[derive(Clone, Debug, Serialize)]
+struct RebuildEvent {
+    build_timestamp: SystemTime,
 }
 
 async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl IntoResponse {
@@ -51,17 +60,49 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
                 .into(),
         ))
         .await;
-    while let Ok(msg) = state.rx.recv().await {
-        if let Err(e) = ws
-            .send(axum::extract::ws::Message::Text(
-                serde_json::to_string(&msg)
-                    .expect("Failed to serialize message")
-                    .into(),
-            ))
-            .await
-        {
-            tracing::error!("Failed to send WebSocket message: {}", e);
-            break;
+    loop {
+        select! {
+            Some(Ok(axum::extract::ws::Message::Text(_))) = ws.recv() => {
+                if let Err(e) = ws
+                    .send(axum::extract::ws::Message::Text(
+                        serde_json::to_string(&RebuildEvent { build_timestamp: state.latest_build_timestamp.lock().await.build_timestamp })
+                            .expect("Failed to serialize message")
+                            .into(),
+                    ))
+                    .await
+                {
+                    tracing::error!("Failed to send WebSocket message: {}", e);
+                    break;
+                }
+            }
+            Ok(rebuild_event) = state.rx2.recv() => {
+                tracing::info!("Rebuild finished, sending websocket message");
+                if let Err(e) = ws
+                    .send(axum::extract::ws::Message::Text(
+                        serde_json::to_string(&rebuild_event)
+                            .expect("Failed to serialize message")
+                            .into(),
+                    ))
+                    .await
+                {
+                    tracing::error!("Failed to send WebSocket message: {}", e);
+                    break;
+                }
+            }
+            Ok(site_changed) = state.rx.recv() => {
+                if let Err(e) = ws
+                    .send(axum::extract::ws::Message::Text(
+                        serde_json::to_string(&site_changed)
+                            .expect("Failed to serialize message")
+                            .into(),
+                    ))
+                    .await
+                {
+                    tracing::error!("Failed to send WebSocket message: {}", e);
+                    break;
+                }
+            }
+            else => break,
         }
     }
     tracing::error!("File change event channel is closed");
@@ -156,8 +197,15 @@ async fn start_server(port: u16) -> Result<()> {
 
     // Setup file watcher and get the receiver
     let (_watcher, _tx, rx) = setup_hot_refresh()?;
-    let state = AppState { rx };
     let (_rebuild_watcher, tx2, mut rx2) = setup_hot_rebuild()?;
+    let (post_rebuild_tx, post_rebuild_rx) = broadcast::channel(1);
+    let state = AppState {
+        rx,
+        rx2: post_rebuild_rx,
+        latest_build_timestamp: Arc::new(Mutex::new(RebuildEvent {
+            build_timestamp: UNIX_EPOCH,
+        })),
+    };
     let _ = tx2.send(FileChangeEvent {
         paths: vec![PathBuf::from("pages")],
     });
@@ -165,7 +213,8 @@ async fn start_server(port: u16) -> Result<()> {
     tokio::spawn(async move {
         while let Ok(_msg) = rx2.recv().await {
             match sam_website::build_content::build_all() {
-                Ok(_) => {
+                Ok(build_timestamp) => {
+                    let _ = post_rebuild_tx.send(RebuildEvent { build_timestamp });
                     tracing::info!("Rebuild successful");
                 }
                 Err(e) => {
