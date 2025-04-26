@@ -51,6 +51,7 @@ async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(tag = "request")]
 #[allow(unused)]
 enum WebsocketRequest {
     GetBuildStaleness {
@@ -65,16 +66,30 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
         select! {
             Some(Ok(axum::extract::ws::Message::Text(ws_req))) = ws.recv() => {
                 tracing::info!("Received websocket request: {}", ws_req);
-                if let Err(e) = ws
-                    .send(axum::extract::ws::Message::Text(
-                        serde_json::to_string(&RebuildEvent { build_timestamp: state.latest_build_timestamp.lock().await.build_timestamp })
-                            .expect("Failed to serialize message")
-                            .into(),
-                    ))
-                    .await
-                {
-                    tracing::error!("Failed to send WebSocket message: {}", e);
-                    break;
+                let Ok(req) = serde_json::from_str::<WebsocketRequest>(&ws_req) else {
+                    continue;
+                };
+                match req {
+                    WebsocketRequest::GetBuildStaleness {
+                        build_timestamp
+                    } => {
+                        let latest_build_timestamp = state.latest_build_timestamp.lock().await.build_timestamp;
+                        if build_timestamp.0 < latest_build_timestamp {
+                            if let Err(e) = ws
+                                .send(axum::extract::ws::Message::Text(
+                                    serde_json::to_string(&RebuildEvent { build_timestamp: state.latest_build_timestamp.lock().await.build_timestamp })
+                                        .expect("Failed to serialize message")
+                                        .into(),
+                                ))
+                                .await
+                            {
+                                tracing::error!("Failed to send WebSocket message: {}", e);
+                                break;
+                            }
+                        }
+
+                    }
+
                 }
             }
             Ok(site_changed) = state.rx.recv() => {

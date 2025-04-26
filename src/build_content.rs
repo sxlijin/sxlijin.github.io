@@ -11,7 +11,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use walkdir::WalkDir;
 
 #[derive(Debug)]
-pub struct BuildTimestamp(SystemTime);
+pub struct BuildTimestamp(pub SystemTime);
 
 impl std::fmt::Display for BuildTimestamp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

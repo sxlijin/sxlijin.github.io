@@ -1,4 +1,4 @@
-const DEFAULT_RECONNECT_ATTEMPTS = 3;
+const DEFAULT_RECONNECT_ATTEMPTS = 100;
 const DEFAULT_RECONNECT_INTERVAL_MS = 1000;
 
 const maybeReloadWebsocket = (reconnectAttempts) => {
@@ -33,6 +33,7 @@ const setupWebSocket = (reconnectAttempts) => {
 	window.hotReloadWs = ws;
 
 	ws.onopen = () => {
+		reconnectAttempts = 0;
 		const buildTimestamp = document.querySelector(
 			'meta[name="build-timestamp"]',
 		).content;
