@@ -51,7 +51,7 @@ async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(tag = "request")]
+#[serde(tag = "request", rename_all = "snake_case")]
 #[allow(unused)]
 enum WebsocketRequest {
     GetBuildStaleness {
@@ -67,6 +67,7 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
             Some(Ok(axum::extract::ws::Message::Text(ws_req))) = ws.recv() => {
                 tracing::info!("Received websocket request: {}", ws_req);
                 let Ok(req) = serde_json::from_str::<WebsocketRequest>(&ws_req) else {
+                    tracing::warn!("failed to deser build staleness recv");
                     continue;
                 };
                 match req {
@@ -74,6 +75,7 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
                         build_timestamp
                     } => {
                         let latest_build_timestamp = state.latest_build_timestamp.lock().await.build_timestamp;
+                        tracing::info!("get build staleness recv {} {:?}", build_timestamp, latest_build_timestamp);
                         if build_timestamp.0 < latest_build_timestamp {
                             if let Err(e) = ws
                                 .send(axum::extract::ws::Message::Text(

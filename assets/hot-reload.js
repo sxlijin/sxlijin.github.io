@@ -40,14 +40,14 @@ const setupWebSocket = (reconnectAttempts) => {
 		ws.send(
 			JSON.stringify({
 				request: "get_build_staleness",
-				buildTimestamp: buildTimestamp,
+				build_timestamp: buildTimestamp,
 			}),
 		);
 	};
 
 	ws.onmessage = (event) => {
 		console.log("WebSocket message received, reloading page", event);
-		// window.location.reload();
+		window.location.reload();
 	};
 
 	ws.onclose = () => {
