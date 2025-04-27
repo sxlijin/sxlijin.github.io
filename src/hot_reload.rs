@@ -2,7 +2,7 @@ use crate::{BuildSummary, build_website};
 use anyhow::{Context, Result};
 use axum::{Router, routing::get};
 use notify_debouncer_full::{
-    DebounceEventResult, Debouncer, FileIdMap, new_debouncer,
+    DebounceEventResult, Debouncer, RecommendedCache, new_debouncer,
     notify::{RecommendedWatcher, RecursiveMode},
 };
 use serde::Serialize;
@@ -33,7 +33,7 @@ impl Clone for HotReloadServerState {
 
 // Setup file watcher and return the broadcast receiver
 fn setup_hot_refresh() -> Result<(
-    Debouncer<RecommendedWatcher, FileIdMap>,
+    Debouncer<RecommendedWatcher, RecommendedCache>,
     broadcast::Receiver<FileChangeEvent>,
 )> {
     // Create a broadcast channel for SSE
@@ -72,7 +72,7 @@ fn setup_hot_refresh() -> Result<(
 }
 
 fn setup_hot_rebuild() -> Result<(
-    Debouncer<RecommendedWatcher, FileIdMap>,
+    Debouncer<RecommendedWatcher, RecommendedCache>,
     broadcast::Receiver<BuildSummary>,
 )> {
     let (tx, rx) = broadcast::channel(100);
@@ -96,10 +96,27 @@ fn setup_hot_rebuild() -> Result<(
     )
     .context("Failed to create debouncer")?;
 
-    // Watch the pages directory
-    debouncer
-        .watch(&PathBuf::from("pages"), RecursiveMode::Recursive)
-        .context("Failed to watch pages directory")?;
+    // Watch multiple directories
+    const WEBSITE_SRC_DIRS: [&str; 6] = [
+        "_layouts",
+        "assets",
+        "pages",
+        "posts",
+        "scss",
+        "root-assets",
+    ];
+
+    for dir in WEBSITE_SRC_DIRS {
+        let path = PathBuf::from(dir);
+        if path.exists() {
+            debouncer
+                .watch(&path, RecursiveMode::Recursive)
+                .with_context(|| format!("Failed to watch {} directory", dir))?;
+            tracing::info!("Watching directory: {}", dir);
+        } else {
+            tracing::warn!("Directory {} does not exist, skipping", dir);
+        }
+    }
 
     Ok((debouncer, rx))
 }
