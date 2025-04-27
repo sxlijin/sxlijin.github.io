@@ -1,9 +1,12 @@
 use crate::{BuildSummary, build_website};
 use anyhow::{Context, Result};
 use axum::{Router, routing::get};
-use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
+use notify_debouncer_full::{
+    DebounceEventResult, Debouncer, FileIdMap, new_debouncer,
+    notify::{RecommendedWatcher, RecursiveMode},
+};
 use serde::Serialize;
-use std::{net::SocketAddr, path::PathBuf, sync::Arc};
+use std::{net::SocketAddr, path::PathBuf, sync::Arc, time::Duration};
 use tokio::{
     net::TcpListener,
     sync::{Mutex, broadcast},
@@ -29,52 +32,76 @@ impl Clone for HotReloadServerState {
 }
 
 // Setup file watcher and return the broadcast receiver
-fn setup_hot_refresh() -> Result<(FsEventWatcher, broadcast::Receiver<FileChangeEvent>)> {
+fn setup_hot_refresh() -> Result<(
+    Debouncer<RecommendedWatcher, FileIdMap>,
+    broadcast::Receiver<FileChangeEvent>,
+)> {
     // Create a broadcast channel for SSE
     let (tx, rx) = broadcast::channel(100);
-    // Create a file watcher
-    let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
-        if let Ok(event) = res {
-            let paths: Vec<PathBuf> = event.paths;
-            if !paths.is_empty() {
-                let message = FileChangeEvent { paths };
-                // If there are no receivers, the message is dropped: that's fine.
-                let _ = tx.send(message);
+
+    // Create a debounced file watcher
+    let mut debouncer = new_debouncer(
+        Duration::from_millis(100),
+        None,
+        move |result: DebounceEventResult| {
+            match result {
+                Ok(events) => {
+                    if !events.is_empty() {
+                        let paths = events
+                            .into_iter()
+                            .map(|e| e.event.paths)
+                            .flatten()
+                            .collect();
+                        let message = FileChangeEvent { paths };
+                        // If there are no receivers, the message is dropped: that's fine.
+                        let _ = tx.send(message);
+                    }
+                }
+                Err(e) => tracing::warn!("Failed to watch directory: {:?}", e),
             }
-        }
-    })
-    .context("Failed to create watcher")?;
+        },
+    )
+    .context("Failed to create debouncer")?;
 
     // Add the _site directory to the watcher
-    watcher
+    debouncer
         .watch(&PathBuf::from("_site"), RecursiveMode::Recursive)
         .context("Failed to watch _site directory")?;
 
-    Ok((watcher, rx))
+    Ok((debouncer, rx))
 }
 
-fn setup_hot_rebuild() -> Result<(FsEventWatcher, broadcast::Receiver<BuildSummary>)> {
+fn setup_hot_rebuild() -> Result<(
+    Debouncer<RecommendedWatcher, FileIdMap>,
+    broadcast::Receiver<BuildSummary>,
+)> {
     let (tx, rx) = broadcast::channel(100);
-    let mut watcher =
-        notify::recommended_watcher(move |res: Result<Event, notify::Error>| match res {
-            Err(e) => {
-                tracing::warn!("Failed to watch pages directory: {}", e);
-            }
-            Ok(_) => match build_website() {
-                Ok(build_summary) => {
-                    let _ = tx.send(build_summary);
-                }
-                Err(e) => tracing::error!("Failed to build: {}", e),
-            },
-        })
-        .context("Failed to create watcher")?;
 
-    // TOOD: how to watch multiple directories?
-    watcher
+    let mut debouncer = new_debouncer(
+        Duration::from_millis(250),
+        None,
+        move |result: DebounceEventResult| match result {
+            Ok(events) => {
+                if !events.is_empty() {
+                    match build_website() {
+                        Ok(build_summary) => {
+                            let _ = tx.send(build_summary);
+                        }
+                        Err(e) => tracing::error!("Failed to build: {}", e),
+                    }
+                }
+            }
+            Err(e) => tracing::warn!("Failed to watch directory: {:?}", e),
+        },
+    )
+    .context("Failed to create debouncer")?;
+
+    // Watch the pages directory
+    debouncer
         .watch(&PathBuf::from("pages"), RecursiveMode::Recursive)
         .context("Failed to watch pages directory")?;
 
-    Ok((watcher, rx))
+    Ok((debouncer, rx))
 }
 
 // Start the server
