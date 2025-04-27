@@ -29,7 +29,14 @@ fn setup_tracing() {
         .with(tracing_subscriber::EnvFilter::new(
             std::env::var("RUST_LOG").unwrap_or_else(|_| "info".into()),
         ))
-        .with(tracing_subscriber::fmt::layer())
+        .with(
+            tracing_subscriber::fmt::layer()
+                .with_ansi(true)
+                .with_target(false)
+                .with_thread_ids(false)
+                .with_file(true)
+                .with_line_number(true),
+        )
         .init();
 }
 

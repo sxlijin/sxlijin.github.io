@@ -35,7 +35,7 @@ const setupWebSocket = (reconnectAttempts) => {
 	ws.onopen = () => {
 		// reset the connection counter when we successfully re-establish a connection
 		reconnectAttempts = 0;
-		const build_summary = document.querySelector(
+		const build_timestamp = document.querySelector(
 			'meta[name="build-summary"]',
 		).content;
 		ws.send(
