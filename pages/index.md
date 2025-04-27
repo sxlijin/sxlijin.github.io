@@ -1,7 +1,6 @@
 ---
 title: hi, i'm sam!
 css: /css/index.css
-layout: Base.njk
 ---
 
 # hi, i'm sam!

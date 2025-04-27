@@ -1,11 +1,11 @@
 use anyhow::{Context, Result};
 use askama::Template;
 use chrono::NaiveDate;
-use serde::de::DeserializeOwned;
 use serde::Deserialize;
+use serde::de::DeserializeOwned;
 use std::ffi::OsStr;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 use walkdir::WalkDir;
 
@@ -105,12 +105,14 @@ struct MarkdownRenderEngine<'a, 'b> {
     options: comrak::Options<'b>,
     arena: comrak::Arena<comrak::nodes::AstNode<'a>>,
     build_timestamp: SystemTime,
+    #[allow(dead_code)]
+    output_dir: PathBuf,
 }
 
-struct ParsedMarkdown<'md, TFrontmatter: Default + DeserializeOwned> {
+struct ParsedMarkdown<TFrontmatter: Default + DeserializeOwned> {
     frontmatter: TFrontmatter,
-    title: String,
-    body: &'md comrak::nodes::AstNode<'md>,
+    first_h1: String,
+    html: String,
 }
 
 impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
@@ -121,19 +123,22 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                     .front_matter_delimiter("---".into())
                     .autolink(true)
                     .footnotes(true)
+                    // TODO: mathjax rendering
+                    .math_dollars(true)
                     .build(),
                 parse: comrak::ParseOptions::default(),
                 render: comrak::RenderOptions::builder().unsafe_(true).build(),
             },
             arena: comrak::Arena::new(),
             build_timestamp: SystemTime::now(),
+            output_dir: PathBuf::from("_site"),
         }
     }
 
     fn parse_markdown<TFrontmatter>(
         &'a self,
         markdown: String,
-    ) -> Result<ParsedMarkdown<'a, TFrontmatter>>
+    ) -> Result<ParsedMarkdown<TFrontmatter>>
     where
         TFrontmatter: Default + DeserializeOwned,
     {
@@ -154,10 +159,15 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             }
         }
 
+        let mut buf = Vec::new();
+        comrak::format_html(root, &self.options, &mut buf)?;
+        let html = String::from_utf8(buf)
+            .context("Failed to convert markdown to HTML (UTF8 validation failed)")?;
+
         Ok(ParsedMarkdown {
             frontmatter: frontmatter.unwrap_or_default(),
-            title: h1.context("Failed to parse title")?,
-            body: root,
+            first_h1: h1.context("Failed to parse title")?,
+            html,
         })
     }
 
@@ -184,77 +194,62 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
         {
             let path = entry.path();
 
-            // Only process .md files
-            if path.extension().and_then(|s| s.to_str()) == Some("md") {
-                // Get the relative path from the posts directory
-                let relative_path = path.strip_prefix(posts_dir)?;
-                let output_path = output_dir.join(relative_path.with_extension("html"));
-                let output_path2 = output_dir
-                    .join(relative_path.with_extension(""))
-                    .join("index.html");
+            // Get the relative path from the posts directory
+            let relative_path = path.strip_prefix(posts_dir)?;
+            let output_path = output_dir.join(relative_path.with_extension("html"));
+            let output_path2 = output_dir
+                .join(relative_path.with_extension(""))
+                .join("index.html");
 
-                // Ensure the parent directory exists
-                if let Some(parent) = output_path.parent() {
-                    fs::create_dir_all(parent)?;
-                }
-
-                tracing::info!("Converting {} to {}", path.display(), output_path.display());
-
-                // Read the markdown file
-                let markdown = fs::read_to_string(path)?;
-
-                let root = comrak::parse_document(&self.arena, &markdown, &self.options);
-                for child in root.children() {
-                    if let comrak::nodes::NodeValue::Heading(_) = child.data.borrow().value {
-                        let h1_ref = &child.first_child().unwrap().data.borrow();
-                        let h1 = h1_ref.value.text().clone().unwrap();
-
-                        posts.push(PostMetadata {
-                            timestamp: NaiveDate::parse_from_str(
-                                &path.file_name().unwrap().to_str().unwrap()[..10],
-                                "%Y-%m-%d",
-                            )?,
-                            title: h1.clone(),
-                            path: path
-                                .file_stem()
-                                .expect("Failed to get file stem")
-                                .to_str()
-                                .unwrap()
-                                .to_string(),
-                        });
-                        break;
-                    }
-                }
-                let mut buf = Vec::new();
-                comrak::format_html(&root, &self.options, &mut buf)?;
-                let html = String::from_utf8(buf)
-                    .context("Failed to convert markdown to HTML (UTF8 validation failed)")?;
-                let mut html = html.lines().collect::<Vec<&str>>();
-                let formatted_date = &format!(
-                    "<p>{}</p>",
-                    posts.last().unwrap().timestamp.format("%Y %b %d")
-                );
-                html.insert(1, formatted_date);
-                html.insert(2, "<hr/>");
-                let html = Page {
-                    title: posts.last().unwrap().title.clone(),
-                    css: "".to_string(),
-                    content: html.join("\n"),
-                    build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
-                }
-                .render()
-                .context("Failed to render template")?;
-
-                // Write the HTML to the output file
-                if let Some(parent) = output_path.parent() {
-                    fs::create_dir_all(parent)?;
-                }
-                if let Some(parent) = output_path2.parent() {
-                    fs::create_dir_all(parent)?;
-                }
-                fs::write(output_path, html.clone())?;
-                fs::write(output_path2, html)?;
+            // Ensure the parent directory exists
+            if let Some(parent) = output_path.parent() {
+                fs::create_dir_all(parent)?;
             }
+
+            tracing::info!("Converting {} to {}", path.display(), output_path.display());
+
+            // Read the markdown file
+            let markdown = fs::read_to_string(path)?;
+
+            let parsed = self.parse_markdown::<()>(markdown)?;
+
+            let post_metadata = PostMetadata {
+                timestamp: NaiveDate::parse_from_str(
+                    &path.file_name().unwrap().to_str().unwrap()[..10],
+                    "%Y-%m-%d",
+                )?,
+                title: parsed.first_h1.clone(),
+                path: path
+                    .file_stem()
+                    .expect("Failed to get file stem")
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            };
+            let mut html = parsed.html.lines().collect::<Vec<&str>>();
+            let formatted_date = &format!("<p>{}</p>", post_metadata.timestamp.format("%Y %b %d"));
+            html.insert(1, formatted_date);
+            html.insert(2, "<hr/>");
+            let html = Page {
+                title: post_metadata.title.clone(),
+                css: "".to_string(),
+                content: html.join("\n"),
+                build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
+            }
+            .render()
+            .context("Failed to render template")?;
+
+            // Write the HTML to the output file
+            if let Some(parent) = output_path.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            if let Some(parent) = output_path2.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            fs::write(output_path, html.clone())?;
+            fs::write(output_path2, html)?;
+
+            posts.push(post_metadata);
         }
 
         tracing::debug!("Markdown conversion completed successfully");
@@ -303,17 +298,12 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             )
         );
 
-        let result = self.parse_markdown::<PageFrontmatter>(markdown)?;
-
-        let mut buf = Vec::new();
-        comrak::format_html(result.body, &self.options, &mut buf)?;
-        let html = String::from_utf8(buf)
-            .context("Failed to convert markdown to HTML (UTF8 validation failed)")?;
+        let parsed = self.parse_markdown::<PageFrontmatter>(markdown)?;
 
         let html = Page {
-            title: result.frontmatter.title.unwrap_or(result.title),
-            css: result.frontmatter.css.unwrap_or("".to_string()),
-            content: html,
+            title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
+            css: parsed.frontmatter.css.unwrap_or("".to_string()),
+            content: parsed.html,
             build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
         }
         .render()
@@ -376,15 +366,11 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             let markdown = fs::read_to_string(path)?;
 
             let parsed = self.parse_markdown::<PageFrontmatter>(markdown)?;
-            let mut buf = Vec::new();
-            comrak::format_html(&parsed.body, &self.options, &mut buf)?;
-            let html = String::from_utf8(buf)
-                .context("Failed to convert markdown to HTML (UTF8 validation failed)")?;
 
             let html = Page {
-                title: parsed.frontmatter.title.unwrap_or(parsed.title),
+                title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
                 css: parsed.frontmatter.css.unwrap_or("".to_string()),
-                content: html,
+                content: parsed.html,
                 build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
             }
             .render()
@@ -419,7 +405,6 @@ struct Page {
 struct PageFrontmatter {
     title: Option<String>,
     css: Option<String>,
-    layout: Option<String>,
 }
 
 #[derive(Debug, Clone)]
