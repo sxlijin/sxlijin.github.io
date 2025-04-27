@@ -1,11 +1,10 @@
 ---
-title: hi, i'm sam!
 css: /css/index.css
 ---
 
 # hi, i'm sam!
 
-I do software things.push out
+I do software things.
 
 I'm currently at [Boundary], where I'm creating a new ML developer experience.
 
