@@ -9,15 +9,20 @@ use crate::EmbeddedBuildTimestamp;
 
 use super::collections::Collection;
 
+pub enum BuildMode {
+    Dev,
+    Prod,
+}
 pub struct MarkdownRenderEngine<'a, 'b> {
     options: comrak::Options<'b>,
     arena: comrak::Arena<comrak::nodes::AstNode<'a>>,
     pub build_timestamp: SystemTime,
     output_dir: PathBuf,
+    build_mode: BuildMode,
 }
 
 impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
-    pub fn new() -> Result<Self> {
+    pub fn new(build_mode: BuildMode) -> Result<Self> {
         let new = Self {
             options: comrak::Options {
                 extension: comrak::ExtensionOptions::builder()
@@ -33,6 +38,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             arena: comrak::Arena::new(),
             build_timestamp: SystemTime::now(),
             output_dir: PathBuf::from("_site"),
+            build_mode,
         };
         std::fs::create_dir_all(&new.output_dir)?;
         Ok(new)
@@ -92,6 +98,10 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                 title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
                 css: parsed.frontmatter.css.unwrap_or("".to_string()),
                 content: html,
+                dev_mode: match self.build_mode {
+                    BuildMode::Dev => true,
+                    BuildMode::Prod => false,
+                },
                 build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
             }
             .render()
@@ -124,6 +134,7 @@ struct BaseTemplate {
     title: String,
     css: String,
     content: String,
+    dev_mode: bool,
     build_timestamp: EmbeddedBuildTimestamp,
 }
 

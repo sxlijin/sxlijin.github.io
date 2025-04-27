@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use sam_website::{build_website, start_server};
+use sam_website::{BuildMode, build_website, start_server};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Parser)]
@@ -46,7 +46,7 @@ async fn main() -> Result<()> {
     let cli = parse();
     match cli.command {
         Commands::Build => {
-            build_website()?;
+            build_website(BuildMode::Prod)?;
             Ok(())
         }
         Commands::Dev => start_server(3000).await,

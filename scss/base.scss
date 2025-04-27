@@ -37,6 +37,18 @@
     font-size: 80%;
     color: #555;
   }
+
+  .dev-mode-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: monospace;
+    z-index: 100;
+  }
 }
 
 @mixin header-layout {

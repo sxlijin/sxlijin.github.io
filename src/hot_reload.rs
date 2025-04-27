@@ -13,6 +13,8 @@ use tokio::{
 };
 use tower_http::{services::ServeDir, trace::TraceLayer};
 
+use crate::build_website::BuildMode;
+
 #[derive(Debug, Clone, Serialize)]
 pub struct FileChangeEvent {
     paths: Vec<PathBuf>,
@@ -83,7 +85,7 @@ fn setup_hot_rebuild() -> Result<(
         move |result: DebounceEventResult| match result {
             Ok(events) => {
                 if !events.is_empty() {
-                    match build_website() {
+                    match build_website(BuildMode::Dev) {
                         Ok(build_summary) => {
                             let _ = tx.send(build_summary);
                         }
@@ -130,7 +132,7 @@ pub async fn start_server(port: u16) -> Result<()> {
     let (_refresh_watcher, hot_refresh_rx) = setup_hot_refresh()?;
 
     // Initial website build.
-    let build_summary = build_website()?;
+    let build_summary = build_website(BuildMode::Dev)?;
 
     let state = HotReloadServerState {
         rx: hot_refresh_rx,

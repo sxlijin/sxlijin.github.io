@@ -10,6 +10,8 @@ use std::path::Path;
 use std::time::SystemTime;
 use walkdir::WalkDir;
 
+pub use markdown_render_engine::BuildMode;
+
 fn build_assets() -> Result<()> {
     let output_dir = Path::new("_site");
     if !output_dir.exists() {
@@ -102,11 +104,11 @@ pub struct BuildSummary {
     pub build_timestamp: SystemTime,
 }
 
-pub fn build_website() -> Result<BuildSummary> {
+pub fn build_website(build_mode: BuildMode) -> Result<BuildSummary> {
     build_assets()?;
     build_scss()?;
 
-    let engine = MarkdownRenderEngine::new()?;
+    let engine = MarkdownRenderEngine::new(build_mode)?;
     let mut posts = engine.build_collection(PostCollection)?;
     posts.sort_by_key(|p| std::cmp::Reverse(p.timestamp));
     engine.build_collection(IndexHtmlCollection { posts })?;

@@ -64,3 +64,13 @@ const setupWebSocket = (reconnectAttempts) => {
 
 // Start WebSocket connection
 setupWebSocket(0);
+
+// Create and append dev mode indicator when document is ready
+document.addEventListener("DOMContentLoaded", () => {
+	const devModeIndicator = document.createElement("div");
+	devModeIndicator.className = "dev-mode-indicator";
+	const build_timestamp =
+		document.querySelector('meta[name="build-summary"]')?.content || "";
+	devModeIndicator.textContent = `[dev mode] Last updated: ${build_timestamp}`;
+	document.body.appendChild(devModeIndicator);
+});
