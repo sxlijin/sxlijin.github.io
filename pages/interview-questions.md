@@ -1,7 +1,3 @@
----
-title: interview questions
-...
-
 # Interview Questions
 
 Questions that I've either worked through, received in real or mock interviews,

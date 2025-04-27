@@ -1,7 +1,3 @@
----
-title: library
-...
-
 # Library
 
 An incomplete list of media I've consumed. Most are formative, some are included for completeness, and occasionally there's something that's still on my todo list.
@@ -36,7 +32,7 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [The Hunt For The Missing Data Type (2024)](https://www.hillelwayne.com/post/graph-types/)
 
-  > There is almost no graph support in any mainstream language. None have it as a built-in type, very few have them in the standard library, and many don’t have a robust third-party library in the ecosystem. [...] Where are all the graph types?
+  > There is almost no graph support in any mainstream language. None have it as a built-in type, very few have them in the standard library, and many don't have a robust third-party library in the ecosystem. [...] Where are all the graph types?
 
 * [Parse, Don't Validate (2019)](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
 
@@ -52,13 +48,13 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [Async Rust Is A Bad Language (2023)](https://bitbashing.io/async-rust.html)
   
-  > Used pervasively, Arc gives you the world’s worst garbage collector.
+  > Used pervasively, Arc gives you the world's worst garbage collector.
 
 * [People lie on surveys and focus groups, often unwittingly (2004)](https://devblogs.microsoft.com/oldnewthing/20041012-00/?p=37593)
 
-  > The majority of consumers who buy computers claim that personal finance management is one of the top three reasons they are purchasing a PC. They’ve been claiming this for more than a decade. But only somewhere around 2% of consumers end up using a personal finance manager.
+  > The majority of consumers who buy computers claim that personal finance management is one of the top three reasons they are purchasing a PC. They've been claiming this for more than a decade. But only somewhere around 2% of consumers end up using a personal finance manager.
 
-* [How Figma’s databases team lived to tell the scale (2024)](https://www.figma.com/blog/how-figmas-databases-team-lived-to-tell-the-scale/) and [The growing pains of database architecture (2023)](https://www.figma.com/blog/how-figma-scaled-to-multiple-databases/)
+* [How Figma's databases team lived to tell the scale (2024)](https://www.figma.com/blog/how-figmas-databases-team-lived-to-tell-the-scale/) and [The growing pains of database architecture (2023)](https://www.figma.com/blog/how-figma-scaled-to-multiple-databases/)
 
   > Limit potential availability impact to <1 minute
 
@@ -112,7 +108,7 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [The Hardest Program I've Ever Written (2015)](http://journal.stuffwithstuff.com/2015/09/08/the-hardest-program-ive-ever-written/) - the story of `dartfmt`
 
-  > The hardest program I’ve ever written, once you strip out the whitespace,
+  > The hardest program I've ever written, once you strip out the whitespace,
   > is 3,835 lines long. That handful of code took me almost a year to write.
   > [...] I deleted 20,704 lines of code over that time.
 

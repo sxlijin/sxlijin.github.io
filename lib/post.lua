@@ -19,3 +19,11 @@ function Pandoc(doc)
 
   return doc
 end
+
+function CodeBlock(block)
+    if block.classes[1] and not block.classes[1]:match("^language%-") then
+        -- Add language- prefix to the first class if it doesn't already have it
+        table.insert(block.classes, "language-" .. block.classes[1])
+    end
+    return block
+end

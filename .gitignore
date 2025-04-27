@@ -1,2 +1,14 @@
 _bin/
 _site/
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+
+
+# Added by cargo
+
+/target
+
+.obsidian

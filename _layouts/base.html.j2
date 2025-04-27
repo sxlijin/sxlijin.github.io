@@ -12,23 +12,18 @@
   <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
-  <title>$pagetitle$</title>
-  $if(css)$
-  <link rel="stylesheet" media="all" href="$css$">
-  $else$
+  <title>{{ title }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@v1/themes/prism.css" rel="stylesheet" />
+  {% if css == "" %}
   <link rel="stylesheet" media="all" href="/css/main.css">
-  $endif$
+  {% else %}
+  <link rel="stylesheet" media="all" href="{{ css }}">
+  {% endif %}
 
-  <link href="https://cdn.jsdelivr.net/prismjs@v1.x/themes/prism.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/prismjs@v1.x/components/prism-core.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
-
-  $if(mathjax)$
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
-  $endif$
+  <script src="/assets/mathjax.js"></script>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -39,11 +34,25 @@
     ga('create', 'UA-89488611-1', 'auto');
     ga('send', 'pageview');
   </script>
+
+  <script src="/assets/hot-reload.js"></script>
+  <meta name="build-summary" content="{{ build_timestamp }}">
+
+  <style>
+    .dev-mode-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: monospace;
+      z-index: 100;
+    }
+  </style>
 </head>
 <body>
-  $if(header)$
-  $header$
-  $else$
   <header role="banner">
     <div>
       <a href="/"><img src="/assets/icon.svg"/></a>
@@ -52,9 +61,10 @@
       <a href="/">home</a> | <a href="/library">library</a> | <a href="/resume">resume</a>
     </div>
   </header>
-  $endif$
   <main class="page-content" aria-label="Content">
-    $body$
+    {{ content | safe }}
   </main>
+
+  <div class="dev-mode-indicator">[dev mode] Last updated: {{ build_timestamp }}</div>
 </body>
-</html>
+</html> 
