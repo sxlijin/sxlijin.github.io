@@ -6,15 +6,9 @@ use axum::{
     Router,
 };
 use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
-use sam_website::build_content;
+use sam_website::build_content::{self, BuildSummary};
 use serde::{Deserialize, Serialize};
-use std::{
-    net::SocketAddr,
-    ops::DerefMut,
-    path::PathBuf,
-    sync::Arc,
-    time::{SystemTime, UNIX_EPOCH},
-};
+use std::{net::SocketAddr, path::PathBuf, sync::Arc, time::SystemTime};
 use tokio::{
     net::TcpListener,
     select,
@@ -29,14 +23,14 @@ struct FileChangeEvent {
 }
 struct AppState {
     rx: broadcast::Receiver<FileChangeEvent>,
-    latest_build_timestamp: Arc<Mutex<RebuildEvent>>,
+    latest_build_summary: Arc<Mutex<BuildSummary>>,
 }
 
 impl Clone for AppState {
     fn clone(&self) -> Self {
         AppState {
             rx: self.rx.resubscribe(),
-            latest_build_timestamp: self.latest_build_timestamp.clone(),
+            latest_build_summary: self.latest_build_summary.clone(),
         }
     }
 }
@@ -55,7 +49,7 @@ async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl
 #[allow(unused)]
 enum WebsocketRequest {
     GetBuildStaleness {
-        build_timestamp: build_content::BuildTimestamp,
+        build_timestamp: build_content::LocalTimeTimestamp,
     },
 }
 
@@ -74,12 +68,14 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
                     WebsocketRequest::GetBuildStaleness {
                         build_timestamp
                     } => {
-                        let latest_build_timestamp = state.latest_build_timestamp.lock().await.build_timestamp;
+                        let latest_build_timestamp = {
+                            state.latest_build_summary.lock().await.build_timestamp
+                        };
                         tracing::info!("get build staleness recv {} {:?}", build_timestamp, latest_build_timestamp);
                         if build_timestamp.0 < latest_build_timestamp {
                             if let Err(e) = ws
                                 .send(axum::extract::ws::Message::Text(
-                                    serde_json::to_string(&RebuildEvent { build_timestamp: state.latest_build_timestamp.lock().await.build_timestamp })
+                                    serde_json::to_string(&RebuildEvent { build_timestamp: latest_build_timestamp })
                                         .expect("Failed to serialize message")
                                         .into(),
                                 ))
@@ -161,74 +157,45 @@ fn setup_hot_refresh() -> Result<(
     Ok((watcher, tx2, rx))
 }
 
-fn setup_hot_rebuild() -> Result<(
-    FsEventWatcher,
-    broadcast::Sender<FileChangeEvent>,
-    broadcast::Receiver<FileChangeEvent>,
-)> {
+fn setup_hot_rebuild() -> Result<(FsEventWatcher, broadcast::Receiver<BuildSummary>)> {
     let (tx, rx) = broadcast::channel(100);
-    let tx2 = tx.clone();
-    let mut watcher = notify::recommended_watcher(move |res: Result<Event, notify::Error>| {
-        if let Ok(event) = res {
-            let paths: Vec<PathBuf> = event.paths;
-            if !paths.is_empty() {
-                let message = FileChangeEvent { paths };
-                // If there are no receivers, the message is dropped: that's fine.
-                let tx_result = tx.send(message);
-                match tx_result {
-                    Ok(_) => {
-                        tracing::debug!("Sent message to SSE channel");
-                    }
-                    Err(e) => {
-                        tracing::error!("Failed to send message to SSE channel: {}", e);
-                    }
-                }
+    let mut watcher =
+        notify::recommended_watcher(move |res: Result<Event, notify::Error>| match res {
+            Err(e) => {
+                tracing::warn!("Failed to watch pages directory: {}", e);
             }
-        }
-    })
-    .context("Failed to create watcher")?;
+            Ok(_) => match sam_website::build_content::build_all() {
+                Ok(build_summary) => {
+                    let _ = tx.send(build_summary);
+                }
+                Err(e) => tracing::error!("Failed to build: {}", e),
+            },
+        })
+        .context("Failed to create watcher")?;
 
+    // TOOD: how to watch multiple directories?
     watcher
         .watch(&PathBuf::from("pages"), RecursiveMode::Recursive)
         .context("Failed to watch pages directory")?;
 
-    Ok((watcher, tx2, rx))
+    Ok((watcher, rx))
 }
 
 // Start the server
 async fn start_server(port: u16) -> Result<()> {
-    // Initialize tracing
-    setup_tracing();
+    let (_rebuild_watcher, mut rx2) = setup_hot_rebuild()?;
+    let (_refresh_watcher, _tx, rx) = setup_hot_refresh()?;
 
-    // Setup file watcher and get the receiver
-    let (_watcher, _tx, rx) = setup_hot_refresh()?;
-    let (_rebuild_watcher, tx2, mut rx2) = setup_hot_rebuild()?;
+    let build_summary = build_content::build_all()?;
+
     let state = AppState {
         rx,
-        latest_build_timestamp: Arc::new(Mutex::new(RebuildEvent {
-            build_timestamp: UNIX_EPOCH,
-        })),
+        latest_build_summary: Arc::new(Mutex::new(build_summary)),
     };
-    let _ = tx2.send(FileChangeEvent {
-        paths: vec![PathBuf::from("pages")],
-    });
-
-    let latest_build_timestamp = state.latest_build_timestamp.clone();
+    let latest_build_summary = state.latest_build_summary.clone();
     tokio::spawn(async move {
-        while let Ok(_msg) = rx2.recv().await {
-            match sam_website::build_content::build_all() {
-                Ok(build_timestamp) => {
-                    let mut latest_build_timestamp = latest_build_timestamp.lock().await;
-                    std::mem::swap(
-                        latest_build_timestamp.deref_mut(),
-                        &mut RebuildEvent { build_timestamp },
-                    );
-                    tracing::info!("Rebuild successful");
-                }
-                Err(e) => {
-                    tracing::error!("Rebuild failed: {:?}", e);
-                }
-            }
+        while let Ok(build_summary) = rx2.recv().await {
+            *latest_build_summary.lock().await = build_summary;
         }
     });
 
@@ -244,8 +211,6 @@ async fn start_server(port: u16) -> Result<()> {
     tracing::info!("Starting Axum server on {}", addr);
 
     axum::serve(TcpListener::bind(addr).await?, app.into_make_service()).await?;
-    //  for entry in app.foo
-    let _w = _watcher;
 
     Ok(())
 }
@@ -253,7 +218,7 @@ async fn start_server(port: u16) -> Result<()> {
 // Main function to run the server
 #[tokio::main]
 async fn main() -> Result<()> {
-    std::fs::create_dir_all("_site")?;
+    setup_tracing();
     start_server(3000).await?;
     Ok(())
 }

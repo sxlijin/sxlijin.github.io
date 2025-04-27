@@ -11,9 +11,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use walkdir::WalkDir;
 
 #[derive(Debug)]
-pub struct BuildTimestamp(pub SystemTime);
+pub struct LocalTimeTimestamp(pub SystemTime);
 
-impl std::fmt::Display for BuildTimestamp {
+impl std::fmt::Display for LocalTimeTimestamp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
@@ -21,12 +21,12 @@ impl std::fmt::Display for BuildTimestamp {
             self.0
                 .duration_since(UNIX_EPOCH)
                 .expect("SystemTime instances should always > UNIX_EPOCH")
-                .as_secs()
+                .as_nanos()
         )
     }
 }
 
-impl serde::Serialize for BuildTimestamp {
+impl serde::Serialize for LocalTimeTimestamp {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -35,15 +35,15 @@ impl serde::Serialize for BuildTimestamp {
     }
 }
 
-impl<'de> serde::Deserialize<'de> for BuildTimestamp {
+impl<'de> serde::Deserialize<'de> for LocalTimeTimestamp {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
         let formatted: String = serde::Deserialize::deserialize(deserializer)?;
-        Ok(BuildTimestamp(
+        Ok(LocalTimeTimestamp(
             UNIX_EPOCH
-                + std::time::Duration::from_secs(
+                + std::time::Duration::from_nanos(
                     u64::from_str(&formatted).map_err(serde::de::Error::custom)?,
                 ),
         ))
@@ -279,7 +279,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                     title: posts.last().unwrap().title.clone(),
                     css: "".to_string(),
                     content: html.join("\n"),
-                    build_timestamp: BuildTimestamp(self.build_timestamp),
+                    build_timestamp: LocalTimeTimestamp(self.build_timestamp),
                 }
                 .render()
                 .context("Failed to render template")?;
@@ -353,7 +353,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             title: result.frontmatter.title.unwrap_or(result.title),
             css: result.frontmatter.css.unwrap_or("".to_string()),
             content: html,
-            build_timestamp: BuildTimestamp(self.build_timestamp),
+            build_timestamp: LocalTimeTimestamp(self.build_timestamp),
         }
         .render()
         .context("Failed to render template")?;
@@ -424,7 +424,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                 title: parsed.frontmatter.title.unwrap_or(parsed.title),
                 css: parsed.frontmatter.css.unwrap_or("".to_string()),
                 content: html,
-                build_timestamp: BuildTimestamp(self.build_timestamp),
+                build_timestamp: LocalTimeTimestamp(self.build_timestamp),
             }
             .render()
             .context("Failed to render template")?;
@@ -450,7 +450,7 @@ struct Page {
     title: String,
     css: String,
     content: String,
-    build_timestamp: BuildTimestamp,
+    build_timestamp: LocalTimeTimestamp,
 }
 
 #[derive(Debug, Deserialize, Default)]
@@ -461,7 +461,14 @@ struct PageFrontmatter {
     layout: Option<String>,
 }
 
-pub fn build_all() -> Result<SystemTime> {
+#[derive(Debug, Clone)]
+pub struct BuildSummary {
+    pub build_timestamp: SystemTime,
+}
+
+pub fn build_all() -> Result<BuildSummary> {
+    std::fs::create_dir_all("_site")?;
+
     build_assets()?;
     build_scss()?;
     let engine = MarkdownRenderEngine::new();
@@ -469,5 +476,7 @@ pub fn build_all() -> Result<SystemTime> {
     engine.build_index_html(posts)?;
     engine.build_pages()?;
 
-    Ok(engine.build_timestamp)
+    Ok(BuildSummary {
+        build_timestamp: engine.build_timestamp,
+    })
 }
