@@ -1,6 +1,6 @@
-use std::str::FromStr;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use chrono::{DateTime, Local, TimeZone};
 use serde::{Deserializer, Serializer};
 
 #[derive(Debug)]
@@ -10,13 +10,20 @@ pub struct EmbeddedBuildTimestamp(pub SystemTime);
 
 impl std::fmt::Display for EmbeddedBuildTimestamp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let duration = self
+            .0
+            .duration_since(UNIX_EPOCH)
+            .expect("SystemTime instances should always > UNIX_EPOCH");
+        let secs = duration.as_secs() as i64;
+        let nanos = duration.subsec_nanos();
+        let datetime = Local
+            .timestamp_opt(secs, nanos)
+            .single()
+            .expect("valid timestamp");
         write!(
             f,
             "{}",
-            self.0
-                .duration_since(UNIX_EPOCH)
-                .expect("SystemTime instances should always > UNIX_EPOCH")
-                .as_nanos()
+            datetime.to_rfc3339_opts(chrono::SecondsFormat::Nanos, true)
         )
     }
 }
@@ -35,12 +42,13 @@ impl<'de> serde::Deserialize<'de> for EmbeddedBuildTimestamp {
     where
         D: Deserializer<'de>,
     {
-        let formatted: String = serde::Deserialize::deserialize(deserializer)?;
+        let datetime_str: String = serde::Deserialize::deserialize(deserializer)?;
+        let datetime =
+            DateTime::parse_from_rfc3339(&datetime_str).map_err(serde::de::Error::custom)?;
+        let timestamp = datetime.timestamp();
+        let nanos = datetime.timestamp_subsec_nanos();
         Ok(EmbeddedBuildTimestamp(
-            UNIX_EPOCH
-                + std::time::Duration::from_nanos(
-                    u64::from_str(&formatted).map_err(serde::de::Error::custom)?,
-                ),
+            UNIX_EPOCH + std::time::Duration::new(timestamp as u64, nanos),
         ))
     }
 }
