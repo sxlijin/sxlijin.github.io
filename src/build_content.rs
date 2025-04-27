@@ -2,7 +2,6 @@ use anyhow::{Context, Result};
 use askama::Template;
 use chrono::NaiveDate;
 use serde::Deserialize;
-use serde::de::DeserializeOwned;
 use std::ffi::OsStr;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -72,9 +71,7 @@ fn build_scss() -> Result<()> {
     for entry in WalkDir::new(scss_dir)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.file_type().is_file() && e.path().extension().and_then(|s| s.to_str()) == Some("scss")
-        })
+        .filter(|e| e.file_type().is_file() && e.path().extension() == Some(OsStr::new("scss")))
     {
         let path = entry.path();
 
@@ -108,30 +105,31 @@ struct MarkdownRenderEngine<'a, 'b> {
     output_dir: PathBuf,
 }
 
-struct ParsedMarkdown<TFrontmatter: Default + DeserializeOwned> {
-    frontmatter: TFrontmatter,
+struct ParsedMarkdown {
+    frontmatter: MdFrontmatter,
     first_h1: String,
     html: String,
 }
 
 trait Collection {
+    type TRenderOutput;
+
     fn input_paths() -> impl Iterator<Item = PathBuf>;
 
     fn output_paths(input_path: &Path) -> Vec<PathBuf>;
 
     fn render(
-        &mut self,
+        &self,
         input_path: &Path,
-        parsed: &ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown,
         options: &comrak::Options,
-    ) -> Result<String>;
+    ) -> Result<(String, Self::TRenderOutput)>;
 }
 
-struct PostCollection {
-    posts: Vec<PostMetadata>,
-}
-
+struct PostCollection;
 impl Collection for PostCollection {
+    type TRenderOutput = PostMetadata;
+
     fn input_paths() -> impl Iterator<Item = PathBuf> {
         WalkDir::new("posts")
             .into_iter()
@@ -151,11 +149,11 @@ impl Collection for PostCollection {
     }
 
     fn render(
-        &mut self,
+        &self,
         input_path: &Path,
-        parsed: &ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown,
         _: &comrak::Options,
-    ) -> Result<String> {
+    ) -> Result<(String, PostMetadata)> {
         let post_metadata = PostMetadata {
             timestamp: NaiveDate::parse_from_str(
                 &input_path.file_name().unwrap().to_str().unwrap()[..10],
@@ -174,17 +172,15 @@ impl Collection for PostCollection {
         html.insert(1, formatted_date);
         html.insert(2, "<hr/>");
 
-        self.posts.push(post_metadata);
-
-        Ok(html.join("\n"))
+        Ok((html.join("\n"), post_metadata))
     }
 }
 
 struct IndexHtmlCollection {
     posts: Vec<PostMetadata>,
 }
-
 impl Collection for IndexHtmlCollection {
+    type TRenderOutput = ();
     fn input_paths() -> impl Iterator<Item = PathBuf> {
         std::iter::once(PathBuf::from("pages/index.md"))
     }
@@ -194,11 +190,11 @@ impl Collection for IndexHtmlCollection {
     }
 
     fn render(
-        &mut self,
+        &self,
         _: &Path,
-        parsed: &ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown,
         options: &comrak::Options,
-    ) -> Result<String> {
+    ) -> Result<(String, Self::TRenderOutput)> {
         let post_list = format!(
             "<div class=\"post-list\">\n{}</div>",
             comrak::markdown_to_html(
@@ -217,12 +213,14 @@ impl Collection for IndexHtmlCollection {
             )
         );
 
-        Ok(format!("{}\n{}", parsed.html, post_list))
+        Ok((format!("{}\n{}", parsed.html, post_list), ()))
     }
 }
 
 struct PageCollection;
 impl Collection for PageCollection {
+    type TRenderOutput = ();
+
     fn input_paths() -> impl Iterator<Item = PathBuf> {
         WalkDir::new("pages")
             .into_iter()
@@ -242,12 +240,12 @@ impl Collection for PageCollection {
     }
 
     fn render(
-        &mut self,
+        &self,
         _: &Path,
-        parsed: &ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown,
         _: &comrak::Options,
-    ) -> Result<String> {
-        Ok(parsed.html.clone())
+    ) -> Result<(String, Self::TRenderOutput)> {
+        Ok((parsed.html.clone(), ()))
     }
 }
 
@@ -271,13 +269,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
         }
     }
 
-    fn parse_markdown<TFrontmatter>(
-        &'a self,
-        markdown: String,
-    ) -> Result<ParsedMarkdown<TFrontmatter>>
-    where
-        TFrontmatter: Default + DeserializeOwned,
-    {
+    fn parse_markdown(&'a self, markdown: String) -> Result<ParsedMarkdown> {
         let root = comrak::parse_document(&self.arena, &markdown, &self.options);
 
         let mut frontmatter = None;
@@ -285,7 +277,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
         for child in root.children() {
             if let comrak::nodes::NodeValue::FrontMatter(ref fm) = child.data.borrow().value {
                 let fm = fm.split("---\n").collect::<Vec<&str>>().join("");
-                let fm: TFrontmatter = serde_yaml::from_str(&fm)?;
+                let fm: MdFrontmatter = serde_yaml::from_str(&fm)?;
                 frontmatter = Some(fm);
             }
             if let comrak::nodes::NodeValue::Heading(_) = child.data.borrow().value {
@@ -307,227 +299,12 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
         })
     }
 
-    #[allow(dead_code)]
-    fn build_posts(&'a self) -> Result<Vec<PostMetadata>> {
-        let mut posts = Vec::new();
-
-        // Ensure the output directory exists
-        let output_dir = Path::new("_site");
-        if !output_dir.exists() {
-            fs::create_dir_all(output_dir)?;
-        }
-
-        // Check if the posts directory exists
-        let posts_dir = Path::new("posts");
-        if !posts_dir.exists() {
-            anyhow::bail!("Posts directory not found");
-        }
-
-        // Use walkdir to iterate through all files in the posts directory
-        for entry in WalkDir::new(posts_dir)
-            .into_iter()
-            .filter_map(|e| e.ok())
-            .filter(|e| e.file_type().is_file())
-        {
-            let path = entry.path();
-
-            // Get the relative path from the posts directory
-            let relative_path = path.strip_prefix(posts_dir)?;
-            let output_path = output_dir.join(relative_path.with_extension("html"));
-            let output_path2 = output_dir
-                .join(relative_path.with_extension(""))
-                .join("index.html");
-
-            // Ensure the parent directory exists
-            if let Some(parent) = output_path.parent() {
-                fs::create_dir_all(parent)?;
-            }
-
-            tracing::info!("Converting {} to {}", path.display(), output_path.display());
-
-            // Read the markdown file
-            let markdown = fs::read_to_string(path)?;
-
-            let parsed = self.parse_markdown::<()>(markdown)?;
-
-            let post_metadata = PostMetadata {
-                timestamp: NaiveDate::parse_from_str(
-                    &path.file_name().unwrap().to_str().unwrap()[..10],
-                    "%Y-%m-%d",
-                )?,
-                title: parsed.first_h1.clone(),
-                path: path
-                    .file_stem()
-                    .expect("Failed to get file stem")
-                    .to_str()
-                    .unwrap()
-                    .to_string(),
-            };
-            let mut html = parsed.html.lines().collect::<Vec<&str>>();
-            let formatted_date = &format!("<p>{}</p>", post_metadata.timestamp.format("%Y %b %d"));
-            html.insert(1, formatted_date);
-            html.insert(2, "<hr/>");
-            let html = Page {
-                title: post_metadata.title.clone(),
-                css: "".to_string(),
-                content: html.join("\n"),
-                build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
-            }
-            .render()
-            .context("Failed to render template")?;
-
-            // Write the HTML to the output file
-            if let Some(parent) = output_path.parent() {
-                fs::create_dir_all(parent)?;
-            }
-            if let Some(parent) = output_path2.parent() {
-                fs::create_dir_all(parent)?;
-            }
-            fs::write(output_path, html.clone())?;
-            fs::write(output_path2, html)?;
-
-            posts.push(post_metadata);
-        }
-
-        tracing::debug!("Markdown conversion completed successfully");
-        Ok(posts)
-    }
-
-    #[allow(dead_code)]
-    fn build_index_html(&'a self, posts: Vec<PostMetadata>) -> Result<()> {
-        // Ensure the output directory exists
-        let output_dir = Path::new("_site");
-        if !output_dir.exists() {
-            fs::create_dir_all(output_dir)?;
-        }
-
-        // Check if the posts directory exists
-        let path = Path::new("pages/index.md");
-        if !path.exists() {
-            anyhow::bail!("Pages directory not found");
-        }
-
-        let output_path = output_dir.join("index.html");
-
-        // Ensure the parent directory exists
-        if let Some(parent) = output_path.parent() {
-            fs::create_dir_all(parent)?;
-        }
-
-        tracing::info!("Converting {} to {}", path.display(), output_path.display());
-
-        // Read the markdown file
-        let markdown = fs::read_to_string(path)?;
-        let markdown = format!(
-            "{}\n<div class=\"post-list\">\n{}</div>",
-            markdown,
-            comrak::markdown_to_html(
-                &posts
-                    .iter()
-                    .map(|p| format!(
-                        "* <div class=\"post-date\">{}</div> <a href=\"{}\">{}</a>",
-                        p.timestamp.format("%b %Y"),
-                        p.path,
-                        p.title
-                    ))
-                    .collect::<Vec<String>>()
-                    .join("\n"),
-                &self.options
-            )
-        );
-
-        let parsed = self.parse_markdown::<PageFrontmatter>(markdown)?;
-
-        let html = Page {
-            title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
-            css: parsed.frontmatter.css.unwrap_or("".to_string()),
-            content: parsed.html,
-            build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
-        }
-        .render()
-        .context("Failed to render template")?;
-
-        // Write the HTML to the output file
-        fs::write(output_path, &html)?;
-
-        tracing::info!("Markdown conversion completed successfully");
-        Ok(())
-    }
-
-    #[allow(dead_code)]
-    fn build_pages(&'a self) -> Result<()> {
-        // Ensure the output directory exists
-        let output_dir = Path::new("_site");
-        if !output_dir.exists() {
-            fs::create_dir_all(output_dir)?;
-        }
-
-        // Check if the posts directory exists
-        let pages_dir = Path::new("pages");
-        if !pages_dir.exists() {
-            anyhow::bail!("Pages directory not found");
-        }
-
-        // Use walkdir to iterate through all files in the posts directory
-        for entry in WalkDir::new(pages_dir)
-            .into_iter()
-            .filter_map(|e| e.ok())
-            .filter(|e| {
-                e.file_type().is_file()
-                    && e.path().extension() == Some(OsStr::new("md"))
-                    && e.path() != Path::new("pages/index.md")
-            })
-        {
-            let path = entry.path();
-
-            // Get the relative path from the posts directory
-            let relative_path = path.strip_prefix(pages_dir)?;
-            let output_path = output_dir.join(relative_path.with_extension("html"));
-            let output_path2 = output_dir
-                .join(relative_path.with_extension(""))
-                .join("index.html");
-
-            // Ensure the parent directory exists
-            if let Some(parent) = output_path.parent() {
-                fs::create_dir_all(parent)?;
-            }
-            if let Some(parent) = output_path2.parent() {
-                fs::create_dir_all(parent)?;
-            }
-
-            tracing::info!("Converting {} to {}", path.display(), output_path.display());
-            tracing::info!(
-                "Converting {} to {}",
-                path.display(),
-                output_path2.display()
-            );
-
-            let markdown = fs::read_to_string(path)?;
-
-            let parsed = self.parse_markdown::<PageFrontmatter>(markdown)?;
-
-            let html = Page {
-                title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
-                css: parsed.frontmatter.css.unwrap_or("".to_string()),
-                content: parsed.html,
-                build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
-            }
-            .render()
-            .context("Failed to render template")?;
-
-            // Write the HTML to the output file
-            fs::write(output_path, &html)?;
-            fs::write(output_path2, &html)?;
-        }
-
-        tracing::info!("Markdown conversion completed successfully");
-        Ok(())
-    }
-
     fn build_collection<TCollection: Collection>(
         &'a self,
-        collection: &mut TCollection,
-    ) -> Result<()> {
+        collection: TCollection,
+    ) -> Result<Vec<TCollection::TRenderOutput>> {
+        let mut outputs = vec![];
+
         for input_path in TCollection::input_paths() {
             let output_paths = TCollection::output_paths(&input_path)
                 .into_iter()
@@ -537,11 +314,12 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
 
             let markdown = fs::read_to_string(&input_path)?;
 
-            let parsed = self.parse_markdown::<PageFrontmatter>(markdown)?;
+            let parsed = self.parse_markdown(markdown)?;
 
-            let html = collection.render(&input_path, &parsed, &self.options)?;
+            let (html, output) = collection.render(&input_path, &parsed, &self.options)?;
+            outputs.push(output);
 
-            let html = Page {
+            let html = BaseTemplate {
                 title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
                 css: parsed.frontmatter.css.unwrap_or("".to_string()),
                 content: html,
@@ -559,10 +337,11 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
             }
         }
 
-        tracing::debug!("Markdown conversion completed successfully");
-        Ok(())
+        tracing::debug!("Finished building {}", std::any::type_name::<TCollection>());
+        Ok(outputs)
     }
 }
+#[derive(Debug, Clone)]
 struct PostMetadata {
     timestamp: NaiveDate,
     title: String,
@@ -571,7 +350,8 @@ struct PostMetadata {
 
 #[derive(Debug, askama::Template)]
 #[template(path = "base.html.j2")]
-struct Page {
+/// Common template for posts/, pages/, and index.html.
+struct BaseTemplate {
     title: String,
     css: String,
     content: String,
@@ -579,8 +359,8 @@ struct Page {
 }
 
 #[derive(Debug, Deserialize, Default)]
-#[allow(dead_code)]
-struct PageFrontmatter {
+/// Frontmatter from any page.
+struct MdFrontmatter {
     title: Option<String>,
     css: Option<String>,
 }
@@ -595,17 +375,12 @@ pub fn build_website() -> Result<BuildSummary> {
 
     build_assets()?;
     build_scss()?;
-    let engine = MarkdownRenderEngine::new();
-    // let posts = engine.build_posts()?;
-    // engine.build_index_html(posts)?;
-    // engine.build_pages()?;
 
-    let mut posts = PostCollection { posts: vec![] };
-    engine.build_collection(&mut posts)?;
-    let mut index = IndexHtmlCollection { posts: posts.posts };
-    engine.build_collection(&mut index)?;
-    let mut pages = PageCollection {};
-    engine.build_collection(&mut pages)?;
+    let engine = MarkdownRenderEngine::new();
+    let mut posts = engine.build_collection(PostCollection)?;
+    posts.sort_by_key(|p| std::cmp::Reverse(p.timestamp));
+    engine.build_collection(IndexHtmlCollection { posts })?;
+    engine.build_collection(PageCollection)?;
 
     Ok(BuildSummary {
         build_timestamp: engine.build_timestamp,
