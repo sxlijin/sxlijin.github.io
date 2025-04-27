@@ -22,7 +22,7 @@ jobs:
       - run: git lfs checkout
 
       - name: Build the site
-        run: ./build.sh
+        run: cargo run -- build
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
