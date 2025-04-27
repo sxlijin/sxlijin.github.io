@@ -24,7 +24,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                     .front_matter_delimiter("---".into())
                     .autolink(true)
                     .footnotes(true)
-                    // TODO: mathjax rendering
+                    // NB: math_dollars only works in combination with the mathjax in the base.html.j2 template
                     .math_dollars(true)
                     .build(),
                 parse: comrak::ParseOptions::default(),
