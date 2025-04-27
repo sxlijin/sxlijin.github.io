@@ -21,6 +21,8 @@ jobs:
 
       - run: git lfs checkout
 
+      - uses: Swatinem/rust-cache@v2
+
       - name: Build the site
         run: cargo run -- build
 

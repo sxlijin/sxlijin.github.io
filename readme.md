@@ -7,32 +7,12 @@ notes on how my personal website is implemented.
 to run incremental builds:
 
 ```bash
-npx nodemon -e md,sh,scss --exec ./build.sh
+cargo run -- dev
 ```
-
-to run hot reload:
-
-```bash
-npx browser-sync start --server _site --files _site --extensions html
-```
-
-to iterate on Lua filters:
-
-```bash
-pandoc FILE -t json
-pandoc FILE -t lib/writer.lua
-npx nodemon -e lua --exec pandoc FILE -t lib/writer.lua
-```
-
-## TODOs
-
-* Improve blog.md auto-generation (use post titles)
-* Show dates on blog posts
-* Revisit the styling - I think I really liked pandoc's built-in styles
-  * Use `pandoc -D html` to check out the default HTMl template
 
 ## Changelog
 
+* Apr 2025 - rewrote it all in Rust
 * Dec 2023 - converted to Pandoc from Jekyll
 * Jan 2017 - cleaned it up, spent a lot of time on Lighthouse optimizations
 * Sept 2016 - created this website
