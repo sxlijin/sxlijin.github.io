@@ -37,6 +37,20 @@
 
   <script src="/assets/hot-reload.js"></script>
   <meta name="build-summary" content="{{ build_timestamp }}">
+
+  <style>
+    .dev-mode-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: monospace;
+      z-index: 100;
+    }
+  </style>
 </head>
 <body>
   <header role="banner">
@@ -51,5 +65,6 @@
     {{ content | safe }}
   </main>
 
+  <div class="dev-mode-indicator">[dev mode] Last updated: {{ build_timestamp }}</div>
 </body>
 </html> 

@@ -1,5 +1,5 @@
 const DEFAULT_RECONNECT_ATTEMPTS = 100;
-const DEFAULT_RECONNECT_INTERVAL_MS = 1000;
+const DEFAULT_RECONNECT_INTERVAL_MS = 100;
 
 const maybeReloadWebsocket = (reconnectAttempts) => {
 	if (reconnectAttempts < DEFAULT_RECONNECT_ATTEMPTS) {

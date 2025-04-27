@@ -23,4 +23,4 @@ Google building petabyte-scale databases serving millions of requests per second
 
 ## blog
 
-<!-- index.lua will append the blog post list at the end of index.md -->
+<!-- BLOG_POST_LIST_MAGIC_STRING -->

@@ -72,29 +72,28 @@ fn build_scss() -> Result<()> {
     for entry in WalkDir::new(scss_dir)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file())
+        .filter(|e| {
+            e.file_type().is_file() && e.path().extension().and_then(|s| s.to_str()) == Some("scss")
+        })
     {
         let path = entry.path();
 
-        // Only process .scss files
-        if path.extension().and_then(|s| s.to_str()) == Some("scss") {
-            // Get the relative path from the scss directory
-            let relative_path = path.strip_prefix(scss_dir)?;
-            let output_path = output_dir.join(relative_path.with_extension("css"));
+        // Get the relative path from the scss directory
+        let relative_path = path.strip_prefix(scss_dir)?;
+        let output_path = output_dir.join(relative_path.with_extension("css"));
 
-            // Ensure the parent directory exists
-            if let Some(parent) = output_path.parent() {
-                fs::create_dir_all(parent)?;
-            }
-
-            tracing::debug!("Compiling {} to {}", path.display(), output_path.display());
-
-            // Compile the SCSS file
-            let css = grass::from_path(path, &grass::Options::default())?;
-
-            // Write the compiled CSS to the output file
-            fs::write(output_path, css)?;
+        // Ensure the parent directory exists
+        if let Some(parent) = output_path.parent() {
+            fs::create_dir_all(parent)?;
         }
+
+        tracing::debug!("Compiling {} to {}", path.display(), output_path.display());
+
+        // Compile the SCSS file
+        let css = grass::from_path(path, &grass::Options::default())?;
+
+        // Write the compiled CSS to the output file
+        fs::write(output_path, css)?;
     }
 
     tracing::debug!("SCSS compilation completed successfully");
@@ -123,9 +122,9 @@ trait Collection {
     fn render(
         &mut self,
         input_path: &Path,
-        parsed: ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown<PageFrontmatter>,
         options: &comrak::Options,
-    ) -> Result<PartialPage>;
+    ) -> Result<String>;
 }
 
 struct PostCollection {
@@ -154,9 +153,9 @@ impl Collection for PostCollection {
     fn render(
         &mut self,
         input_path: &Path,
-        parsed: ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown<PageFrontmatter>,
         _: &comrak::Options,
-    ) -> Result<PartialPage> {
+    ) -> Result<String> {
         let post_metadata = PostMetadata {
             timestamp: NaiveDate::parse_from_str(
                 &input_path.file_name().unwrap().to_str().unwrap()[..10],
@@ -174,15 +173,10 @@ impl Collection for PostCollection {
         let formatted_date = &format!("<p>{}</p>", post_metadata.timestamp.format("%Y %b %d"));
         html.insert(1, formatted_date);
         html.insert(2, "<hr/>");
-        let html = PartialPage {
-            title: post_metadata.title.clone(),
-            css: "".to_string(),
-            content: html.join("\n"),
-        };
 
         self.posts.push(post_metadata);
 
-        Ok(html)
+        Ok(html.join("\n"))
     }
 }
 
@@ -202,9 +196,9 @@ impl Collection for IndexHtmlCollection {
     fn render(
         &mut self,
         _: &Path,
-        parsed: ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown<PageFrontmatter>,
         options: &comrak::Options,
-    ) -> Result<PartialPage> {
+    ) -> Result<String> {
         let post_list = format!(
             "<div class=\"post-list\">\n{}</div>",
             comrak::markdown_to_html(
@@ -222,18 +216,8 @@ impl Collection for IndexHtmlCollection {
                 options
             )
         );
-        let mut html = parsed.html.lines().collect::<Vec<&str>>();
 
-        // Find the index of the line containing "the first blog" and insert after it
-        if let Some(index) = html.iter().position(|line| line.contains("blog post list")) {
-            html.insert(index + 1, &post_list);
-        }
-
-        Ok(PartialPage {
-            title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
-            css: parsed.frontmatter.css.unwrap_or("".to_string()),
-            content: html.join("\n"),
-        })
+        Ok(format!("{}\n{}", parsed.html, post_list))
     }
 }
 
@@ -243,7 +227,7 @@ impl Collection for PageCollection {
         WalkDir::new("pages")
             .into_iter()
             .filter_map(|e| e.ok())
-            .filter(|e| e.file_type().is_file())
+            .filter(|e| e.file_type().is_file() && e.path() != Path::new("pages/index.md"))
             .map(|e| e.path().to_path_buf())
     }
 
@@ -260,14 +244,10 @@ impl Collection for PageCollection {
     fn render(
         &mut self,
         _: &Path,
-        parsed: ParsedMarkdown<PageFrontmatter>,
+        parsed: &ParsedMarkdown<PageFrontmatter>,
         _: &comrak::Options,
-    ) -> Result<PartialPage> {
-        Ok(PartialPage {
-            title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
-            css: parsed.frontmatter.css.unwrap_or("".to_string()),
-            content: parsed.html,
-        })
+    ) -> Result<String> {
+        Ok(parsed.html.clone())
     }
 }
 
@@ -548,29 +528,23 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
         &'a self,
         collection: &mut TCollection,
     ) -> Result<()> {
-        // Ensure the output directory exists
-        let output_dir = Path::new("_site");
-        if !output_dir.exists() {
-            fs::create_dir_all(output_dir)?;
-        }
-
-        // Use walkdir to iterate through all files in the posts directory
         for input_path in TCollection::input_paths() {
-            // Get the relative path from the posts directory
-            let output_paths = TCollection::output_paths(&input_path);
+            let output_paths = TCollection::output_paths(&input_path)
+                .into_iter()
+                .map(|p| self.output_dir.join(p))
+                .collect::<Vec<PathBuf>>();
             tracing::info!("Converting {} to {:?}", input_path.display(), output_paths);
 
-            // Read the markdown file
             let markdown = fs::read_to_string(&input_path)?;
 
             let parsed = self.parse_markdown::<PageFrontmatter>(markdown)?;
 
-            let html = collection.render(&input_path, parsed, &self.options)?;
+            let html = collection.render(&input_path, &parsed, &self.options)?;
 
             let html = Page {
-                title: html.title,
-                css: html.css,
-                content: html.content,
+                title: parsed.frontmatter.title.unwrap_or(parsed.first_h1),
+                css: parsed.frontmatter.css.unwrap_or("".to_string()),
+                content: html,
                 build_timestamp: EmbeddedBuildTimestamp(self.build_timestamp),
             }
             .render()
@@ -593,12 +567,6 @@ struct PostMetadata {
     timestamp: NaiveDate,
     title: String,
     path: String,
-}
-
-struct PartialPage {
-    title: String,
-    css: String,
-    content: String,
 }
 
 #[derive(Debug, askama::Template)]
