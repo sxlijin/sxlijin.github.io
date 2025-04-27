@@ -39,15 +39,7 @@ fn setup_hot_refresh() -> Result<(FsEventWatcher, broadcast::Receiver<FileChange
             if !paths.is_empty() {
                 let message = FileChangeEvent { paths };
                 // If there are no receivers, the message is dropped: that's fine.
-                let tx_result = tx.send(message);
-                match tx_result {
-                    Ok(_) => {
-                        tracing::debug!("Sent message to SSE channel");
-                    }
-                    Err(e) => {
-                        tracing::error!("Failed to send message to SSE channel: {}", e);
-                    }
-                }
+                let _ = tx.send(message);
             }
         }
     })
@@ -112,8 +104,8 @@ pub async fn start_server(port: u16) -> Result<()> {
     let app = Router::new()
         // Clients connect here to get notified when they need to refresh.
         .route("/_debug/reload", get(crate::websocket_handler::ws_handler))
-        .layer(TraceLayer::new_for_http())
         .fallback_service(ServeDir::new("_site"))
+        .layer(TraceLayer::new_for_http())
         .with_state(state);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], port));

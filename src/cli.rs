@@ -27,12 +27,12 @@ pub fn parse() -> Cli {
 fn setup_tracing() {
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
-            std::env::var("RUST_LOG").unwrap_or_else(|_| "info".into()),
+            std::env::var("RUST_LOG").unwrap_or_else(|_| "debug".into()),
         ))
         .with(
             tracing_subscriber::fmt::layer()
                 .with_ansi(true)
-                .with_target(false)
+                .with_target(true)
                 .with_thread_ids(false)
                 .with_file(true)
                 .with_line_number(true),
