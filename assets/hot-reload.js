@@ -33,14 +33,15 @@ const setupWebSocket = (reconnectAttempts) => {
 	window.hotReloadWs = ws;
 
 	ws.onopen = () => {
+		// reset the connection counter when we successfully re-establish a connection
 		reconnectAttempts = 0;
-		const buildTimestamp = document.querySelector(
-			'meta[name="build-timestamp"]',
+		const build_summary = document.querySelector(
+			'meta[name="build-summary"]',
 		).content;
 		ws.send(
 			JSON.stringify({
 				request: "get_build_staleness",
-				build_timestamp: buildTimestamp,
+				build_timestamp,
 			}),
 		);
 	};

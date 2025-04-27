@@ -6,7 +6,7 @@ use axum::{
     Router,
 };
 use notify::{Event, FsEventWatcher, RecursiveMode, Watcher};
-use sam_website::build_content::{self, BuildSummary};
+use sam_website::BuildSummary;
 use serde::{Deserialize, Serialize};
 use std::{net::SocketAddr, path::PathBuf, sync::Arc, time::SystemTime};
 use tokio::{
@@ -49,7 +49,7 @@ async fn ws_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> impl
 #[allow(unused)]
 enum WebsocketRequest {
     GetBuildStaleness {
-        build_timestamp: build_content::LocalTimeTimestamp,
+        build_timestamp: sam_website::EmbeddedBuildTimestamp,
     },
 }
 
@@ -71,7 +71,6 @@ async fn ws_handler_impl(mut state: AppState, mut ws: WebSocket) {
                         let latest_build_timestamp = {
                             state.latest_build_summary.lock().await.build_timestamp
                         };
-                        tracing::info!("get build staleness recv {} {:?}", build_timestamp, latest_build_timestamp);
                         if build_timestamp.0 < latest_build_timestamp {
                             if let Err(e) = ws
                                 .send(axum::extract::ws::Message::Text(
@@ -164,7 +163,7 @@ fn setup_hot_rebuild() -> Result<(FsEventWatcher, broadcast::Receiver<BuildSumma
             Err(e) => {
                 tracing::warn!("Failed to watch pages directory: {}", e);
             }
-            Ok(_) => match sam_website::build_content::build_all() {
+            Ok(_) => match sam_website::build_website() {
                 Ok(build_summary) => {
                     let _ = tx.send(build_summary);
                 }
@@ -186,7 +185,7 @@ async fn start_server(port: u16) -> Result<()> {
     let (_rebuild_watcher, mut rx2) = setup_hot_rebuild()?;
     let (_refresh_watcher, _tx, rx) = setup_hot_refresh()?;
 
-    let build_summary = build_content::build_all()?;
+    let build_summary = sam_website::build_website()?;
 
     let state = AppState {
         rx,
