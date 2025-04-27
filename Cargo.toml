@@ -1,7 +1,7 @@
 [package]
 name = "sam-website"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [lints.rust]
 dead_code = "deny"
@@ -9,35 +9,31 @@ elided_named_lifetimes = "deny"
 unused_imports = "deny"
 unused_variables = "deny"
 
-
 [dependencies]
-anyhow = { version = "1.0.97", features = ["backtrace"] }
-askama = "0.13.0"
+anyhow = { version = "1.0", features = ["backtrace"] }
+askama = "0.13"
 async-stream = "0.3"
-axum = { version = "0.8.3", features = ["ws"] }
-chrono = "0.4.40"
-comrak = "0.38.0"
-grass = "0.13.4"
+axum = { version = "0.8", features = ["ws"] }
+chrono = "0.4"
+clap = { version = "4.5", features = ["derive"] }
+comrak = "0.38"
+grass = "0.13"
 hyper = { version = "0.14", features = ["full"] }
 notify = "6.1"
-notify-debouncer-full = "0.5.0"
-pulldown-cmark = "0.13.0"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
-serde_yaml = "0.9.34"
-tokio = { version = "1.44.2", features = ["full"] }
+notify-debouncer-full = "0.5"
+pulldown-cmark = "0.13"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+tokio = { version = "1.44", features = ["full"] }
 tokio-stream = { version = "0.1", features = ["full"] }
 tokio-tungstenite = "0.26"
-tower = { version = "0.5.2", features = ["util"] }
-tower-http = { version = "0.5.2", features = ["fs", "trace"] }
-tracing = "0.1.41"
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.5", features = ["fs", "trace"] }
+tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-walkdir = "2.4.0"
-
-# [[bin]]
-# name = "hyper-server2"
-# path = "src/hyper_server2.rs"
+walkdir = "2.4"
 
 [[bin]]
-name = "axum-server"
-path = "src/axum_server.rs"
+name = "cli"
+path = "src/cli.rs"
