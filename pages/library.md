@@ -30,6 +30,20 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Articles
 
+* [Designing type inference for high quality type errors (2025)](https://blog.polybdenum.com/2025/02/14/designing-type-inference-for-high-quality-type-errors.html)
+
+  > If you force the typechecker to make guesses, it will guess things the user didn’t intend, and the resulting error messages will be bloated and irrelevant to the user. [...] Something as simple as let g: Double = -(1 + 2) + -(3 + 4) + 5 takes 20 seconds to typecheck in Swift 3.1.
+
+* [A Case Study in Community-Driven Software Adoption (2019)](https://static.googleusercontent.com/media/sre.google/en//static/pdf/CaseStudyInCommunityDrivenSoftwareDevelopment.pdf)
+
+  > Sisyphus’s creators themselves said its code
+  > quality was poor and its development had been bewilderingly cha‐
+  > otic. It had no schedule, no funded staff, no project management,
+  > and the design documentation was written months after the tool was
+  > operational. Yet after nine years of the dozens of different automated
+  > rollout tools developed at Google, Sisyphus was used by virtually all
+  > SRE teams and many developer teams
+
 * [The Hunt For The Missing Data Type (2024)](https://www.hillelwayne.com/post/graph-types/)
 
   > There is almost no graph support in any mainstream language. None have it as a built-in type, very few have them in the standard library, and many don't have a robust third-party library in the ecosystem. [...] Where are all the graph types?
