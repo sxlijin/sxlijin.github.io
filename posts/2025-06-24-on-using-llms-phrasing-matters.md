@@ -24,7 +24,7 @@ The other thing you should think about is that **in the absence of context signa
 
 More precisely, the people building the LLM need to make decisions about what level of detail an LLM should respond with by default[^level-of-detail] (the LLM is not making these decisions on the fly, at runtime; these decisions are implicitly encoded into the model as a consequence of the training data and system prompt).
 
-[level-of-detail]: It's not just the level of detail either: they also need to think about whether the LLM should be matter-of-fact and curt, whether it should [respond with affirmation](https://openai.com/index/expanding-on-sycophancy/), and whether it should suggest further conversation! This is why ChatGPT will sometimes respond with "Which response do you prefer better?", because they're trying to collect feedback on what their users prefer.
+[^level-of-detail]: It's not just the level of detail either: they also need to think about whether the LLM should be matter-of-fact and curt, whether it should [respond with affirmation](https://openai.com/index/expanding-on-sycophancy/), and whether it should suggest further conversation! This is why ChatGPT will sometimes respond with "Which response do you prefer better?", because they're trying to collect feedback on what their users prefer.
 
 This idea, that the choice of phrasing matters, is not a new one. See for example [WIRED's "5 Levels" series](https://www.youtube.com/playlist?list=PLibNZv5Zd0dyCoQ6f4pdXUFnpAIlKgm3N), where experts explain complex subjects with 5 different levels of complexity, and [Randall Munroe's _Thing Explainer_](https://xkcd.com/thing-explainer/), which uses only the 1,000 most common English words to explain helicopters, tectonic plates, etc.
 

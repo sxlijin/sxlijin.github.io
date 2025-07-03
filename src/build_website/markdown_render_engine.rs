@@ -30,6 +30,7 @@ impl<'a, 'b> MarkdownRenderEngine<'a, 'b> {
                     .front_matter_delimiter("---".into())
                     .autolink(true)
                     .footnotes(true)
+                    .header_ids("".to_string())
                     // NB: math_dollars only works in combination with the mathjax in the base.html.j2 template
                     .math_dollars(true)
                     .build(),

@@ -1,13 +1,21 @@
 # Rust Case Studies
-This is a list of case studies about projects that have migrated to Rust, adopted Rust, or rejected Rust, to help you make your decision about whether you want to use Rust or not.
+Audience: Rust-curious technical decision-makers.
 
-Table of Contents
-- [Migrating to Rust](#migrating-to-rust)
-- [Adopting Rust](#adopting-rust)
-- [Decided Against Rust](#decided-against-rust)
+You're here because you've heard some good things about Rust, but it's all assorted anecdotes, and you'd like something a bit more comprehensive, in-depth, and ideally _neutral_, about the reasons that people choose to use Rust, and what context informs those reasons.
+
+I've collected a list of case studies that do provide this information, categorized as follows:
+
+- [Migrating to Rust](#migrating-to-rust): projects that rewrote large existing codebases in Rust
+- [Adopting Rust](#adopting-rust): organizations that are now using Rust by default for new projects
+- [Decided Against Rust](#decided-against-rust): yes, there are people who have made informed decisions to not use Rust!
+
+I've aimed to collect case studies that describe experiences from teams at both small and large companies with varying backgrounds, so hopefully at least one thing in here is useful for you.
+
+If there is an article, blog, or other case study I haven't included yet, please [let me know](mailto:me@sxlijin.com).
+
 # Migrating to Rust
 
-## OpenAI, Codex: Typescript -> Rust
+## OpenAI, Codex: Typescript → Rust
 Source: [Codex CLI is going native (2025)](https://github.com/openai/codex/discussions/1174)
 
 (Note: this migration is ongoing at the time of this article.)
@@ -18,23 +26,31 @@ Why
 > - **Optimized Performance** — no runtime garbage collection, resulting in lower memory consumption
 > - **Extensible Protocol** — we've been working on a "wire protocol" for Codex CLI to allow developers to extend the agent in different languages (including Type/JavaScript, Python, etc) and MCPs ([already supported in Rust](https://github.com/openai/codex/tree/main/codex-rs#mcp_servers))
 
-## AWS, Aurora DSQL: C -> Rust, Java/Kotlin -> Rust
+## AWS, Aurora DSQL: C → Rust, Java/Kotlin → Rust
 Source: [Just make it scale: An Aurora DSQL story (2025)](https://www.allthingsdistributed.com/2025/05/just-make-it-scale-an-aurora-dsql-story.html)
 
-DSQL data plane:
+What
+- Aurora DSQL is a new Postgres-compatible cloud database service from AWS
+- DSQL data plane: writes database rows to disk and reads them back
+- DSQL control plane: puts customer A's data in one place and customer B's data in another place; also changes server configuration on the fly (autoscaling, cluster topology)
+- Postgres extensions: DSQL integrations with the Postgres query engine
+
+Why, DSQL data plane
+> To validate our concerns [about GC pauses], we ran simulation testing of the system [...] instead of achieving the expected million TPS in the crossbar simulation, we were only hitting about 6,000 TPS [...] This wasn’t just an edge case - it was fundamental to our architecture.
+
 > We assigned two engineers to the project. They had never written C, C++, or Rust before. [But after a few weeks, the Rust version] was 10x faster than our carefully tuned Kotlin implementation – despite no attempt to make it faster. To put this in perspective, we had spent years incrementally improving the Kotlin version from 2,000 to 3,000 transactions per second (TPS). The Rust version, written by Java developers who were new to the language, clocked 30,000 TPS.
 
-DSQL control plane:
+Why, DSQL control plane
 > Kotlin seemed like the obvious choice [...] The benefits we saw with Rust in the data plane – throughput, latency, memory safety – weren’t as critical here. [...] It also turned out to be the wrong one [because] the control plane has to share some amount of logic with the data plane
 
-Postgres extensions:
+Why, Postgres extensions
 > Initially, the team felt C was a better choice. We already had to read and understand C to work with Postgres, and it would offer a lower impedance mismatch. As the work progressed though, we realized a critical flaw in this thinking. The Postgres C code is reliable: it’s been thoroughly battled tested over the years. But our extensions were freshly written, and every new line of C code was a chance to add some kind of memory safety bug, like a use-after-free or buffer overrun.
 
 Also from Amazon:
 - Firecracker, the AWS Lambda hypervisor ([FAQ](https://github.com/firecracker-microvm/firecracker/blob/main/FAQ.md))
 - [Rebuilding Prime Video UI with Rust and WebAssembly (2025)](https://www.infoq.com/presentations/prime-video-rust/)
 
-## Microsoft, many projects: C++ -> Rust
+## Microsoft, many projects: C++ → Rust
 Source: [Microsoft - Victor Ciura, Principal Engineer (2025)](https://corrode.dev/podcast/s04e01-microsoft/)
 
 What
@@ -55,7 +71,7 @@ Lessons
 
 > Success very much depends on if we can [make it] easy to cross from C++ or from C# in our case. [Another] top problem here is fitting cargo in existing build systems, right - how do you fit cargo in, let's say, a cmake project [...]
 
-## Vercel, Turborepo: Go -> Rust
+## Vercel, Turborepo: Go → Rust
 Sources:
 - [Finishing Turborepo's migration from Go to Rust (2024)](https://vercel.com/blog/finishing-turborepos-migration-from-go-to-rust)
 - [How Turborepo is porting from Go to Rust (2023)](https://vercel.com/blog/how-turborepo-is-porting-from-go-to-rust)
@@ -69,18 +85,17 @@ Why
 
 > [For example:] Go lets users set a Unix-style file permission code [but also allows] us to set a file permission code on Windows, even when doing so will have no effect. [...] If you want to set a file permission code in Rust, you have to explicitly annotate the code as Unix-only. If you don't, the code won't even compile on Windows.
 
->  great perk: our team **wants** to write Rust. It's a language that solves what we care about and brings us joy. The fact that we enjoy writing Rust is valuable, by itself [...] Happier developers deliver better software.
+> great perk: our team **wants** to write Rust. It's a language that solves what we care about and brings us joy. The fact that we enjoy writing Rust is valuable, by itself [...] Happier developers deliver better software.
 
 Also from Vercel: [Vercel Functions are now faster—and powered by Rust (2024)](https://vercel.com/blog/vercel-functions-are-now-faster-and-powered-by-rust)
 
-## Shopify, YJIT: C -> Rust
+## Shopify, YJIT: C → Rust
 Source: [Our Experience Porting the YJIT Ruby Compiler to Rust (2022)](https://shopify.engineering/porting-yjit-ruby-compiler-to-rust)
 
 What
 > The YJIT team has six developers, with four people taking an active part in the Rust porting effort. I was one of the founding members and have been acting as team lead for 18 months. I’ve been programming for 24 years and got started by learning C++ in 1998 [...] I’ve only been programming in Rust for four months.
 
 > YJIT is a relatively simple JIT compiler that totals about 11,000 lines of C code. [...] It took us three months to complete the port of YJIT from C to Rust, and we feel very satisfied with the result. [The end product](https://github.com/ruby/ruby/tree/master/yjit) is, in my opinion, much more maintainable and pleasant to work with than the original C codebase.
-
 
 Why
 > C doesn’t provide many tools to manage complexity. [For example:] There are no classes or interface types to cleanly encapsulate functionality, and there are no standard container types. We implemented our own dynamic array type, which we had to manipulate through awkward preprocessor macros with no type checking. [...]
@@ -91,8 +106,7 @@ Why
 
 > The [build system] for conditional compilation works really well; it's a lot better than having a large number of preprocessor ifdefs in a C codebase. The ability to embed tests into the source code is also very nice.
 
-
-## 1Password, Core: Go -> Rust
+## 1Password, Core: Go → Rust
 Sources: 
 - [Behind the scenes of 1Password for Linux (2021)](https://dteare.medium.com/behind-the-scenes-of-1password-for-linux-d59b19143a23)
 - [1Password 8: The Story So Far (2021)](https://blog.1password.com/1password-8-the-story-so-far/)
@@ -105,9 +119,14 @@ Why
 
 > It also ticked all the boxes for the platforms to which we were planning to deploy: macOS, iOS, Windows, Android, Linux, our browser extension, and our web app.
 
-
-## Discord, Read States service: Go -> Rust
+## Discord, Read States service: Go → Rust
 Source: [Why Discord is switching from Go to Rust (2020)](https://discord.com/blog/why-discord-is-switching-from-go-to-rust)
+
+What
+> The service we switched from Go to Rust is the “Read States” service. Its sole purpose is to keep track of which channels and messages you have read. Read States is accessed every time you connect to Discord, every time a message is sent and every time a message is read. In short, Read States is in the hot path. We want to make sure Discord feels super snappy all the time, so we need to make sure Read States is quick.
+
+Why
+> It was fast most of the time, but every few minutes we saw large latency spikes that were bad for user experience. After investigating, we determined the spikes were due to core Go features: its memory model and garbage collector (GC).
 
 > Go will force a garbage collection run every 2 minutes at minimum. [...]  in the Rust version of the Read States service, when a user’s Read State is evicted from the LRU cache it is immediately freed from memory. [...]
 >
@@ -115,7 +134,7 @@ Source: [Why Discord is switching from Go to Rust (2020)](https://discord.com/bl
 > 
 > The actual rewrite was fairly straight forward. It started as a rough translation, then we slimmed it down where it made sense. For instance, Rust has a great type system with extensive support for generics, so we could throw out Go code that existed simply due to lack of generics. Also, Rust’s memory model is able to reason about memory safety across threads, so we were able to throw away some of the manual cross-goroutine memory protection that was required in Go.
 
-## Figma, Multiplayer Service: TS -> Rust
+## Figma, Multiplayer Service: TS → Rust
 Source: [Rust in production at Figma (2018)](https://www.figma.com/blog/rust-in-production-at-figma/)
 
 What
@@ -129,7 +148,7 @@ Why
 > Pros: low memory usage, awesome performance, solid toolchain, friendly error messages
 > Cons: lifetimes are confusing, errors are hard to debug, many libraries are still early, asynchronous Rust is difficult
 
-## Dropbox, Magic Pocket: Go -> Rust
+## Dropbox, Magic Pocket: Go → Rust
 Sources:
 - [The Epic Story of Dropbox's Exodus From the Amazon Cloud Empire (2016)](https://www.wired.com/2016/03/epic-story-dropboxs-exodus-amazon-cloud-empire/)
 - [jamwt on Hacker News (2016)](https://news.ycombinator.com/item?id=11283688)
@@ -142,16 +161,18 @@ Why
 
 > The advantages of Rust are many. Really powerful abstractions, no null, no segfaults, no leaks, yet C-like performance and control over memory and you can use that whole C/C++ bag of optimization tricks.
 
-## Mozilla, Firefox: C++ -> Rust
+## Mozilla, Firefox: C++ → Rust
 Sources:
 - [Implications of Rewriting a Browser Component in Rust (2019)](https://hacks.mozilla.org/2019/02/rewriting-a-browser-component-in-rust/)
 - [Shipping Rust in Firefox (2016)](https://hacks.mozilla.org/2016/07/shipping-rust-in-firefox/)
 
 Mozilla deserves a special mention as the organization that first sponsored and drove a major production use case for Rust.
 
-CSS Engine
+
+What: CSS Engine
 > The style component is the part of a browser that applies CSS rules to a page. [...] By 2017, Mozilla had made two previous attempts to parallelize the style system using C++. Both had failed.
 
+Why
 > With Rust, you can statically verify that you don’t have data races. This means you avoid tricky-to-debug bugs by just not letting them into your code in the first place. The compiler won’t let you do it.
 
 # Adopting Rust
@@ -188,7 +209,7 @@ Sources:
 >Anecdotally, it seems like Rust has become the de-facto choice for new/greenfield software over the last three-ish years. Five years ago when I joined, the de-facto choice was Go. We still have lots of Go, but it seems like nobody is actively choosing Go anymore.
 
 # Deciding Against Rust
-## Microsoft, TypeScript compiler: TS -> Go
+## Microsoft, TypeScript compiler: TS → Go
 Sources: [Why Go? (2025)](https://github.com/microsoft/typescript-go/discussions/411), [TypeScript is being ported to Go (2025)](https://www.youtube.com/watch?v=10qowKUW82U&t=768s)
 
 What
@@ -219,7 +240,7 @@ Source: [I love building a startup in Rust. I wouldn't pick it again. (2023)](ht
 ## Other success stories
 - Volvo, ECUs for EX90 and Polestar3: https://corrode.dev/podcast/s03e08-volvo/, https://www.youtube.com/watch?v=2JIFUk4f0iE
 - Astral, `uv` and `ruff`
-- Linkerd: Go -> Rust  https://linkerd.io/2020/07/23/under-the-hood-of-linkerds-state-of-the-art-rust-proxy-linkerd2-proxy/
+- Linkerd: Go → Rust  https://linkerd.io/2020/07/23/under-the-hood-of-linkerds-state-of-the-art-rust-proxy-linkerd2-proxy/
 - Okta Workflows were built with Tokio pre-1.0 and then migrated to use `async` and `await`: https://www.okta.com/blog/2024/11/migrating-off-legacy-tokio-at-scale/
 
 ## Other lists
