@@ -3,15 +3,13 @@ Audience: Rust-curious technical decision-makers.
 
 You're here because you've heard some good things about Rust, but it's all assorted anecdotes, and you'd like something a bit more comprehensive, in-depth, and ideally _neutral_, about the reasons that people choose to use Rust, and what context informs those reasons.
 
-I've collected a list of case studies that do provide this information, categorized as follows:
+Here are some case studies, describing experiences from teams at both small and large companies, that will hopefully be useful to you:
 
 - [Migrating to Rust](#migrating-to-rust): projects that rewrote large existing codebases in Rust
-- [Adopting Rust](#adopting-rust): organizations that are now using Rust by default for new projects
-- [Decided Against Rust](#decided-against-rust): yes, there are people who have made informed decisions to not use Rust!
+- [Adopting Rust](#adopting-rust): orgs that regularly use Rust for new projects
+- [Decided Against Rust](#decided-against-rust): teams that have tried and rejected Rust
 
-I've aimed to collect case studies that describe experiences from teams at both small and large companies with varying backgrounds, so hopefully at least one thing in here is useful for you.
-
-If there is an article, blog, or other case study I haven't included yet, please [let me know](mailto:me@sxlijin.com).
+Please [let me know](mailto:me@sxlijin.com) if there is an article, blog, or other case study I should add.
 
 # Migrating to Rust
 
