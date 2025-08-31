@@ -19,6 +19,16 @@ main {
     margin-top: .5rem;
     color: #777;
   }
+
+  .wide-content {
+    // Use negative margins to force the content to be as wide as screen.
+    margin: 2em calc(-50vw + 50%);
+    text-align: center;
+
+    iframe {
+      max-width: 100%;
+    }
+  }
 }
 
 h1, h2, h3, h4 {
