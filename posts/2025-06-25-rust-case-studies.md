@@ -1,4 +1,5 @@
 # Rust Case Studies
+
 Audience: Rust-curious technical decision-makers.
 
 You're here because you've heard some good things about Rust, but it's all assorted anecdotes, and you'd like something a bit more comprehensive, in-depth, and ideally _neutral_, about the reasons that people choose to use Rust, and what context informs those reasons.
@@ -206,7 +207,27 @@ Sources:
 >
 >Anecdotally, it seems like Rust has become the de-facto choice for new/greenfield software over the last three-ish years. Five years ago when I joined, the de-facto choice was Go. We still have lots of Go, but it seems like nobody is actively choosing Go anymore.
 
-# Deciding Against Rust
+# Decided Against Rust
+## Prisma ORM
+Sources: [Prisma ORM: The Complete Rust-to-Typescript Migration Journey (2025)](https://www.prisma.io/blog/series/prisma-orm-the-complete-rust-to-typescript-migration-journey)
+
+What
+>We detail the engineering rationale for switching to a TypeScript/WASM core, deliver 3.4x faster query benchmarks, and show how this change (with a 90% smaller bundle) made Prisma ORM production-ready for Serverless/Edge deployments.
+
+Why
+>When we started [...] we had a pretty clear vision: we wanted to build ORMs for as many languages as possible—TypeScript, Go, Python, Scala, Rust, and others.
+>
+>[...] the ability to support multiple clients is no longer our focus. Prisma ORM is a TypeScript project [...] we won't be developing [our community clients] in-house.
+
+>While having a powerful Rust engine helped us deliver great performance quickly, we’ve since discovered that it creates some notable challenges:
+>
+> - **Skillset barriers**: Contributing to the query engine requires a combination of Rust and TypeScript proficiency, reducing the opportunity for community involvement.
+>
+> - **Deployment complexity**: Each operating system and OpenSSL library version needs its own binary, complicating deployments and slowing down development.
+>
+> - **Compatibility issues**: Modern JavaScript runtimes, serverless, and edge environments aren’t always compatible with large Rust binaries, limiting how and where Prisma can be deployed.
+>
+
 ## Microsoft, TypeScript compiler: TS → Go
 Sources: [Why Go? (2025)](https://github.com/microsoft/typescript-go/discussions/411), [TypeScript is being ported to Go (2025)](https://www.youtube.com/watch?v=10qowKUW82U&t=768s)
 
