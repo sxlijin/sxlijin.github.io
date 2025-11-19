@@ -209,9 +209,11 @@ Sources:
 
 # Decided Against Rust
 ## Prisma ORM
-Sources: [Prisma ORM: The Complete Rust-to-Typescript Migration Journey (2025)](https://www.prisma.io/blog/series/prisma-orm-the-complete-rust-to-typescript-migration-journey)
+Sources: [The Complete Rust-to-Typescript Migration Journey (2025)](https://www.prisma.io/blog/series/prisma-orm-the-complete-rust-to-typescript-migration-journey)
 
 What
+>Prisma ORM is a Node.js and TypeScript ORM with an intuitive data model, automated migrations, type-safety, and auto-completion.
+
 >We detail the engineering rationale for switching to a TypeScript/WASM core, deliver 3.4x faster query benchmarks, and show how this change (with a 90% smaller bundle) made Prisma ORM production-ready for Serverless/Edge deployments.
 
 Why
