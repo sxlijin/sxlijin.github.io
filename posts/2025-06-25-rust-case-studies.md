@@ -14,6 +14,16 @@ Please [let me know](mailto:me@sxlijin.com) if there is an article, blog, or oth
 
 # Migrating to Rust
 
+## Statsig: Node/Python/Elixir/Java -> Rust
+Source: [Escaping SDK maintenance hell with a core Rust engine (2025)](https://statsig.com/blog/escaping-sdk-maintenance-hell/)
+
+What
+- Statsig is a feature flag / experimentation SaaS platform, and provides users with SDKs in whatever language their app is built in.
+> At Statsig, we have over 24 SDKs our customers use to log events and run experiments—and a team of just 7 devs to maintain them.
+
+Why
+> Three years ago, we only supported two server languages: Node and Go. Today, we support _ten_. Before this Rust core project, each of our server SDKs had to duplicate necessary evaluation logic in their own language [...] With this new approach—we’re calling it Server Core—the goal is to only need to write evaluation logic once in Rust. We’re rewriting language-specific SDKs to simply be bindings that pass data into that centralized Rust core.
+
 ## OpenAI, Codex: Typescript → Rust
 Source: [Codex CLI is going native (2025)](https://github.com/openai/codex/discussions/1174)
 

@@ -1,0 +1,8 @@
+- weight loss - how, journey, observations, etc
+- why constrained output will make your response quality worse, [gpt-5.1 refusal to count example](https://chatgpt.com/s/t_691ac8c9b4248191bd2ad976b829abc3)
+- why do aws gcp etc not implement hard billing limits
+- why do math/science matter
+	- chemistry: pottery colors fe 2+ vs fe 3+ green vs red
+	- math: imaginary numbers, fourier transforms for audio processing
+	- [https://blog.igniteseattle.org/submit/](https://blog.igniteseattle.org/submit/)
+- 

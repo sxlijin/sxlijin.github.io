@@ -36,13 +36,7 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [A Case Study in Community-Driven Software Adoption (2019)](https://static.googleusercontent.com/media/sre.google/en//static/pdf/CaseStudyInCommunityDrivenSoftwareDevelopment.pdf)
 
-  > Sisyphus’s creators themselves said its code
-  > quality was poor and its development had been bewilderingly cha‐
-  > otic. It had no schedule, no funded staff, no project management,
-  > and the design documentation was written months after the tool was
-  > operational. Yet after nine years of the dozens of different automated
-  > rollout tools developed at Google, Sisyphus was used by virtually all
-  > SRE teams and many developer teams
+  > Sisyphus’s creators themselves said its code quality was poor and its development had been bewilderingly chaotic. It had no schedule, no funded staff, no project management, and the design documentation was written months after the tool was operational. Yet after nine years of the dozens of different automated rollout tools developed at Google, Sisyphus was used by virtually all SRE teams and many developer teams
 
 * [The Hunt For The Missing Data Type (2024)](https://www.hillelwayne.com/post/graph-types/)
 
@@ -72,18 +66,13 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
   > Limit potential availability impact to <1 minute
 
-* [Every infrastructure decision I endorse or regret
-    (2024)](https://cep.dev/posts/every-infrastructure-decision-i-endorse-or-regret-after-4-years-running-infrastructure-at-a-startup/)
+* [Every infrastructure decision I endorse or regret (2024)](https://cep.dev/posts/every-infrastructure-decision-i-endorse-or-regret-after-4-years-running-infrastructure-at-a-startup/)
 
 * [ABP Privacy Infra, Long Range Investments (Facebook internal, 2021)](https://www.documentcloud.org/documents/21716382-facebook-data-lineage-internal-document)
 
 * [Latency Numbers Every Programmer Should Know](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
 
-  AFAIK this originates from [a talk that Jeff Dean gave in
-  2010][latency-numbers-jeff-dean]; the numbers have changed slightly in the
-  decade+ since, but it largely still holds. You can also find it on [High
-  Scalability][latency-numbers-high-scalability] and
-  [sre.google][latency-numbers-sre-google].
+  AFAIK this originates from [a talk that Jeff Dean gave in 2010][latency-numbers-jeff-dean]; the numbers have changed slightly in the decade+ since, but it largely still holds. You can also find it on [High Scalability][latency-numbers-high-scalability] and [sre.google][latency-numbers-sre-google].
 
 [latency-numbers-jeff-dean]: https://youtu.be/modXC5IWTJI?t=3554
 [latency-numbers-high-scalability]: http://highscalability.com/blog/2011/1/26/google-pro-tip-use-back-of-the-envelope-calculations-to-choo.html
@@ -99,48 +88,38 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 * [MySQL 8.0.34 (2023)](https://jepsen.io/analyses/mysql-8.0.34.pdf)
 
-  > The core problem is that MySQL claims to implement Repeatable Read but
-  > actually provides something much weaker.
+  > The core problem is that MySQL claims to implement Repeatable Read but actually provides something much weaker.
 
 * [PostgreSQL's fsync() surprise (2018)](https://lwn.net/Articles/752063/)
 
-  > If that happens to a PostgreSQL server, the result can be silent corruption
-  > of the database
+  > If that happens to a PostgreSQL server, the result can be silent corruption of the database
 
 * [A Few Billion Lines of Code Later (2010)](https://web.stanford.edu/~engler/BLOC-coverity.pdf)
 
-  > Parsing is considered a solved problem. Unfortunately, this view is naïve,
-  > rooted in the widely believed myth that programming languages exist.
+  > Parsing is considered a solved problem. Unfortunately, this view is naïve, rooted in the widely believed myth that programming languages exist.
 
 
 * [No Silver Bullet (1986)](http://worrydream.com/refs/Brooks-NoSilverBullet.pdf) - a discussion of the fundamental challenges involved in creating software.
 
 * [Supercomputing's Monster in the Closet (2016)](https://spectrum.ieee.org/computing/hardware/how-to-kill-a-supercomputer-dirty-power-cosmic-rays-and-bad-solder) - found via [this Twitter thread](https://twitter.com/whitequark/status/980522328151834624?s=19)
 
-  > Jaguar had 360 terabytes of main memory [and] was logging ECC errors at a
-  > rate of 350 per minute.
+  > Jaguar had 360 terabytes of main memory [and] was logging ECC errors at a rate of 350 per minute.
 
 * [The Hardest Program I've Ever Written (2015)](http://journal.stuffwithstuff.com/2015/09/08/the-hardest-program-ive-ever-written/) - the story of `dartfmt`
 
-  > The hardest program I've ever written, once you strip out the whitespace,
-  > is 3,835 lines long. That handful of code took me almost a year to write.
-  > [...] I deleted 20,704 lines of code over that time.
+  > The hardest program I've ever written, once you strip out the whitespace, is 3,835 lines long. That handful of code took me almost a year to write. [...] I deleted 20,704 lines of code over that time.
 
 * [We can't send mail more than 500 miles](https://web.mit.edu/jemorris/humor/500-miles)
 
 * [Caches, Modes, and Unstable Systems (2021)](https://brooker.co.za/blog/2021/08/27/caches.html)
 
-  > So our system has two stable loops. One's a happy loop where the cache is
-  > full [...] The other is a sad loop, where the cache is empty, and stays
-  > empty
+  > So our system has two stable loops. One's a happy loop where the cache is full [...] The other is a sad loop, where the cache is empty, and stays empty
 
 * [We Have No Moat, and Neither Does OpenAI (Google, 2023)](https://www.semianalysis.com/p/google-we-have-no-moat-and-neither)
 
 * [The Tyranny of Structurelessness (1972)](https://www.jofreeman.com/joreen/tyranny.htm)
 
-  > As long as the structure of the group is informal, the rules of how
-  > decisions are made are known only to a few and awareness of power is
-  > limited to those who know the rules.
+  > As long as the structure of the group is informal, the rules of how decisions are made are known only to a few and awareness of power is limited to those who know the rules.
 
 * [Things You Should Never Do, Part 1 (2000)](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/) - Joel Spolsky talking about the Netscape rewrite
 
@@ -155,8 +134,9 @@ An incomplete list of media I've consumed. Most are formative, some are included
 ### Talks
 
 * [Jeff Dean - Building Software Systems at Google and Lessons Learned (2010)](https://www.youtube.com/watch?v=modXC5IWTJI)
+  Even in 2026, this continues to be the densest talk about system design I have ever watched.
 
-* [Robert Kennedy - Life in the Trenches of healthcare.gov (2014)](https://www.youtube.com/watch?v=GLQyj-kBRdo
+* [Robert Kennedy - Life in the Trenches of healthcare.gov (2014)](https://www.youtube.com/watch?v=GLQyj-kBRdo)
 
 * [Mike Monteiro - Fuck You, Pay Me (2012)](https://youtu.be/jVkLVRt6c1U)
 
@@ -206,9 +186,9 @@ Other
 * Hardware: McMaster-Carr, Grainger, OnlineMetals
 * Electronics: Digikey, Mouser
 * Stationery: JetPens, MUJI, others that I haven't used
-* https://thecentercolumn.com/
+* Tripods: https://thecentercolumn.com/
 * WiFi: https://www.wiisfi.com/
-
+- cookware: https://homeandcooksales.com/index.php/
 ### Assorted
 
 * [Veritasium - Why Machines That Bend Are Better (2019)](https://youtu.be/97t7Xj_iBv0)
