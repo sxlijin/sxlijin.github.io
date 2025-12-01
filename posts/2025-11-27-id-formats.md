@@ -1,3 +1,4 @@
+# ID Formats
 petname
 - a la Heroku, Docker
 - [my notes on reqs](https://github.com/BoundaryML/baml/blob/e6251f23d7e7f3fb64a19a919279f17161517fbb/engine/bstd/src/random_word_id.rs#L1010-L1019)

@@ -1,3 +1,5 @@
+# Threat Model Framing
+
 Put this together when I was designing an encryption scheme for user data.
 
 ## Threat Modeling Manifesto ([link](https://www.threatmodelingmanifesto.org/))
