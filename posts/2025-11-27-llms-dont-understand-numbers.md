@@ -8,7 +8,7 @@ Stop writing prompts assuming that LLMs understand numbers:
 
 We've known for a long time that LLMs [are bad at any task that involves understanding the semantics of numbers](https://loeber.substack.com/p/21-everything-we-know-about-llms), which means that they're bad at addition, multiplication, counting, and any task that assumes they're good at those tasks.
 
-It's easy to assume that LLMs _do_ understand numbers, because if you prompt it on something simple, like "count the R's in strawberry", a state of the art model like [gpt-5.1 will give you the right answer]](https://chatgpt.com/share/6928b415-b8b4-800a-a229-f47ca790a3d1).
+It's easy to assume that LLMs _do_ understand numbers, because if you prompt it on something simple, like "count the R's in strawberry", a state of the art model like [gpt-5.1 will give you the right answer](https://chatgpt.com/share/6928b415-b8b4-800a-a229-f47ca790a3d1).
 
 But if you ask gpt-5.1 to do a less trivial counting task, though, it will [try to refuse](https://chatgpt.com/share/691ac9b7-47a0-800a-a9a7-c0302f463168):
 
