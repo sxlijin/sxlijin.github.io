@@ -38,6 +38,13 @@ impl Collection for PostCollection {
             .into_iter()
             .filter_map(|e| e.ok())
             .filter(|e| e.file_type().is_file())
+            .filter(|e| {
+                e.path()
+                    .file_name()
+                    .and_then(|name| name.to_str())
+                    .map(|name| !name.starts_with("draft-"))
+                    .unwrap_or(true)
+            })
             .map(|e| e.path().to_path_buf())
     }
 
