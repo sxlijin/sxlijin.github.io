@@ -19,6 +19,7 @@ clap = { version = "4.5", features = ["derive"] }
 comrak = "0.38"
 grass = "0.13"
 hyper = { version = "0.14", features = ["full"] }
+kuchiki = "0.8"
 notify = "6.1"
 notify-debouncer-full = "0.5"
 pulldown-cmark = "0.13"

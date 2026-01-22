@@ -5,6 +5,7 @@ main {
   line-height: 1.5;
   max-width: min(35em, 90vw);
   margin: 0 auto;
+  counter-reset: sidenote-counter;
 
   // Keep page contents centered when scrollbar is shown
   padding-left: calc(100vw - 100%);
@@ -33,4 +34,66 @@ main {
 
 h1, h2, h3, h4 {
   margin-bottom: .5rem;
+}
+
+.sidenote {
+  float: right;
+  clear: right;
+  margin-right: -60%;
+  width: 50%;
+  margin-top: 0.3rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: #666;
+  position: relative;
+}
+
+.sidenote-number {
+  counter-increment: sidenote-counter;
+}
+
+.sidenote-number:after,
+.sidenote:before {
+  position: relative;
+  vertical-align: baseline;
+}
+
+.sidenote-number:after {
+  content: counter(sidenote-counter);
+  font-size: 0.8rem;
+  top: -0.4rem;
+  left: 0.1rem;
+}
+
+.sidenote:before {
+  content: counter(sidenote-counter) " ";
+  font-size: 0.8rem;
+  top: -0.4rem;
+}
+
+input.margin-toggle {
+  display: none;
+}
+
+label.sidenote-number {
+  display: inline-block;
+  max-height: 1.5rem;
+}
+
+@media (max-width: 760px) {
+  label.sidenote-number {
+    cursor: pointer;
+  }
+
+  .sidenote {
+    display: none;
+  }
+
+  .margin-toggle:checked + .sidenote {
+    display: block;
+    float: none;
+    width: 95%;
+    margin: 0.75rem 2.5%;
+  }
 }
