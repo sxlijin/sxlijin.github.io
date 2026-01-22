@@ -1,0 +1,737 @@
+# What's so good about Rust, anyways?
+
+When people talk about Rust, they usually talk about memory safety or performance as the thing that is great about Rust. And that's great, but I've written plenty of memory-safe and sufficiently performant code: it's called using a garbage collector.
+
+I like Rust for a different reason:
+
+- null safety
+- exceptions that make sense
+- high-quality library ecosystem
+
+There's a long list of other features, but I'll start with these three.
+
+# Null safety
+
+# Exceptions that make sense
+# High-quality libraries
+
+
+
+This is all possible due to three primitives:
+- enums and structs
+- `match` statements
+
+
+
+
+
+Someone asked me this question a few weeks ago, and it occurred to me that when
+people extoll the virtues of Rust, they usually talk about things like memory
+safety and the borrow checker.
+
+That's neat and all for people coming from C or C++, but for anyone coming from
+a GC'd language like Go or Java or Python or Typescript, well, those aren't
+problems they have.
+
+Rust has plenty going for it, though, besides the memory safety and borrow checker,
+and those other features are why I actually like using Rust - and as a community, I
+don't think we talk enough about all those other language features.
+
+So let's talk about my favorite Rust features!:
+
+- null safety
+- statically checked exceptions
+- libraries are explicit about what they do
+
+- exhaustive match statements
+- enums are powerful
+- value destructuring
+- exceptions do not bypass normal control flow
+- built-in JSON serialization
+- clone gets you deep clone
+- compiler has some really nice type narrowing capabilities
+- everything is an expression
+- the library ecosystem is pretty fantastic
+
+## Null safety
+
+## C++
+
+```c++ foo.cc
+#include <iostream>
+#include <string>
+
+int main() {
+    std::cout << std::getenv("FOO_DEBUG_PORT") << std::endl;
+    return 0;
+}
+```
+
+```
+$ clang++ foo.cc && ./a.out
+[1]    32957 segmentation fault  ./a.out
+```
+
+## Java
+
+```java Foo.java
+public class Foo {
+    public static void main(String[] args) {
+        int debugPort = Integer.parseInt(System.getenv("FOO_DEBUG_PORT"));
+        System.out.println("debug port: " + debugPort);
+    }
+}
+```
+
+```
+$ javac Foo.java && java Foo
+Exception in thread "main" java.lang.NumberFormatException: Cannot parse null string
+        at java.base/java.lang.Integer.parseInt(Integer.java:526)
+        at java.base/java.lang.Integer.parseInt(Integer.java:661)
+        at Foo.main(Foo.java:3)
+```
+TODO: put the Rust example at the top of this section
+
+If you've ever spent time with a mainstream programming language, you've had
+code blow up in your face because you didn't check that something was null.
+
+  - C++: your program will irrecoverably blow up in your face if you pass a 
+  `nullptr` to something that accepts only non-null pointers,
+  like `printf` (yay for segfaults! said no one ever)
+
+    ```
+    ❯ clang++ foo.cc && ./a.out
+    [1]    32957 segmentation fault  ./a.out
+    ```
+
+  
+  - Go: pass a `nil` somewhere it doesn't belong? Have fun debugging!
+
+    ```
+    panic: runtime error: invalid memory address or nil pointer dereference
+    [signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x48ebfa]
+
+    goroutine 1 [running]:
+    main.main()
+      /tmp/sandbox4269208483/prog.go:21 +0x1a
+
+    Program exited.
+    ```
+
+  - Java: almost anything is allowed to be `null`, and if you forget to check if it's null before using it, voila, the runtime will just throw a `NullPointerException`.  You can
+  even pass `null` into a method that expects an `Optional<String>`!
+
+    ```
+    Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "<local1>" is null
+        at Foo.main(Foo.java:4)
+    ```
+
+  - JS/TS: you have both `undefined` and `null`, both of which will happily trigger a `TypeError` if you use them somewhere you didn't expect to have to handle either. (We're not going to talk about the maddeningly subtle differences between the two.)
+
+    ```
+    Uncaught TypeError: Cannot read properties of undefined (reading 'length')
+    Uncaught TypeError: Cannot read properties of null (reading 'length')
+    ```
+
+
+  - Python: if you forget to check if `value is None`, the runtime will throw a `TypeError` yelling something about how your `NoneType` object is missing methods.
+
+    ```
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    TypeError: object of type 'NoneType' has no len()
+    ```
+
+All of these errors are possible because all of these languages allow most objects to be `null`, and rely on the user to make sure that they're checking if something is null before using it. If you have an object that you pass around which used to never be `null`, but now is `null` sometimes, well... good luck - that gets hairy really fast.
+
+As Tony Hoare, the inventor of null, [puts it](https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html#the-option-enum-and-its-advantages-over-null-values):
+
+> I call it my billion-dollar mistake. At that time, I was designing the first comprehensive type system for references in an object-oriented language. My goal was to ensure that all use of references should be absolutely safe, with checking performed automatically by the compiler. But I couldn’t resist the temptation to put in a null reference, simply because it was so easy to implement. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years.
+
+In Rust's type system, by contrast, you can only pass `None` into functions that accept `Option<Foo>` - the compiler will explicitly reject an attempt to pass `None` into - so it's impossible for a Rust program to fail at runtime because you didn't realize something could be `None`.
+
+For example, when compiling [this](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=675bb57878cf71c2762a6355696eb3e5):
+
+```rust
+fn my_func(word: &str) {
+}
+
+fn main() {
+    my_func(None);
+}
+```
+
+you get this compiler error:
+
+```
+error[E0308]: mismatched types
+ --> src/main.rs:5:15
+  |
+5 |     my_func(None);
+  |     ------- ^^^^ expected `&str`, found `Option<_>`
+  |     |
+  |     arguments to this function are incorrect
+  |
+  = note: expected reference `&str`
+                  found enum `Option<_>`
+note: function defined here
+ --> src/main.rs:1:4
+  |
+1 | fn my_func(word: &str) {
+  |    ^^^^^^^ ----------
+
+```
+
+## Switch statements are exhaustive
+
+Rust's switch statements are required by the compiler to be exhaustive. See [example](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=2b1b010d1f398be178862864389d527d):
+
+```rust
+enum Color { Red, Blue, Green }
+
+fn main() {
+    let color = Color::Red;
+    match color {
+        Color::Red => println!("red"),
+        Color::Blue => println!("blue"),
+        // green not covered
+    }
+}
+```
+
+```rust
+enum 
+
+
+which yields this compiler error:
+
+```
+error[E0004]: non-exhaustive patterns: `Color::Green` not covered
+ --> src/main.rs:5:11
+  |
+5 |     match color {
+  |           ^^^^^ pattern `Color::Green` not covered
+  |
+note: `Color` defined here
+ --> src/main.rs:1:6
+  |
+1 | enum Color { Red, Blue, Green }
+  |      ^^^^^              ----- not covered
+  = note: the matched value is of type `Color`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern or an explicit pattern as shown
+  |
+7 ~         Color::Blue => println!("blue"),
+8 ~         Color::Green => todo!(),
+  |
+
+For more information about this error, try `rustc --explain E0004`.
+error: could not compile `playground` (bin "playground") due to 1 previous error
+```
+
+If you want to add a catch-all case, you add a `_` case, so this compiles:
+
+```rust
+enum Color { Red, Blue, Green }
+
+fn main() {
+    let color = Color::Red;
+    match color {
+        Color::Red => println!("red"),
+        Color::Blue => println!("blue"),
+        _ => println!("other")
+    }
+}
+```
+
+Other languages:
+
+* C++ allows you to opt in to compiler-enforced exhaustive switch statements using `-Werror -Wall` (which most mature projects do), but it isn't the default behavior.
+
+* Go doesn't have enums.
+
+* Java developers will be surprised to know that starting with Java 14 - released in 2020 - switch expressions must be exhaustive, but switch _statements_ are not (for backwards compatibility reasons).
+
+* Python has no type-checking out of the box, so you can't get this by default. (Pyright/Pylance, Mypy, and PyType all support this though.)
+
+* TS doesn't check for enum exhaustiveness[^tsc-exhaustive-switch]; you have to [use `typescript-eslint` for this][typescript-eslint-exhaustive-switch].
+
+[^tsc-exhaustive-switch]: `tsc`'s lack of exhaustiveness checking leads to some fun quandaries like [this StackOverflow question from 2016](https://stackoverflow.com/questions/39419170/how-do-i-check-that-a-switch-block-is-exhaustive-in-typescript).
+
+[typescript-eslint-exhaustive-switch]: https://typescript-eslint.io/rules/switch-exhaustiveness-check/
+
+## Destructuring/unpacking reduces boilerplate
+
+Rust makes it easy to destructure/unpack values, using what it calls "pattern matching". For example, with tuples:
+
+```rust
+fn choose_pair() -> (i32, i32) {
+  (3, 4)
+}
+
+fn main() {
+  let (a, b) = choose_pair();
+}
+```
+
+You can destructure structs and ignore fields too:
+
+```rust
+struct Point { x: i32, y: i32, z: i32 }
+
+fn choose_point() -> Point {
+  Point { x: 3, y: 4 }
+}
+
+fn main() {
+  let Point { x, y, .. } = choose_point();
+}
+```
+
+In other languages:
+
+* C++ structured bindings are the poor man's version of pattern matching: they
+don't allow nested destructuring, don't allow partial destructuring, and are
+limited in terms of lifetime syntax[^cpp-structured-bindings-copy-semantics].
+
+[^cpp-structured-bindings-copy-semantics]: namely, because you must do either `auto [x, y] = foo()` or `auto &[x, y] = foo()`, you cannot destructure the first by value and the second by reference.
+
+* Java does not yet have anything of the sort.
+
+* Python allows dynamically unpacking tuples and lists - a natural consequence
+of the lack of a native static type system - which can blow up with `ValueError: not enough values to unpack` or `ValueError: too many values to unpack` if you're not careful[^python-unpacking-footguns].
+
+* TS has had all of this forever, under the name "destructuring"
+
+[^python-unpacking-footguns]: This runtime-based unpacking approach can have
+    some _interesting_ surprises. For example, consider this code:
+
+    ```
+    my_dict = {"name": "Bob", "age": 25}
+    x, y = my_dict
+    print(x, y)
+    ```
+
+    If you guessed that this would print `name, age`, congratulations, you were right!
+
+specifically, rust allows you to write code like this:
+
+```
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+```
+
+which you would handle like this:
+
+```rust
+match message {
+  Quit => {
+    println!("quit!");
+  }
+  Move { x, y } => {
+    println!("move to ({x}, {y})");
+  }
+  Write(w) => {
+    println!("write this down: {w}")
+  }
+  ChangeColor(r, g, b) => {
+    println!("change color to this RGB: ({r}, {g}, {b})")
+  }
+}
+```
+
+
+## Enums with pattern matching are expressive
+
+(This section is about two concepts - sorry! - because they're just so intertwined;
+they're only powerful when combined with one another.)
+
+Rust enums are also structurally very expressive, which when combined with
+pattern matching allows for some very expressive code:
+
+```rust
+enum Shape {
+  Point,
+  Circle(i32),
+  Rectangle { width: i32, height: i32 },
+}
+
+fn describe(shape: Shape) {
+  match shape {
+    Shape::Point => println!("point"),
+    Shape::Circle(radius) => println!("circle with radius {radius}"),
+    Shape::Rectangle { width, height } => println!("{width}x{height} rectangle"),
+  }
+}
+```
+
+This combines three very powerful concepts:
+
+  - switch statements (`match` in Rust), as explained above, must be exhaustive,
+    which 
+  - pattern matching makes it simple to reference variables that only make sense
+    in one of the enum's variants
+  - pattern matching works on 
+
+By contrast, in most other languages, you usually have to do something like
+this, where users of `Shape` need to pinky-promise that they'll only use
+`radius` if `shape_type` is `Circle`:
+
+```cpp
+enum ShapeType {
+  Point,
+  Circle,
+  Rectangle,
+}
+
+struct Shape {
+  ShapeType shape_type,
+
+  // if shape_type == Circle
+  int radius,
+
+  // if shape_type == Rectangle
+  int width,
+  int height,
+}
+```
+
+Specifically:
+
+- C++: technically `std::variant` exists for this purpose, but it's so painful to work with that it's easier to just use this "I promise I'll use `Shape` correctly, pinky promise" approach.
+
+- Go: n/a, because again, no enums.
+
+- Java: historically you had to use the pinky-promise approach, although if you're using the newest versions of Java, you actually have a lot of compiler support[^java-pattern-matching]
+
+[^java-pattern-matching]: Starting in Java 21 (released in 2023), [pattern
+    matching in `switch`][java-switch-pattern-matching] enables you to do this if
+    you're using [sealed classes][java-sealed-classes] (stabilized in Java 17,
+    released in 2021).
+    
+    Still no destructuring, though, and with Java 8 still in LTS, how many Java
+    users even know Java 17 exists? 
+    
+    That being said, hats off to Project Amber for what they've accomplished - it's
+    seriously amazing.
+
+[java-switch-pattern-matching]: https://openjdk.org/jeps/441
+
+[java-sealed-classes]: https://openjdk.org/jeps/409
+
+- Python: you can use tuple/list unpacking
+
+- TS:
+
+
+
+
+
+And that doesn't even take into consideration how nice it is to be able to work with `radius` directly if `shape` is a `Circle`:
+
+```rust
+match shape {
+  // ...
+  Shape::Circle(radius) => { call_func(radius) }
+  // ...
+}
+```
+
+as opposed to having to manually create a new `radius` variable yourself:
+
+```cpp
+switch (shape) {
+  // ...
+  case ShapeType::Circle:
+    radius = shape.radius
+    call_func(radius)
+  // ...
+}
+```
+
+This gets really powerful:
+
+```rust
+fn read_config() {
+  let use_v2_format = true;
+  let v1_allowlist = vec![];
+
+  match (use_v2_format, v1_allowlist.contains(key)) {
+    (true, _) => { /* do something with v2_format */ }
+    (false, true) => { /* do something with v1_format */ }
+    (false, false) => { /* do something else */ }
+  }
+}
+```
+
+in most languages, your enum looks something like this:
+
+```
+enum Color = { Red, Green, Blue }
+```
+
+to do the same in the other languages:
+
+- in ts, you usually do something like `type IpAddr = { kind: "v4", nums: number[] } | {kind: "v6", addr: string}`
+- you cannot express this in java. you certainly can't get the compiler to type-check it. what you can do in java is
+
+```
+class Foo {
+  Color color;
+  RedProperties redProps;  // only meaningful if color == Red
+  BlueProps blueProps;     // only meaningful if color == Blue
+  GreenProps greenProps;   // only meaningful if color == Green
+}
+```
+
+and you get no compiler guarantees about what goes into `greenProps` when `color == Red`
+
+
+and this is all tied into the 
+
+## exceptions do not bypass normal control flow
+
+let's say you try to read a file, but someone saved it with the wrong permissions
+
+in python, c++, java, ts, this will cause some kind of error that will propagate
+all the way up the callstack, with no static hint or compiler hint that this
+might happen deeper in your call stack and you should probably handle it
+
+this usually takes the form of:
+
+```
+doThingWithLibrary()
+```
+
+"why is this code crashing?"
+
+"oh, because `doThingWithLibrary()` can throw `FileNotFoundException`... ok, i should handle that"
+
+and then if you get paranoid about handling it, you end up adding `try { ... }
+catch (FileNotFoundException e) { ... }` at three different layers of the
+callstack, even though you only actually need 1 of them, because your tooling
+has no way to tell you which one of those is actually necessary
+
+this ends up being the same reason we no longer use `goto` statements in our code, and is also the reason that golang did away with the notion of exceptions
+
+(OK, technically, panics are exceptions in Rust. but most APIs that can fail
+require the user to handle this _explicitly_ using `Result<Ok, Error>` which
+requires the user to handle the `Ok` and `Error` variants explicitly. if the
+user wants to just panic? sure, have fun! but most rust users would consider it
+bad practice to `unwrap()` your way to working code)
+
+and there is `?` to ergonomically handle dealing with `Error` variants, which allows doing stuff like
+
+```
+let latin = foo.bar()?.fizz()?.buzz()?;
+process(latin)
+```
+
+compare this with the golang equivalent:
+
+```
+latin, err := foo.Bar()
+if err != nil {
+    return err
+}
+
+latin, err = latin.Fizz()
+if err != nil {
+    return err
+}
+
+latin, err = latin.Buzz()
+if err != nil {
+    return err
+}
+
+process(latin)
+```
+
+## everything is an expression
+
+really nice for switch expressions. weirder for if-else, but it grows on you, certainly ebtter than python's confusing `value if condition else else-value`
+ 
+ or TS needing anonymous functions if you want a switch statement
+
+this one takes a little while to get used to, but it grows on you after a while
+
+## built-in json serialization
+
+OK, maybe it's not _quite_ built into the Rust standard library, but `serde` and `serde_json` make it _really_ easy to serialize and deserialize JSON into a statically typed object
+
+example:
+
+```
+#[derive(Deserialize, Serialize)]
+struct Repository {
+  default_branch: String,
+  open_issues: i32,
+  topics: Vec<String>,
+  has_issues: bool,
+}
+```
+
+is all the code you need to parse this json object:
+
+```json
+{
+  "default_branch": "main",
+  "open_issues_count": 0,
+  "open_issues": 0,
+  "topics": [ "octocat", "api", ],
+  "has_issues": true,
+}
+```
+
+there's no standard way to do this in C++ or java (not without some kind of
+codegen); in TS you have zod for this but the type system doesn't allow
+communicating guarantees about whether `open_issues` is an integer or float, and in Python you have pydantic, which relies on shenanigans with class variables to type its member variables (explain this)
+
+
+## clone gets you deep clone
+
+most languages have some manner of implicit copy semantics that come with "shoot yourself in the foot" implications, because if you make a copy, you make a _shallow_ copy, not a deep clone
+
+in rust, `[#derive(Clone)] struct Foo { ... }` means that `foo.clone()` creates a deep copy of the object.
+
+by comparison, in js you need to pull in lodash's structuredClone
+
+in java, c++, you need to implement it yourself. if you don't want to write a few hundred lines of boilerplate, you need to rely on libraries with their own quirks (hello, autovalue) or terrifying template magic in c++'s case
+
+
+## compiler has some type narrowing capabilities
+
+e.g. the let-else construct:
+
+```
+let Ok(read) = std::fs::read("path/to/file.txt") else {
+  return Err(MyCustomError("couldn't read file"));
+}
+
+process(read)
+```
+
+## no inheritance surprises
+
+in c++, multiple inheritance and virtual methods make it really hard to actually
+know, for a given `foo.call_method()`, to know which implementation of
+`call_method()` is actually getting called
+
+java is slightly easier because everything is a virtual call, but can still be confusing (which, when i was
+going back and forth between java and cpp, i was constantly getting confused
+about, because i hadn't really internalized this)
+
+python has multiple inheritance
+
+ts inheritance means "don't do wacky shit with prototypes" because, well, you
+don't want to find out what happens if you do. (i've actually never tried. i
+wonder what you blow up when you do this. all i know is i've heard people say
+it's a bad idea.)
+
+because rust doesn't have inheritance, well, in theory it's easy to figure out what 
+
+## backtraces
+
+users of gc'd languages will laugh at this, but for folks coming from c++ this
+is actually incredibly painful to set up.
+
+you can use stuff like abseil's debugging, boost's stacktrace, or libunwind, but
+you still need to hook into the global exception handlers to do this
+
+
+## the library ecosystem is pretty fantastic
+
+some of my favorite crates:
+
+- `notify`: cross-platform filesystem watcher
+- `etcetera`: makes it easy to store application state in `~/.config/my-app/` in a cross-platform way
+
+
+## there are still warts
+
+that all being said, rust, like any other language, comes with its own baggage:
+
+- i have to spend a lot of mental energy reasoning about lifetime/ownership semantics,
+because of the borrow checker, even when i don't want to. in most cases, i
+actually really don't care about lifetime semantics, and would be much happier
+with the implicit refcount/GC semantics of a language like Java, TS/Node,
+Golang, etc. (also, Arc is the world's worst GC, so performance honestly kinda
+strikes me as a... not great argument.) incidentally, this is why i find something like borgo super cool
+
+- so much mental energy, enough that i'm going to devote two bullets to it. you have to get your design right the first time; if you need to refactor it, it is _hard_ to do so. doing quick and dirty prototypes requires a lot of "explicitly bupass the safety" code. going back to the earlier example? if you're not returning a `Result`, that becomes
+
+```
+foo.bar().unwrap().fizz().unwrap().buzz().unwrap()
+```
+
+and that's just one bit of it.
+
+https://loglog.games/blog/leaving-rust-gamedev/#procedural-macros-are-not-even-we-have-reflection-at-home goes into a lot more depth into all the problems this causes in practice
+
+- async stuff is extra hard, for the same reasons as above: because rust gives
+you all the knobs and is as close to the metal as possible,
+async needs funky abstractions like `Pin` (i think of understanding `Pin` like
+understanding atomics: in theory i understand what it does, and i can parrot the
+docs, but if you actually quiz me on the edge cases and how it behaves i will
+make an absolute fool of myself). also lifetimes get _way_ harder in async code. (this has entertaining results, like the world collectively deciding that the easy way out of this is to use the world's worst garbage collector: `Arc<Mutex<T>>`, i.e. wrapping everything in an atomic-ref-counted pointer and mutex, so that you can guarantee that an object in an async scope will exist until the async scope finishes)
+
+- you can't format macro code like this:
+
+  ```
+  json!({
+    "foo": {
+  "this": "should be easy to format",
+    }
+  })
+  ```
+
+  but because of how rust macros work it's actually really hard to format it
+
+- hygientic macros are actually kinda annoying.
+
+- rust doesn't have function overloading (e.g. defining `foo(String)` and
+`foo(i32)` on a struct and relying on ADL to resolve an overload)
+
+- virtual method calls ard hard to pass around: what does it mean for a type to be statically sized?
+maybe that's obvious once you understand it, but it's always frustrating when i
+wrap a `dyn StreamExt` as `Box<dyn StreamExt>` willy-nilly because that's my
+only option for holding onto a stream object. trait objects 
+
+    in axum, you can't do this:
+
+    ```
+    match result {
+      Ok(_) => (StatusCode::Ok, Json(...)),
+      Err(_) => (StatusCode::InternalServerError, Text(...)),
+    }
+    ```
+
+    because the `match` expression needs to have a consistent type; there's no
+    way in rust right now for a `match` to have arms with differing types, even
+    if those types obey the same contract
+
+    (not sure if you can use `return` statements inside the match arms to get
+    around the fn's return type being `impl Trait`)
+
+- traits mean that you _need_ an IDE to navigate the code at times. i've learned
+to navigate a lot of codebases by literally just `grep`ing my way through them,
+but it's an order of magnitude harder to do this in rust.
+
+- compile times are certainly an issue; we'll see how the world decides to solve this.
+
+- hot reload doesn't come out of the box, you have to bolt it on. at least in python and js/ts world you have stuff like `next dev` for nextjs, `flask watch` for python, `fastapi dev` for fastapi. in rust you have to `cargo watch -- build`
+
+- `String` vs `&str` vs `&String` (and then all the sister types like `bytes`
+and `Path` and `PathBuf`) - having the explicitness is important and valuable,
+but it would also be nice if i could just have it work in the simple cases
+without having to go through `Cow<str>` and `to_string_lossy()`...
+
+- the lack of literals or anonymous types is a pain point.
+
+- passing around lambdas can be weird: `Fn` vs `FnMut` vs `FnOnce`
+
+- thinking about ownership and borrowing is annoying. if i'm iterating over a list, very frequently I don't care about the distinction between `vec![1, 2, 3].into_iter().map(...).collect()` and `vec![1, 2, 3].iter().map(...).collect()`.
