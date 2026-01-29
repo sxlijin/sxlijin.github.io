@@ -6,6 +6,7 @@ An incomplete list of media I've consumed. Most are formative, some are included
 
 ### Blogs
 
+* Simon Willison - https://simonwillison.net
 * Avery Penwarr / apenwarr - https://apenwarr.ca/log/
   * go/vfa and [What do executives do, anyways? (2019)](https://apenwarr.ca/log/20190926)
   * [Systems design explains the world (2020)](https://apenwarr.ca/log/20201227) and [Systems design 2: what we hope we know (2023)](https://apenwarr.ca/log/20230415)
