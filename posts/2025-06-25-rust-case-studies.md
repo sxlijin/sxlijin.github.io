@@ -14,6 +14,18 @@ Please [let me know](mailto:me@sxlijin.com) if there is an article, blog, or oth
 
 # Migrating to Rust
 
+## Airtable: Node -> Rust
+
+Source: [Rewriting Our Database in Rust (2026)](https://medium.com/airtable-eng/rewriting-our-database-in-rust-f64e37a482ef)
+
+What
+> Our in-house database, originally written in TypeScript \[provides\] real-time updates to queries, collaborative rich-text editing, a formula language, linked records, attachments, manual record ordering, and much more.
+
+Why
+> \[Node's\] limited multi-threading capabilities and lack of fine-grained control over memory layout and lifecycle became bottlenecks as we scaled. \[Rust\] offers a unique combination of high performance, memory safety, and developer productivity.
+>
+> Airtable already had several Node.js native extensions written in Rust, so we had experience with Rust-Node.js interop, and with running Rust in production. After three years of development, validation, migration, and performance engineering, our new in-memory database has reached a level of maturity to the point that it’s now serving production customer traffic.
+
 ## Statsig: Node/Python/Elixir/Java -> Rust
 Source: [Escaping SDK maintenance hell with a core Rust engine (2025)](https://statsig.com/blog/escaping-sdk-maintenance-hell/)
 
